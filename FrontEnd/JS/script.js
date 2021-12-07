@@ -14,17 +14,17 @@
         $.ajax({
             url: url,
             type: 'GET',
+            //origin: "*",
             //expect json data
-            contentType : 'application/json',
+            //contentType : 'application/json',
             dataType : 'json'
         })
         .done(function(data) {
             //table to append with results
             const table = $('#name');
-            const div = $('<div></div>');
-            alert("button click");
+            alert(typeof(data));
             $.each(data.results, function(i, item){
-
+                
                 let row = $('<tr></tr>', {'id': 'text'});
 
                 let cell = $('<td></td>', { 'text': "ArtistId" });
@@ -32,15 +32,15 @@
                 cell = $('<td></td>', { 'text': item.ArtistId });
                 row.append(cell);
                 
-
+                alert("adding table");
                 cell = $('<td></td>', { 'text': 'Name' });
                 row.append(cell);
                 cell = $('<td></td>', { 'text': item.Name });
 
                 div.append(row);
-                
+                table.append(row);
             
             });
-            table.append(div);
+            
         });
     });

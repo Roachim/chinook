@@ -1,6 +1,6 @@
 <?php
-header('Content-Type: application/json');
-header('Accept-version: v1');  
+header('Access-Control-Allow-Origin: *');
+
 class DataBase{
 
     public function connection(){

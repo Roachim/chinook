@@ -1,8 +1,7 @@
 <?php require_once "db.php";
 // header('Content-Type: application/json');
 // header('Accept-version: v1');
-header('Content-Type: application/json');
-header('Accept-version: v1'); 
+header('Access-Control-Allow-Origin: http://localhost');
 class Artist{
     //properties
     private $artistsId;

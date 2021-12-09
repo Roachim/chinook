@@ -1,4 +1,5 @@
-<?php require_once "db.php";
+<?php include_once "db.php";
+//implement whole CRUD
 // header('Content-Type: application/json');
 // header('Accept-version: v1');
 class Artist{

@@ -1,5 +1,5 @@
-<?php
-
+<?php include_once "db.php";
+//implement whole CRUD
 class Track{
     //properties
     private $trickId;
@@ -12,7 +12,51 @@ class Track{
     private $unitPrice;
     //constructor
     //methods
-}
+     //getAllMethod
+     public function TrackList(){
+        $db = new DataBase();
+        $con = $db->connection();
 
+        if ($con) {
+            $query = <<<'SQL'
+            SELECT * FROM track t
+            LEFT JOIN mediatype mt ON t.MediaTypeId = mt.MediaTypeId
+            LEFT JOIN genre g ON t.GenreId = g.GenreId
+            SQL;
+            $result = mysqli_query($con, $query);
+
+        } else {
+            return 'Connection error';
+        }
+        //array to return. retres = return result ᕕ( ᐛ )ᕗ
+        $retres = [];
+
+        //populate the return result
+        // "custom name" => $row['database id']
+        while ($row = mysqli_fetch_array($result)) {
+            $retres[] = array(
+            "TrackId" => $row['t.TrackId'], 
+            "Name" => $row['t.Name'],
+            "AlbumId" => $row['t.AlbumId'],
+            //"MediaTypeId"
+            "MediaType" => $row['mt.MediaType'],
+            //"GenreId"
+            "Genre" => $row['g.Genre'],
+            "Composer" => $row['t.Composer'],
+            "Milliseconds" => $row['t.Milliseconds'],
+            "Bytes" => $row['t.Bytes'],
+            "UnitPrice" => $row['t.Bytes']
+            );
+        }
+
+        //cut connection to database before ending function
+        $db->cutConnection($con);
+
+        echo json_encode($retres);
+    }
+    
+}
+$track = new Track();
+$track->TrackList();
 
 ?>

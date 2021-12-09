@@ -19,10 +19,11 @@ class Track{
 
         if ($con) {
             $query = <<<'SQL'
-            SELECT * FROM track t
-            LEFT JOIN mediatype mt ON t.MediaTypeId = mt.MediaTypeId
-            LEFT JOIN genre g ON t.GenreId = g.GenreId
+            SELECT TrackId, t.Name, AlbumId, mt.Name as MediaType, g.Name as Genre, Composer, Milliseconds, Bytes, UnitPrice FROM track t
+            LEFT JOIN mediatype mt ON mt.MediaTypeId = t.MediaTypeId
+            LEFT JOIN genre g ON g.GenreId = t.GenreId
             SQL;
+
             $result = mysqli_query($con, $query);
 
         } else {
@@ -35,17 +36,17 @@ class Track{
         // "custom name" => $row['database id']
         while ($row = mysqli_fetch_array($result)) {
             $retres[] = array(
-            "TrackId" => $row['t.TrackId'], 
-            "Name" => $row['t.Name'],
-            "AlbumId" => $row['t.AlbumId'],
+            "TrackId" => $row['TrackId'], 
+            "Name" => $row['Name'],
+            "AlbumId" => $row['AlbumId'],
             //"MediaTypeId"
-            "MediaType" => $row['mt.MediaType'],
+            "MediaType" => $row['MediaType'],
             //"GenreId"
-            "Genre" => $row['g.Genre'],
-            "Composer" => $row['t.Composer'],
-            "Milliseconds" => $row['t.Milliseconds'],
-            "Bytes" => $row['t.Bytes'],
-            "UnitPrice" => $row['t.Bytes']
+            "Genre" => $row['Genre'],
+            "Composer" => $row['Composer'],
+            "Milliseconds" => $row['Milliseconds'],
+            "Bytes" => $row['Bytes'],
+            "UnitPrice" => $row['UnitPrice']
             );
         }
 

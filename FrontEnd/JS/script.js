@@ -6,7 +6,7 @@
     //     e.preventDefault();
     //     //location.reload();
         
-
+    //      alert("in old");
     //     //use to get info from html/php page via id of item
     //     var keyword = $("#somethinhg").val();
     //     var url = base_url + "Backend/artists.php";
@@ -52,9 +52,10 @@
         
 
         //use to get info from html/php page via id of item
-        var keyword = $("#somethinhg").val();
+        //var keyword = $("#somethinhg").val();
         var url = base_url + "Backend/track.php";
         alert("in here");
+        
 
         $.ajax({
             url: url,
@@ -64,6 +65,7 @@
             dataType : 'json'
         })
         .done(function(data) {
+            console.log(data);
             //table to append with results
             const table = $('#name');
             const div = $("<div></div>");

@@ -2,31 +2,34 @@
 //implement whole CRUD
 // header('Content-Type: application/json');
 // header('Accept-version: v1');
+        //SQL
+        //Prepare statement, bind and execute
+        //cut connection
 class Artist{
     //properties
     private $artistsId;
     private $name;
     //constructor
-    function __constructor(){
-
-    }
+    
     //methods
     //getAllMethod
     public function GetAll(){
         $db = new DataBase();
         $con = $db->connect();
-        if ($con) {
-            $result = mysqli_query($con, $query);
-        } else {
-            return 'Connection error';
+        if (!$con) {
+            die('Connection error');   
         }
+        //SQL
         $query = <<<'SQL'
             SELECT * FROM artist
         SQL;
-        //prepare and bind
+        //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
         $stmt->execute();
-        //populate the return result
+        //create query result
+        //$result = mysqli_query($con, $query);
+        $result = $stmt->get_result();
+        //populate the list from result
         // custom name => database id
         $list = [];
         while ($row = mysqli_fetch_array($result)) {
@@ -40,23 +43,48 @@ class Artist{
 
         return $list;
     }
-    public function Create($track){
+    // = array of values?
+    public function Create($name){
         $db = new DataBase();
         $con = $db->connect();
         if (!$con) {
             die('Connection error');
         } 
-
+        //SQL
+        $query = <<<'SQL'
+            INSERT INTO track (Name)
+            VALUES (?)
+        SQL;
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("s", $name);
+        $stmt->execute();
+        //cut connection
+        
         $db->cutConnection($con);
-        return;
+        return 'Artist created';
 
     }
-    public function Update(){
+    public function Update($artistId ,$name){
         $db = new DataBase();
         $con = $db->connect();
         if (!$con) {
             die('Connection error');
         } 
+        //SQL
+        $query = <<<'SQL'
+            INSERT INTO track (Name)
+            VALUES (?)
+            WHERE ArtistId = ?
+        SQL;
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("si", $name, $artistId);
+        $stmt->execute();
+        //cut connection
+        
+        $db->cutConnection($con);
+        return 'Artist updated';
     
     }
     public function Delete($artistId){
@@ -70,7 +98,7 @@ class Artist{
         DELETE FROM artist
         WHERE ArtistId = ?
         SQL;
-        //prepare and bind
+        //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
         $stmt->bind_param("i", $artistId);
         $stmt->execute();

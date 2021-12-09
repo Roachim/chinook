@@ -9,33 +9,43 @@ class Albums{
     //methods
     //getAllMethod
     
-    public function AlbumsList(){
+    public function GetAll(){
         $db = new DataBase();
-        $con = $db->connection();
+        $con = $db->connect();
 
-        if ($con) {
-            $query = "SELECT * FROM album";
-            $result = mysqli_query($con, $query);
-
-        } else {
-            return 'Connection error';
+        if (!$con) {
+            die('Connection lost');
         }
-        //array to return. retres = return result ᕕ( ᐛ )ᕗ
-        $retres = [];
+        //array to return. retres = return result 
+        //SQL
+        $query = <<<'SQL'
+        SELECT * FROM album
+        SQL;
+        $result = mysqli_query($con, $query);
 
         //populate the return result
         // custom name => database id
+        $list=[];
         while ($row = mysqli_fetch_array($result)) {
-            $retres[] = array(
+            $list = array(
             "ArtistId" => $row['ArtistId'], 
             "Name" => $row['Name']
             );
         }
 
-        //cut connection to database before ending function
+        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
         $db->cutConnection($con);
 
-        echo json_encode($retres);
+        return $list;
+    }
+    public function Create(){
+            
+    }
+    public function Update(){
+
+    }
+    public function Delete(){
+
     }
 }
 

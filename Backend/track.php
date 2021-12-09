@@ -53,7 +53,53 @@ class Track{
         //cut connection to database before ending function
         $db->cutConnection($con);
 
-        echo json_encode($retres);
+        return $retres;
+    }
+    public function Create($name, $albumId, $MedieTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');
+        } 
+        //SQL
+        $query = <<<'SQL'
+            INSERT INTO track (Name, AlbumId, MedieTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        SQL;
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("siiisiid", $name, $albumId, $MedieTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice);
+        $stmt->execute();
+        //cut connection
+        
+        $db->cutConnection($con);
+        return 'Track created';
+
+    }
+    public function Update($TrackId ,$name, $albumId, $MedieTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');
+        } 
+        //SQL
+        $query = <<<'SQL'
+            INSERT INTO track (Name, AlbumId, MedieTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            WHERE TrackId = ?
+        SQL;
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("siiisiidi", $name, $albumId, $MedieTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice, $TrackId);
+        $stmt->execute();
+        //cut connection
+        
+        $db->cutConnection($con);
+        return 'Track updated';
+    
+    }
+    public function Delete(){
+        
     }
     
 }

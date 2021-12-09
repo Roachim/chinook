@@ -4,7 +4,11 @@ class Admin{
     //properties
     //constructor
     //methods
+    public function GetPassword(){
+        //get password
+    }
 }
+
 
 
 

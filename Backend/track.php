@@ -15,7 +15,7 @@ class Track{
      //getAllMethod
      public function TrackList(){
         $db = new DataBase();
-        $con = $db->connection();
+        $con = $db->connect();
 
         if ($con) {
             $query = <<<'SQL'

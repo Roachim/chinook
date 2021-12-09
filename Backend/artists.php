@@ -12,34 +12,73 @@ class Artist{
     }
     //methods
     //getAllMethod
-    public function ArtistList(){
+    public function GetAll(){
         $db = new DataBase();
-        $con = $db->connection();
-
+        $con = $db->connect();
         if ($con) {
-            $query = "SELECT * FROM artist";
             $result = mysqli_query($con, $query);
-
         } else {
             return 'Connection error';
         }
-        //array to return. retres = return result ᕕ( ᐛ )ᕗ
-        $retres = [];
-
+        $query = <<<'SQL'
+            SELECT * FROM artist
+        SQL;
+        //prepare and bind
+        $stmt = $con->prepare($query);
+        $stmt->execute();
         //populate the return result
         // custom name => database id
+        $list = [];
         while ($row = mysqli_fetch_array($result)) {
-            $retres[] = array(
+            $list[] = array(
             "ArtistId" => $row['ArtistId'], 
             "Name" => $row['Name']
             );
         }
-
-        //cut connection to database before ending function
+        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
         $db->cutConnection($con);
 
-        echo json_encode($retres);
+        return $list;
     }
+    public function Create($track){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');
+        } 
+
+        $db->cutConnection($con);
+        return;
+
+    }
+    public function Update(){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');
+        } 
+    
+    }
+    public function Delete($artistId){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');
+        } 
+        //prepare statement
+        $query = <<<'SQL'
+        DELETE FROM artist
+        WHERE ArtistId = ?
+        SQL;
+        //prepare and bind
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("i", $artistId);
+        $stmt->execute();
+        //cut and return
+        $db->cutConnection($con);
+        return 'Artist updated';
+    }
+
 }
 
 $in = new Artist();

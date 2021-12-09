@@ -4,11 +4,11 @@ header('Access-Control-Allow-Headers', 'Content-Type');
 
 class DataBase{
 
-    public function connection(){
+    public function connect(){
 
         try 
         {
-            $connection = mysqli_connect('127.0.0.1', 'root', '', 'chinook_abridged');
+            $connection = new mysqli('127.0.0.1', 'root', '', 'chinook_abridged');
         } catch (mysqli_sql_exception)
         {
             echo mysqli_error($connection);

@@ -1,5 +1,6 @@
 <?php include_once "db.php";
 
+//Create, read, Update
 class Customer{
     //properties
     private $customerId;
@@ -17,10 +18,90 @@ class Customer{
     private $email;
     //constructor
     //methods
-    public function Get(){
-        
+    public function GetAll(){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');   
+        }
+        //SQL
+        $query = <<<'SQL'
+            SELECT * FROM customer
+        SQL;
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->execute();
+        //create query result
+        //$result = mysqli_query($con, $query);
+        $result = $stmt->get_result();
+        //populate the list from result
+        // custom name => database id
+        $list = [];
+        while ($row = mysqli_fetch_array($result)) {
+            $list[] = array(
+            "CustomerId" => $row['CustomerId'], 
+            "FirstName" => $row['FirstName'],
+            "LastName" => $row['LastName'],
+            "Password" => $row['Password'],
+            "Company" => $row['Company'],
+            "Address" => $row['Address'],
+            "City" => $row['City'],
+            "State" => $row['State'],
+            "Country" => $row['Country'],
+            "PostalCode" => $row['PostalCode'],
+            "Phone" => $row['Phone'],
+            "Fax" => $row['Fax'],
+            "Email" => $row['Email'],
+            );
+        }
+        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
+        $db->cutConnection($con);
+
+        return $list;
     }
-    public function Create($name){
+    public function Get($customerId){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');   
+        }
+        //SQL
+        $query = <<<'SQL'
+            SELECT * FROM customer
+            WHERE CustomerId
+        SQL;
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->execute();
+        //create query result
+        //$result = mysqli_query($con, $query);
+        $result = $stmt->get_result();
+        //populate the list from result
+        // custom name => database id
+        $list = [];
+        while ($row = mysqli_fetch_array($result)) {
+            $list[] = array(
+                "CustomerId" => $row['CustomerId'], 
+                "FirstName" => $row['FirstName'],
+                "LastName" => $row['LastName'],
+                "Password" => $row['Password'],
+                "Company" => $row['Company'],
+                "Address" => $row['Address'],
+                "City" => $row['City'],
+                "State" => $row['State'],
+                "Country" => $row['Country'],
+                "PostalCode" => $row['PostalCode'],
+                "Phone" => $row['Phone'],
+                "Fax" => $row['Fax'],
+                "Email" => $row['Email'],
+                );
+        }
+        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
+        $db->cutConnection($con);
+
+        return $list;
+    }
+    public function Create($FirstName, $LastName, $Password, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email){
         $db = new DataBase();
         $con = $db->connect();
         if (!$con) {
@@ -28,20 +109,20 @@ class Customer{
         } 
         //SQL
         $query = <<<'SQL'
-            INSERT INTO track (Name)
-            VALUES (?)
+            INSERT INTO customer (FirstName, LastName, Password, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         SQL;
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
-        $stmt->bind_param("s", $name);
+        $stmt->bind_param("ssssssssssss", $FirstName, $LastName, $Password, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email);
         $stmt->execute();
         //cut connection
         
         $db->cutConnection($con);
-        return 'Artist created';
+        return 'User account created';
 
     }
-    public function Update($artistId ,$name){
+    public function Update($CustomerId ,$FirstName, $LastName, $Password, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email){
         $db = new DataBase();
         $con = $db->connect();
         if (!$con) {
@@ -49,18 +130,18 @@ class Customer{
         } 
         //SQL
         $query = <<<'SQL'
-            INSERT INTO track (Name)
-            VALUES (?)
-            WHERE ArtistId = ?
+            INSERT INTO customer (FirstName, LastName, Password, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            WHERE CustomerId = ?
         SQL;
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
-        $stmt->bind_param("si", $name, $artistId);
+        $stmt->bind_param("sssssssssssss", $FirstName, $LastName, $Password, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email, $CustomerId);
         $stmt->execute();
         //cut connection
         
         $db->cutConnection($con);
-        return 'Artist updated';
+        return 'User account updated';
     
     }
 }

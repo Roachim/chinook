@@ -15,10 +15,9 @@
     </header>
     
     <form action="browsePage.php" method="POST">
-        <input type="text" name="loginName" id="" placeholder="username">
+        <input type="text" name="loginEmail" id="" placeholder="Email">
         <input type="password" name="loginPass" placeholder="password">
         <input type="submit">
-
     </form>
     <br>
     <button id="Btn">click for info</button>

@@ -12,7 +12,7 @@ class InvoiceLine{
         
     }
     //methods
-    public function Create($name){
+    public function Create($invoiceId, $trackId, $unitPrice, $quantity){
         $db = new DataBase();
         $con = $db->connect();
         if (!$con) {
@@ -20,17 +20,18 @@ class InvoiceLine{
         } 
         //SQL
         $query = <<<'SQL'
-            INSERT INTO track (Name)
-            VALUES (?)
+            INSERT INTO invoice (InvoiceId, TrackId, UnitPrice, Quantity)
+            VALUES (?, ?, ?, ?)
         SQL;
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
-        $stmt->bind_param("s", $name);
+
+        $stmt->bind_param("iidi", $invoiceId, $trackId, $unitPrice, $quantity);
         $stmt->execute();
         //cut connection
         
         $db->cutConnection($con);
-        return 'Artist created';
+        return 'InvoiceLine created';
 
     }
 }

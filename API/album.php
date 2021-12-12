@@ -1,6 +1,6 @@
 <?php include_once "db.php";
 //implement whole CRUD
-class Albums{
+class Album{
     //properties
     private $almbumId;
     private $title;

@@ -33,7 +33,7 @@ header('Accept-version: v1');
 $pieces = count($urlPieces);
 
 if ($pieces == 1) {
-    echo APIDescription();
+    echo 'APIDescription placeholder. Please use the readme.md included.'();
 } else {
     if ($pieces > MAX_PIECES) {
         echo formatError();
@@ -51,21 +51,21 @@ if ($pieces == 1) {
                 switch ($verb) {
                     case 'GET':                             //get all album
                         
-                        echo addHATEOAS($album->GetAll(), ENTITY_ALBUMS);
+                        echo $album->GetAll();
                         
                         break;
                     case 'POST':                            //create new artist
                         if (!isset($_POST['name'])) {
                             echo formatError();
                         } else {
-                            echo addHATEOAS($person->add($_POST['name']), ENTITY_ALBUMS);
+                            echo $person->add($_POST['name']);
                         }                        
                         break;
                     case 'DELETE':                          //delete artist
                         if ($pieces < MAX_PIECES) {
                             echo formatError();
                         } else {
-                            echo addHATEOAS($person->delete($urlPieces[POS_ID]), ENTITY_ALBUMS);
+                            echo $person->delete($urlPieces[POS_ID]);
                         }
                         break;                     
                 }

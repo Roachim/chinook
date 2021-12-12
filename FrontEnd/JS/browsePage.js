@@ -6,8 +6,8 @@ $("#BtnTracks").on("click", function(e){
     
 
     //use to get info from html/php page via id of item
-    //var keyword = $("#somethinhg").val();
-    var url = base_url + "Backend/track.php";
+    //const keyword = $("#somethinhg").val();
+    const url = base_url + "Backend/track.php";
     
     
 
@@ -32,8 +32,8 @@ $("#BtnTracks").on("click", function(e){
 
             let cell = $('<td></td>', { 'text': "Name" });
             
-            let ucell = $('<td></td>', { 'text': item.Name });
-            cell.append(ucell);
+            let cell = $('<td></td>', { 'text': item.Name });
+            row.append(cell);
             row.append(cell);
             
             cell = $('<td></td>', { 'text': 'Album' });

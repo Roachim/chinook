@@ -38,11 +38,48 @@ class Album{
 
         return $list;
     }
-    public function Create(){
-            
-    }
-    public function Update(){
+    public function Create($title, $artistId){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');
+        } 
+        //SQL
+        $query = <<<'SQL'
+            INSERT INTO album (Title, ArtistId)
+            VALUES (?, ?)
+        SQL;
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("si", $title, $artistId);
+        $stmt->execute();
+        //cut connection
+        
+        $db->cutConnection($con);
+        return 'Album created';
 
+    }
+    public function Update($albumId ,$title, $artistId){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');
+        } 
+        //SQL
+        $query = <<<'SQL'
+            INSERT INTO track (Title, ArtistId)
+            VALUES (?, ?)
+            WHERE ArtistId = ?
+        SQL;
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("si", $title, $artistId);
+        $stmt->execute();
+        //cut connection
+        
+        $db->cutConnection($con);
+        return 'Album updated';
+    
     }
     public function Delete(){
 

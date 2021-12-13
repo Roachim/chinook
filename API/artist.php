@@ -106,7 +106,35 @@ class Artist{
         $db->cutConnection($con);
         return 'Artist deleted';
     }
-
+    function IntegrityCheck($artistId) {
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');
+        } 
+        // SQL
+        $query = <<<'SQL'
+            SELECT AlbumId 
+            FROM album
+            WHERE ArtistId = ?;
+        SQL;
+        //prepare, bind, execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('i', $artistId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        //check amount
+        while ($row = mysqli_fetch_array($result)) {
+            $list[] = array(
+                "AlbumId" => $row['AlbumId']
+                );
+        }
+        if(count($row) == 0 || count($row) == null){
+            return true;
+        }
+        return false;
+    }
 }
 
 ?>

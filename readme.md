@@ -30,14 +30,14 @@ POST http://localhost/chinook/tracks
 PUT http://localhost/chinook/tracks/10
 DELETE http://localhost/chinook/tracks/10
 
-Customer--
+Customers--
 GET http://localhost/chinook/customers
 POST http://localhost/chinook/customers
 POST http://localhost/chinook/customers/validate
 PUT http://localhost/chinook/customers/5
 
-invoice--
-POST http://localhost/chinook/invoice
+invoices--
+POST http://localhost/chinook/invoices
 
 invoiceLine--
 POST http://localhost/chinook/invoiceline

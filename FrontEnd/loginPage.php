@@ -51,10 +51,10 @@
 
     </header>
     
-    <form action="browsePage.php" method="POST">
+    <form action="loginPage.php" method="POST">
         <input type="text" name="loginEmail" id="" placeholder="Email">
         <input type="password" name="loginPass" placeholder="password">
-        <input type="submit">
+        <input type="submit" id="LoginBtn" value="Login">
     </form>
     <br>
     <button id="Btn">click for info</button>

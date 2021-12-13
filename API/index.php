@@ -41,13 +41,13 @@ if ($pieces == 1) {
     echo 'APIDescription placeholder. Please use the readme.md included.'();
 } else {
     if ($pieces > MAX_PIECES) {
-        echo formatError();
+        echo 'format error';
     } else {
 
         $entity = $urlPieces[POS_ENTITY];
 
         switch ($entity) {
-            case ENTITY_ALBUMS:
+            case ENTITY_ALBUMS: //----------------------------------------------------ALBUMS--------------------------------------------------------------------------------
                 require_once('album.php');
                 $album = new Album();
 
@@ -59,16 +59,23 @@ if ($pieces == 1) {
                         echo $album->GetAll();
                         
                         break;
-                    case 'POST':                            //create new artist
+                    case 'POST':                            //create new album
                         if (!isset($_POST['name'])) {
-                            echo formatError();
+                            echo 'format error';
+                        } else {
+                            echo $person->add($_POST['name']);
+                        }                        
+                        break;
+                    case 'PUT':
+                        if (!isset($_POST['name'])) {
+                            echo 'format error';
                         } else {
                             echo $person->add($_POST['name']);
                         }                        
                         break;
                     case 'DELETE':                          //delete artist
                         if ($pieces < MAX_PIECES) {
-                            echo formatError();
+                            echo 'format error';
                         } else {
                             echo $person->delete($urlPieces[POS_ID]);
                         }
@@ -76,7 +83,7 @@ if ($pieces == 1) {
                 }
                 $album = null;
                 break;  
-            case ENTITY_ARTIST:
+            case ENTITY_ARTIST: //----------------------------------------------------ARTISTS--------------------------------------------------------------------------------
                 require_once('artist.php');
                 $artist = new Artist();
 
@@ -88,7 +95,7 @@ if ($pieces == 1) {
                         break;
                     case 'POST':                                    // Add new film
                         if (!isset($_POST['title'])) {
-                            echo formatError();
+                            echo 'format error';
                         } else {
                             echo addHATEOAS($movie->add($_POST), ENTITY_ARTIST);
                         }
@@ -99,14 +106,14 @@ if ($pieces == 1) {
                         $movieData = (array) json_decode(file_get_contents('php://input'), TRUE);
                 
                         if ($pieces < MAX_PIECES || !isset($movieData['title'])) {
-                            echo formatError();
+                            echo 'format error';
                         } else {
                             echo addHATEOAS($movie->update($urlPieces[POS_ID], $movieData), ENTITY_ARTIST);
                         }
                         break;
                     case 'DELETE':                                  // Delete film
                         if ($pieces < MAX_PIECES) {
-                            echo formatError();
+                            echo 'format error';
                         } else {
                             echo addHATEOAS($movie->delete($urlPieces[POS_ID]), ENTITY_ARTIST);
                         }
@@ -114,8 +121,32 @@ if ($pieces == 1) {
                 }
                 $movie = null;
                 break; 
+            case ENTITY_CUSTOMER: //----------------------------------------------------CUSTOMERs--------------------------------------------------------------------------------
+                require_once('customer.php');
+                $artist = new Customer();
+
+                $verb = $_SERVER['REQUEST_METHOD'];
+                break;
+            case ENTITY_INVOICES: //----------------------------------------------------INVOICES--------------------------------------------------------------------------------
+                require_once('invoice.php');
+                $artist = new Invoice();
+
+                $verb = $_SERVER['REQUEST_METHOD'];
+                break;
+            case ENTITY_INVOICELINES: //----------------------------------------------------INVOICELINES--------------------------------------------------------------------------------
+                require_once('invoiceline.php');
+                $artist = new InvoiceLine();
+
+                $verb = $_SERVER['REQUEST_METHOD'];
+                break;
+             case ENTITY_ADMINS: //----------------------------------------------------ADMINS--------------------------------------------------------------------------------
+                require_once('admin.php');
+                $artist = new Admin();
+
+                $verb = $_SERVER['REQUEST_METHOD'];
+                break;
             default:
-                echo formatError();
+                echo 'Format error';
         }
     }
 }

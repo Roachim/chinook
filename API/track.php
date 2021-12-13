@@ -117,6 +117,35 @@ class Track{
         $db->cutConnection($con);
         return 'Track deleted';
     }
+    function IntegrityCheck($trackId) {
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');
+        } 
+        // SQL
+        $query = <<<'SQL'
+            SELECT InvoiceLineId 
+            FROM InvoiceLine
+            WHERE TrackId = ?;
+        SQL;
+        //prepare, bind, execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('i', $trackId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        //check amount
+        while ($row = mysqli_fetch_array($result)) {
+            $list[] = array(
+                "InvoiceLineId" => $row['InvoiceLineId']
+                );
+        }
+        if(count($row) == 0 || count($row) == null){
+            return true;
+        }
+        return false;
+    }
     
 }
 

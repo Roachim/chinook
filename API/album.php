@@ -100,6 +100,8 @@ class Album{
         $db->cutConnection($con);
         return 'Album deleted';
     }
+    
+
 }
 
 

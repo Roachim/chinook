@@ -68,10 +68,11 @@ class Customer{
         //SQL
         $query = <<<'SQL'
             SELECT * FROM customer
-            WHERE CustomerId
+            WHERE CustomerId = ?
         SQL;
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
+        $stmt->bind_param("i", $customerId);
         $stmt->execute();
         //create query result
         //$result = mysqli_query($con, $query);
@@ -112,6 +113,8 @@ class Customer{
             INSERT INTO customer (FirstName, LastName, Password, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         SQL;
+        //remember to has password
+        $Password = password_hash($Password, PASSWORD_DEFAULT);
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
         $stmt->bind_param("ssssssssssss", $FirstName, $LastName, $Password, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email);
@@ -134,6 +137,10 @@ class Customer{
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             WHERE CustomerId = ?
         SQL;
+        if($Password != null){
+        //remember to has password
+        $Password = password_hash($Password, PASSWORD_DEFAULT);
+        }
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
         $stmt->bind_param("sssssssssssss", $FirstName, $LastName, $Password, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email, $CustomerId);
@@ -181,6 +188,35 @@ class Customer{
 
         // Check the password
         return (password_verify($password, $result['password']));
+    }
+    function IntegrityCheck($customerId) {
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');
+        } 
+        // SQL
+        $query = <<<'SQL'
+            SELECT InvoiceId 
+            FROM Invoice
+            WHERE CustomerId = ?;
+        SQL;
+        //prepare, bind, execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('i', $customerId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        //check amount
+        while ($row = mysqli_fetch_array($result)) {
+            $list[] = array(
+                "InvoiceId" => $row['InvoiceId']
+                );
+        }
+        if(count($row) == 0 || count($row) == null){
+            return true;
+        }
+        return false;
     }
 }
 

@@ -32,7 +32,7 @@ $("#BtnTracks").on("click", function(e){
 
             let cell = $('<td></td>', { 'text': "Name" });
             
-            let cell = $('<td></td>', { 'text': item.Name });
+            cell = $('<td></td>', { 'text': item.Name });
             row.append(cell);
             row.append(cell);
             
@@ -175,10 +175,10 @@ $("#BtnArtists").on("click", function(e){
         const newPassword = $("#txtNewPassword").val().trim();
 
         $.ajax({
-            url: "src/api.php",
+            url: url,
             type: "POST",
             data: {
-                entity: "customer",
+                entity: "customers",
                 action: "UPDATE",
                 customerId: customerId,
                 firstName: firstName,
@@ -197,19 +197,21 @@ $("#BtnArtists").on("click", function(e){
                 newPassword: newPassword
             },
             success: function(data) {
-                data = JSON.parse(data);
+                //parse from JSON to objects
+                
+                data = JSON.parse(JSON.stringify(data));
                 //hide the password information
                 $("#txtOldPassword").val("");
                 $("#txtNewPassword").val("");
                 
-                hideModal("userProfile");
+                //hideModal("userProfile");
                 if (data) {
                     alert("The user profile was successfully updated. Please log in again");
                     
                     // Call the PHP API to end the session and redirect to the login page
-                    //aye aye sir. kinda cruel function though.
+                    //aye aye sir. Kinda cruel function though.
                     $.ajax({
-                        url: "src/api.php",
+                        url: url,
                         type: "POST",
                         data: {
                             entity: "session",

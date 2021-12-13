@@ -99,6 +99,8 @@
     <footer>
 
     </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
+    <script src="JS/browsePage.js" defer></script>
 </body>
 </html>
 
@@ -106,5 +108,5 @@
     The page should show all tracks, all artist and all albums.
 A button to change window for each would be helpful.
 each item must have a button to be added to cart.
-Include a path to cart, include a path userInfo.
+Include a path to cart, include a path to userInfo.
 -->

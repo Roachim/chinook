@@ -6,10 +6,7 @@ require_once "admin.php";
 require_once "customer.php";
 require_once "invoice.php";
 require_once "invoiceline.php";
-session_start();
-    if (!isset($_SESSION['customerId'])) {
-        die('Session variable userID not set.<br>User not authenticated.');
-    }
+
 define('POS_ENTITY', 1);
 define('POS_ID', 2);
 define('MAX_PIECES', 3);
@@ -39,6 +36,11 @@ header('Accept-version: v1');
 
 $pieces = count($urlPieces);
 
+session_start();
+
+    if (!isset($_SESSION['customerId'])) {
+        die('Session variable userID not set.<br>User not authenticated.');
+    }
 //json encode for correct return type = json_encode()
 
 if ($pieces == 1) {
@@ -181,6 +183,8 @@ if ($pieces == 1) {
                 $verb = $_SERVER['REQUEST_METHOD'];
                 break;
             case 'session':
+                $action = $_POST['action'];
+
                 switch ($action) {
                     case 'destroy':
                         session_destroy();

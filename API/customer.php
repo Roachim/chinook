@@ -3,19 +3,19 @@
 //Create, read, Update
 class Customer{
     //properties
-    private $customerId;
-    private $firstname;
-    private $lastname;
-    private $password;
-    private $company;
-    private $address;
-    private $city;
-    private $state;
-    private $country;
-    private $postalCode;
-    private $phone;
-    private $fax;
-    private $email;
+    public $customerId;
+    public $firstname;
+    public $lastname;
+    public $password;
+    public $company;
+    public $address;
+    public $city;
+    public $state;
+    public $country;
+    public $postalCode;
+    public $phone;
+    public $fax;
+    public $email;
     //constructor
     //methods
     public function GetAll(){

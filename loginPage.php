@@ -15,23 +15,33 @@
     } else if (isset($_POST['loginEmail']) && isset($_POST['loginPass'])) {
         
         $userValidation = true;
-        require_once('customer.php');
+        require_once('API/customer.php');
 
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+        $email = $_POST['loginEmail'];
+        $password = $_POST['loginPass'];
 
-        
         $validUser = $user->validate($email, $password);
         if ($validUser) {
             session_start();
 
-            $_SESSION['userID'] = $user->userID;
+            $_SESSION['customerId'] = $user->userID;
             $_SESSION['firstName'] = $user->firstName;
             $_SESSION['lastName'] = $user->lastName;
+            $_SESSION['password'] = $password;
+            $_SESSION['company'] = $email;
+            $_SESSION['address'] = $email;
+            $_SESSION['city'] = $email;
+            $_SESSION['state'] = $email;
+            $_SESSION['country'] = $email;
+            $_SESSION['postalCode'] = $email;
+            $_SESSION['phone'] = $email;
+            $_SESSION['fax'] = $email;
             $_SESSION['email'] = $email;
+
 
             header('Location: browsePage.php');
         }
+        //$CustomerId ,$FirstName, $LastName, $Password, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email
     }
 
 ?>

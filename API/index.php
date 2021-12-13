@@ -68,17 +68,18 @@ if ($pieces == 1) {
                             echo json_encode($album->Create($_POST['Title'], $_POST['ArtistId']));
                         }                        
                         break;
-                    case 'PUT':
+                    case 'PUT':                             //Update album
                         if (!isset($_PUT['AlbumId']) || !isset($_PUT['Title']) || !isset($_PUT['ArtistId'])) {
                             echo 'format error';
                         } else {
                             echo json_encode($album->Update($_PUT['AlbumId'], $_PUT['Title'], $_PUT['ArtistId']));
                         }                        
                         break;
-                    case 'DELETE':                          //delete artist
+                    case 'DELETE':                          //delete album
                         if ($pieces < MAX_PIECES) {
                             echo 'format error';
-                        } else {
+                        }
+                        else {
                             echo json_encode($album->Delete(POS_ID));
                         }
                         break;                     
@@ -93,13 +94,13 @@ if ($pieces == 1) {
 
                 switch ($verb) {
                     case 'GET':
-                        echo addHATEOAS($artist->GetAll(), ENTITY_ALBUMS);
+                        echo json_encode($artist->GetAll());                     //get all artists
                         break;
                     case 'POST':                                    // Add new film
                         if (!isset($_POST['title'])) {
                             echo 'format error';
                         } else {
-                            echo addHATEOAS($movie->add($_POST), ENTITY_ARTIST);
+                            echo $movie->add($_POST);
                         }
                         break;
                     case 'PUT':                                     // Update film
@@ -110,14 +111,14 @@ if ($pieces == 1) {
                         if ($pieces < MAX_PIECES || !isset($movieData['title'])) {
                             echo 'format error';
                         } else {
-                            echo addHATEOAS($movie->update($urlPieces[POS_ID], $movieData), ENTITY_ARTIST);
+                            echo $movie->update($urlPieces[POS_ID], $movieData);
                         }
                         break;
                     case 'DELETE':                                  // Delete film
                         if ($pieces < MAX_PIECES) {
                             echo 'format error';
                         } else {
-                            echo addHATEOAS($movie->delete($urlPieces[POS_ID]), ENTITY_ARTIST);
+                            echo $movie->delete($urlPieces[POS_ID]);
                         }
                         break;
                 }

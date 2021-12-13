@@ -198,7 +198,7 @@ $("#BtnArtists").on("click", function(e){
             },
             success: function(data) {
                 data = JSON.parse(data);
-
+                //hide the password information
                 $("#txtOldPassword").val("");
                 $("#txtNewPassword").val("");
                 
@@ -207,6 +207,7 @@ $("#BtnArtists").on("click", function(e){
                     alert("The user profile was successfully updated. Please log in again");
                     
                     // Call the PHP API to end the session and redirect to the login page
+                    //aye aye sir. kinda cruel function though.
                     $.ajax({
                         url: "src/api.php",
                         type: "POST",
@@ -215,7 +216,7 @@ $("#BtnArtists").on("click", function(e){
                             action: "destroy"
                         },
                         success: function(data) {
-                            window.location.replace('login.php');
+                            window.location.replace('loginPage.php');
                         }
                     })
 

@@ -106,7 +106,7 @@ if ($pieces == 1) {
                         if (!isset($_POST['title'])) {
                             echo json_encode('format error');
                         } else {
-                            echo json_encode($artist->Create()) ;
+                            //echo json_encode($artist->Create()) ;
                         }
                         break;
                     case 'POST':                                                 //update artist
@@ -143,8 +143,10 @@ if ($pieces == 1) {
                     case 'POST':
                         $type = $_POST['action'];
                         if ($type = 'UPDATE') {
-                            echo json_encode($customer->Update($_POST['customerId'] ,$_POST['firstName'], $_POST['lastName'], $_POST['password'], $_POST['company'], $_POST['address'], $_POST['city'], 
-                            $_POST['state'], $_POST['country'], $_POST['postalCode'], $_POST['phone'], $_POST['fax'], $_POST['email'])); //Update customer
+                            echo json_encode($customer->Update($_POST['customerId'] ,$_POST['firstName'], 
+                            $_POST['lastName'], $_POST['company'], $_POST['address'], $_POST['city'], 
+                            $_POST['state'], $_POST['country'], $_POST['postalCode'], $_POST['phone'], 
+                            $_POST['fax'], $_POST['email'], $_POST['password'],$_POST['newPassword'])); //Update customer
                         } else{
                             echo json_encode($customer->Create($_POST['firstName'], $_POST['lastName'], $_POST['password'], $_POST['company'], $_POST['address'], $_POST['city'], 
                             $_POST['state'], $_POST['country'], $_POST['postalCode'], $_POST['phone'], $_POST['fax'], $_POST['email'])); //create new customer
@@ -178,6 +180,13 @@ if ($pieces == 1) {
 
                 $verb = $_SERVER['REQUEST_METHOD'];
                 break;
+            case 'session':
+                switch ($action) {
+                    case 'destroy':
+                        session_destroy();
+                        //echo 'Session destroyed';
+                        break;
+                    }
             default:
                 echo json_encode('format error');
         }

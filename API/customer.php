@@ -154,7 +154,7 @@ class Customer{
         return 'User account created';
 
     }
-    public function Update($CustomerId ,$FirstName, $LastName, $Password, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email){
+    public function Update($CustomerId, $FirstName, $LastName, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email, $Password, $newPassword){
         $db = new DataBase();
         $con = $db->connect();
         if (!$con) {
@@ -162,22 +162,49 @@ class Customer{
         } 
         //SQL
         $query = <<<'SQL'
-            INSERT INTO customer (FirstName, LastName, Password, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            WHERE CustomerId = ?
+            UPDATE customer 
+            SET FirstName = ?, 
+            LastName = ?, 
+            Company = ?, 
+            Address = ?, 
+            City = ?, 
+            State = ?, 
+            Country = ?, 
+            PostalCode = ?, 
+            Phone = ?, 
+            Fax = ?, 
+            Email = ?
         SQL;
+        //split the SQL, insert new password before the 'where' clause to sandwich in updating the password when appropriate
+        $passwordChange = (trim($newPassword) !== '');
+        if ($passwordChange) {
+            if ($this->validate($Email, $Password)) {                
+                $newPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+                $query .= ', Password = ?';
+            } else {
+                return false;
+            }
+        }
+        $query .= ' WHERE CustomerId = ?;';
+
         if($Password != null){
-        //remember to has password
-        $Password = password_hash($Password, PASSWORD_DEFAULT);
+            //remember to hash password before inserting
+            $Password = password_hash($Password, PASSWORD_DEFAULT);
         }
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
-        $stmt->bind_param("sssssssssssss", $FirstName, $LastName, $Password, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email, $CustomerId);
+        if($passwordChange){
+            $stmt->bind_param("sssssssssssss", $FirstName, $LastName, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email, $newPassword, $CustomerId);
+        }
+        else{
+            $stmt->bind_param("sssssssssssss", $FirstName, $LastName, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email, $CustomerId);
+        }
+        
         $stmt->execute();
         //cut connection
         
         $db->cutConnection($con);
-        return 'User account updated';
+        return true;
     
     }
     function validate($email, $password) {
@@ -217,11 +244,11 @@ class Customer{
 
         // hash check password
         if(!password_verify($password, $this->password)){
-            return 'Password is false: entered' . $password . ' this is ' . $this->password;
+            return false;
         }
         return true;
     }
-    //check if customer has any purchases via invoices. return true if integrity holds
+    //check if customer has any purchases via invoices. return true if integrity holds: customer has no purchases and is allowed to be deleted
     function IntegrityCheck($customerId) {
         $db = new DataBase();
         $con = $db->connect();
@@ -250,6 +277,9 @@ class Customer{
             return true;
         }
         return false;
+    }
+    function PasswordCheck($password){
+
     }
 }
 

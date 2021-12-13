@@ -28,10 +28,12 @@ class Album{
         $list=[];
         while ($row = mysqli_fetch_array($result)) {
             $list = array(
-            "ArtistId" => $row['ArtistId'], 
-            "Name" => $row['Name']
+            "AlbumId" => htmlspecialchars($row['AlbumId']),
+            "ArtistId" => htmlspecialchars($row['ArtistId']), 
+            "Title" => htmlspecialchars($row['Title'])
             );
         }
+        
 
         //cut connection to database before ending function ᕕ( ᐛ )ᕗ
         $db->cutConnection($con);

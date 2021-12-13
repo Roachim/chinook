@@ -34,8 +34,8 @@ class Artist{
         $list = [];
         while ($row = mysqli_fetch_array($result)) {
             $list[] = array(
-            "ArtistId" => $row['ArtistId'], 
-            "Name" => $row['Name']
+                "ArtistId" => htmlspecialchars($row['ArtistId']) , 
+                "Name" => htmlspecialchars($row['Name'])
             );
         }
         //cut connection to database before ending function ᕕ( ᐛ )ᕗ

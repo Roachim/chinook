@@ -82,19 +82,19 @@ class Customer{
         $list = [];
         while ($row = mysqli_fetch_array($result)) {
             $list[] = array(
-                "CustomerId" => $row['CustomerId'], 
-                "FirstName" => $row['FirstName'],
-                "LastName" => $row['LastName'],
-                "Password" => $row['Password'],
-                "Company" => $row['Company'],
-                "Address" => $row['Address'],
-                "City" => $row['City'],
-                "State" => $row['State'],
-                "Country" => $row['Country'],
-                "PostalCode" => $row['PostalCode'],
-                "Phone" => $row['Phone'],
-                "Fax" => $row['Fax'],
-                "Email" => $row['Email'],
+                "CustomerId" => htmlspecialchars($row['CustomerId']), 
+                "FirstName" => htmlspecialchars($row['FirstName']),
+                "LastName" => htmlspecialchars($row['LastName']),
+                "Password" => htmlspecialchars($row['Password']),
+                "Company" => htmlspecialchars($row['Company']),
+                "Address" => htmlspecialchars($row['Address']),
+                "City" => htmlspecialchars($row['City']),
+                "State" => htmlspecialchars($row['State']),
+                "Country" => htmlspecialchars($row['Country']),
+                "PostalCode" => htmlspecialchars($row['PostalCode']),
+                "Phone" => htmlspecialchars($row['Phone']),
+                "Fax" => htmlspecialchars($row['Fax']),
+                "Email" => htmlspecialchars($row['Email'])
                 );
         }
         //cut connection to database before ending function ᕕ( ᐛ )ᕗ
@@ -179,16 +179,10 @@ class Customer{
             return false;
         }
 
-        // $user = $stmt->fetch();
-
-        // $this->userID = $user['CustomerId'];
-        // $this->firstName = $user['FirstName'];
-        // $this->lastName = $user['LastName'];
-        // $this->email = $email;
-
-        // Check the password
+        // hash check password
         return (password_verify($password, $result['password']));
     }
+    //check if customer has any purchases via invoices. return true if integrity holds
     function IntegrityCheck($customerId) {
         $db = new DataBase();
         $con = $db->connect();

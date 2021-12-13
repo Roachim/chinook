@@ -37,6 +37,8 @@ header('Accept-version: v1');
 
 $pieces = count($urlPieces);
 
+//json encode for correct return type = json_encode()
+
 if ($pieces == 1) {
     echo 'APIDescription placeholder. Please use the readme.md included.'();
 } else {
@@ -56,28 +58,28 @@ if ($pieces == 1) {
                 switch ($verb) {
                     case 'GET':                             //get all album
                         
-                        echo $album->GetAll();
+                        echo json_encode($album->GetAll());
                         
                         break;
                     case 'POST':                            //create new album
-                        if (!isset($_POST['name'])) {
+                        if (!isset($_POST['Title']) || !isset($_POST['ArtistId'])) {
                             echo 'format error';
                         } else {
-                            echo $person->add($_POST['name']);
+                            echo json_encode($album->Create($_POST['Title'], $_POST['ArtistId']));
                         }                        
                         break;
                     case 'PUT':
-                        if (!isset($_POST['name'])) {
+                        if (!isset($_PUT['AlbumId']) || !isset($_PUT['Title']) || !isset($_PUT['ArtistId'])) {
                             echo 'format error';
                         } else {
-                            echo $person->add($_POST['name']);
+                            echo json_encode($album->Update($_PUT['AlbumId'], $_PUT['Title'], $_PUT['ArtistId']));
                         }                        
                         break;
                     case 'DELETE':                          //delete artist
                         if ($pieces < MAX_PIECES) {
                             echo 'format error';
                         } else {
-                            echo $person->delete($urlPieces[POS_ID]);
+                            echo json_encode($album->Delete(POS_ID));
                         }
                         break;                     
                 }

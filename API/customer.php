@@ -3,9 +3,9 @@
 //Create, read, Update
 class Customer{
     //properties
-    public int $customerId;
-    public string $firstname;
-    public string $lastname;
+    public int $customerId; //not null
+    public string $firstName; //not null
+    public string $lastName; //not null
     public string $password;
     public string $company;
     public string $address;
@@ -15,8 +15,37 @@ class Customer{
     public string $postalCode;
     public string $phone;
     public string $fax;
-    public string $email;
+    public string $email; //not null
     //constructor ??
+    // function __construct()
+    // { global $customerId;
+    //     global $customerId;
+    //     global $firstName;
+    //     global $lastName;
+    //     global $password;
+    //     global $company;
+    //     global $address;
+    //     global $city;
+    //     global $state;
+    //     global $country;
+    //     global $postalCode;
+    //     global $phone;
+    //     global $fax;
+    //     global $email;
+    //  $customerId = 0; //not null
+    //  $firstName = ''; //not null
+    //  $lastName = ''; //not null
+    //  $password = '';
+    //  $company = '';
+    //  $address = '';
+    //  $city = '';
+    //  $state = '';
+    //  $country = '';
+    //  $postalCode = '';
+    //  $phone = '';
+    //  $fax = '';
+    //  $email = '';
+    // }
     //methods
     public function GetAll(){
         $db = new DataBase();
@@ -159,46 +188,38 @@ class Customer{
         } 
         // SQL
         $query = <<<'SQL'
-            SELECT CustomerId, FirstName, LastName, Password 
+            SELECT CustomerId, FirstName, LastName, Password, Company, Address, City, State, Country, PostalCode, Phone, Fax, Email
             FROM customer
-            WHERE Email = ?;
+            WHERE Email = ?
         SQL;
         //prepare, bind, execute
         $stmt = $con->prepare($query);
+        
         $stmt->bind_param("s", $email);
+        
         $stmt->execute();
         $result = $stmt->get_result();
-        
-        //check amount
-        if(mysqli_fetch_array($result) == null){
 
-        }
-        else if(count(mysqli_fetch_array($result)) == 0 || count(mysqli_fetch_array($result)) == null){
-            return false;
-        }
-
-        //put values into properties of customer
-        while ($row = mysqli_fetch_array($result)) {
-            
-                $this->customerId = htmlspecialchars($row['CustomerId']); 
-                $this->firstname = htmlspecialchars($row['FirstName']);
-                $this->lastname = htmlspecialchars($row['LastName']);
-                $this->password = $row['Password'];
-                $this->company = htmlspecialchars($row['Company']);
-                $this->address = htmlspecialchars($row['Address']);
-                $this->city = htmlspecialchars($row['City']);
-                $this->state = htmlspecialchars($row['State']);
-                $this->country = htmlspecialchars($row['Country']);
-                $this->postalCode = htmlspecialchars($row['PostalCode']);
-                $this->phone = htmlspecialchars($row['Phone']);
-                $this->fax = htmlspecialchars($row['Fax']);
-                $this->email = htmlspecialchars($row['Email']);
-                break;
-            
-        }
+        $row = $result->fetch_assoc();
+        $this->customerId = htmlspecialchars($row['CustomerId']); 
+        $this->firstName = htmlspecialchars($row['FirstName']);
+        $this->lastName = htmlspecialchars($row['LastName']);
+        $this->password = $row['Password'];
+        $this->company = htmlspecialchars($row['Company']);
+        $this->address = htmlspecialchars($row['Address']);
+        $this->city = htmlspecialchars($row['City']);
+        $this->state = htmlspecialchars($row['State']);
+        $this->country = htmlspecialchars($row['Country']);
+        $this->postalCode = htmlspecialchars($row['PostalCode']);
+        $this->phone = htmlspecialchars($row['Phone']);
+        $this->fax = htmlspecialchars($row['Fax']);
+        $this->email = htmlspecialchars($row['Email']);
 
         // hash check password
-        return (password_verify($password, $this->password));
+        if(!password_verify($password, $this->password)){
+            return 'Password is false: entered' . $password . ' this is ' . $this->password;
+        }
+        return true;
     }
     //check if customer has any purchases via invoices. return true if integrity holds
     function IntegrityCheck($customerId) {

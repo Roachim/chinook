@@ -12,10 +12,9 @@ session_start();
     }
 define('POS_ENTITY', 1);
 define('POS_ID', 2);
-
 define('MAX_PIECES', 3);
 
-define('ENTITY_ARTIST', 'aritst');
+define('ENTITY_ARTIST', 'artists');
 define('ENTITY_ALBUMS', 'albums');
 define('ENTITY_TRACKS', 'tracks');
 define('ENTITY_CUSTOMER', 'customers');
@@ -43,7 +42,7 @@ $pieces = count($urlPieces);
 //json encode for correct return type = json_encode()
 
 if ($pieces == 1) {
-    echo 'APIDescription placeholder. Please use the readme.md included.'();
+    echo json_encode('APIDescription placeholder. Please use the readme.md included for info.');
 } else {
     if ($pieces > MAX_PIECES) {
         echo 'format error';
@@ -66,21 +65,21 @@ if ($pieces == 1) {
                         break;
                     case 'POST':                            //create new album
                         if (!isset($_POST['Title']) || !isset($_POST['ArtistId'])) {
-                            echo 'format error';
+                            echo json_encode('format error');
                         } else {
                             echo json_encode($album->Create($_POST['Title'], $_POST['ArtistId']));
                         }                        
                         break;
                     case 'PUT':                             //Update album
                         if (!isset($_PUT['AlbumId']) || !isset($_PUT['Title']) || !isset($_PUT['ArtistId'])) {
-                            echo 'format error';
+                            echo json_encode('format error');
                         } else {
                             echo json_encode($album->Update($_PUT['AlbumId'], $_PUT['Title'], $_PUT['ArtistId']));
                         }                        
                         break;
                     case 'DELETE':                          //delete album
                         if ($pieces < MAX_PIECES) {
-                            echo 'format error';
+                            echo json_encode('format error');
                         }
                         else {
                             echo json_encode($album->Delete(POS_ID));
@@ -94,32 +93,36 @@ if ($pieces == 1) {
                 $artist = new Artist();
 
                 $verb = $_SERVER['REQUEST_METHOD'];
-
+                $type = $_POST['action'];
                 switch ($verb) {
                     case 'GET':
                         echo json_encode($artist->GetAll());                     //get all artists
                         break;
-                    case 'POST':                                    // Add new film
+                    case 'POST':                                                //create new artist
+                        if ($type = 'UPDATE') {
+                            echo json_encode($artist->Update($artistId, $name));
+                        }
+                        
                         if (!isset($_POST['title'])) {
-                            echo 'format error';
+                            echo json_encode('format error');
                         } else {
-                            echo $movie->add($_POST);
+                            echo json_encode($artist->Create()) ;
                         }
                         break;
-                    case 'PUT':                                     // Update film
+                    case 'POST':                                                 //update artist
                         // Since PHP does not handle PUT parameters explicitly,
                         // they must be read from the request body's raw data
                         $movieData = (array) json_decode(file_get_contents('php://input'), TRUE);
                 
                         if ($pieces < MAX_PIECES || !isset($movieData['title'])) {
-                            echo 'format error';
+                            echo json_encode('format error');
                         } else {
                             echo $movie->update($urlPieces[POS_ID], $movieData);
                         }
                         break;
-                    case 'DELETE':                                  // Delete film
+                    case 'DELETE':                                  //delete artist
                         if ($pieces < MAX_PIECES) {
-                            echo 'format error';
+                            echo json_encode('format error');
                         } else {
                             echo $movie->delete($urlPieces[POS_ID]);
                         }
@@ -127,11 +130,35 @@ if ($pieces == 1) {
                 }
                 $movie = null;
                 break; 
-            case ENTITY_CUSTOMER: //----------------------------------------------------CUSTOMERs--------------------------------------------------------------------------------
+            case ENTITY_CUSTOMER: //----------------------------------------------------CUSTOMERS--------------------------------------------------------------------------------
                 require_once('customer.php');
-                $artist = new Customer();
+                $customer = new Customer();
 
                 $verb = $_SERVER['REQUEST_METHOD'];
+                
+                switch ($verb) {
+                    case 'GET':
+                        echo json_encode($customer->GetAll());                     //get all customers
+                        break;
+                    case 'POST':
+                        $type = $_POST['action'];
+                        if ($type = 'UPDATE') {
+                            echo json_encode($customer->Update($_POST['customerId'] ,$_POST['firstName'], $_POST['lastName'], $_POST['password'], $_POST['company'], $_POST['address'], $_POST['city'], 
+                            $_POST['state'], $_POST['country'], $_POST['postalCode'], $_POST['phone'], $_POST['fax'], $_POST['email'])); //Update customer
+                        } else{
+                            echo json_encode($customer->Create($_POST['firstName'], $_POST['lastName'], $_POST['password'], $_POST['company'], $_POST['address'], $_POST['city'], 
+                            $_POST['state'], $_POST['country'], $_POST['postalCode'], $_POST['phone'], $_POST['fax'], $_POST['email'])); //create new customer
+                        }
+                        break;
+                    case 'DELETE':                                                  //delete customer
+                        if ($pieces < MAX_PIECES) {
+                            echo json_encode('format error');
+                        } else {
+                            echo $movie->delete($urlPieces[POS_ID]);
+                        }
+                        break;
+
+                }
                 break;
             case ENTITY_INVOICES: //----------------------------------------------------INVOICES--------------------------------------------------------------------------------
                 require_once('invoice.php');
@@ -152,7 +179,7 @@ if ($pieces == 1) {
                 $verb = $_SERVER['REQUEST_METHOD'];
                 break;
             default:
-                echo 'Format error';
+                echo json_encode('format error');
         }
     }
 }

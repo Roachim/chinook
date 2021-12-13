@@ -1,19 +1,22 @@
 <?php
+    session_start();
 
-// if(isset($_POST['loginEmail']) && isset($_POST['loginPassword'])) {
-//     // the form was submitted
-//     $loginEmail = $_POST['loginEmail'];
-//     $LoginPassword = $_POST['loginPassword'];
-
-//     // ...
-//     // perform your logic
-
-//     // redirect if login was successful
-//     header('Location: /somewhere');
-// }
-// else{
-//     header('Location: localhost/chinook/frontend/loginPage.php');
-// }
+    if (!isset($_SESSION['customerId'])) {    
+        header('Location: loginPage.php');
+    }
+    $customerId = $_SESSION['customerId'];
+    $firstName = $_SESSION['firstName'];
+    $lastName = $_SESSION['lastName'];
+    $password = $_SESSION['password'];
+    $company = $_SESSION['company'];
+    $address = $_SESSION['address'];
+    $city = $_SESSION['city'];
+    $state = $_SESSION['state'];
+    $country = $_SESSION['country'];
+    $postalCode = $_SESSION['postalCode'];
+    $phone = $_SESSION['phone'];
+    $fax = $_SESSION['fax'];
+    $email = $_SESSION['email'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,6 +34,52 @@
          <button>Cart</button>
      </div>
     </header>
+    <div id="modalUserProfile" class="modal">
+            <header>
+                <h3 ie="headerProfile">Edit user profile</h3>
+            </header>
+            <main>
+                <form id="editCustomerProfile" method="POST">
+                    <fieldset>
+                        <legend>customer profile</legend>
+                        <input type="hidden" id="txtCustId" value="<?= $customerId?>" required>
+                        <label for="txtFirstName">First name</label>
+                        <input type="text" id="txtFirstName" value="<?= $firstName?>" required>
+                        <label for="txtLastName">Last name</label>
+                        <input type="text" id="txtLastName" value="<?= $lastName?>" required>
+                        <label for="txtEmail">Email</label>
+                        <input type="text" id="txtEmail" value="<?= $email?>" required>
+                        <label for="txtCompany">Company</label>
+                        <input type="text" id="txtCompany" value="<?= $company?>" >
+                        <label for="txtAddress">Address</label>
+                        <input type="text" id="txtAddress" value="<?= $address?>" >
+                        <label for="txtCity">City</label>
+                        <input type="text" id="txtCity" value="<?= $city?>" >
+                        <label for="txtState">State</label>
+                        <input type="text" id="txtState" value="<?= $state?>" >
+                        <label for="txtCountry">Country</label>
+                        <input type="text" id="txtCountry" value="<?= $country?>" >
+                        <label for="txtPostalCode">Postal code</label>
+                        <input type="text" id="txtPostalCode" value="<?= $postalCode?>" >
+                        <label for="txtPhone">Phone number</label>
+                        <input type="text" id="txtPhone" value="<?= $phone?>" >
+                        <label for="txtFax">Fax</label>
+                        <input type="text" id="txtFax" value="<?= $fax?>" >
+                        <fieldset>
+                            <legend>Password change</legend>
+                            <label for="txtOldPassword">Old password</label>
+                            <input type="password" id="txtOldPassword">
+                            <label for="txtNewPassword">New password</label>
+                            <input type="password" id="txtNewPassword">
+                        </fieldset>                        
+                    </fieldset>
+                </form>
+            </main>
+            <div class="buttons">
+                <button id="btnProfileOk">Ok</button>
+                <button id="btnProfileCancel">Cancel</button>
+            </div>
+        </div>
     <section>
         <table id="trackList">
             <div>

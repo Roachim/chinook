@@ -22,7 +22,7 @@
 
         $customer = new Customer();
         $validCustomer = $customer->validate($email, $password);
-        if ($validCustomer) {
+        if ($validCustomer === true) {
             session_start();
 
             $_SESSION['customerId'] = $customer->customerId;
@@ -39,8 +39,20 @@
             $_SESSION['fax'] = $customer->fax;
             $_SESSION['email'] = $email;
 
-
             header('Location: browsePage.php');
+        } else if($validCustomer === false){
+            echo 'customer is false';
+            echo $email;
+            echo $password;
+        } 
+        else {
+            if(is_int($validCustomer)){
+                echo $validCustomer;
+            }
+            else{
+                echo $validCustomer;
+            }
+            
         }
         //$CustomerId ,$FirstName, $LastName, $Password, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email
     }
@@ -78,7 +90,7 @@
     </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
-    <script src="JS/script.js" defer></script>
+    <script src="JS/loginPage.js" defer></script>
 </body>
 
 </html>

@@ -6,7 +6,10 @@ require_once "admin.php";
 require_once "customer.php";
 require_once "invoice.php";
 require_once "invoiceline.php";
-
+session_start();
+    if (!isset($_SESSION['customerId'])) {
+        die('Session variable userID not set.<br>User not authenticated.');
+    }
 define('POS_ENTITY', 1);
 define('POS_ID', 2);
 

@@ -3,20 +3,20 @@
 //Create, read, Update
 class Customer{
     //properties
-    public $customerId;
-    public $firstname;
-    public $lastname;
-    public $password;
-    public $company;
-    public $address;
-    public $city;
-    public $state;
-    public $country;
-    public $postalCode;
-    public $phone;
-    public $fax;
-    public $email;
-    //constructor
+    public int $customerId;
+    public string $firstname;
+    public string $lastname;
+    public string $password;
+    public string $company;
+    public string $address;
+    public string $city;
+    public string $state;
+    public string $country;
+    public string $postalCode;
+    public string $phone;
+    public string $fax;
+    public string $email;
+    //constructor ??
     //methods
     public function GetAll(){
         $db = new DataBase();
@@ -78,7 +78,7 @@ class Customer{
         //$result = mysqli_query($con, $query);
         $result = $stmt->get_result();
         //populate the list from result
-        // custom name => database id
+        // custom name => database id. Custom name is what i look for in ajax call
         $list = [];
         while ($row = mysqli_fetch_array($result)) {
             $list[] = array(
@@ -160,27 +160,45 @@ class Customer{
         // SQL
         $query = <<<'SQL'
             SELECT CustomerId, FirstName, LastName, Password 
-            FROM user
-            WHERE email = ?;
+            FROM customer
+            WHERE Email = ?;
         SQL;
         //prepare, bind, execute
         $stmt = $con->prepare($query);
-        $stmt->bind_param('s',$email);
+        $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
         
         //check amount
-        while ($row = mysqli_fetch_array($result)) {
-            $list[] = array(
-                "CustomerId" => $row['CustomerId']
-                );
+        if(mysqli_fetch_array($result) == null){
+
         }
-        if(count($row) == 0 || count($row) == null){
+        else if(count(mysqli_fetch_array($result)) == 0 || count(mysqli_fetch_array($result)) == null){
             return false;
         }
 
+        //put values into properties of customer
+        while ($row = mysqli_fetch_array($result)) {
+            
+                $this->customerId = htmlspecialchars($row['CustomerId']); 
+                $this->firstname = htmlspecialchars($row['FirstName']);
+                $this->lastname = htmlspecialchars($row['LastName']);
+                $this->password = $row['Password'];
+                $this->company = htmlspecialchars($row['Company']);
+                $this->address = htmlspecialchars($row['Address']);
+                $this->city = htmlspecialchars($row['City']);
+                $this->state = htmlspecialchars($row['State']);
+                $this->country = htmlspecialchars($row['Country']);
+                $this->postalCode = htmlspecialchars($row['PostalCode']);
+                $this->phone = htmlspecialchars($row['Phone']);
+                $this->fax = htmlspecialchars($row['Fax']);
+                $this->email = htmlspecialchars($row['Email']);
+                break;
+            
+        }
+
         // hash check password
-        return (password_verify($password, $result['password']));
+        return (password_verify($password, $this->password));
     }
     //check if customer has any purchases via invoices. return true if integrity holds
     function IntegrityCheck($customerId) {

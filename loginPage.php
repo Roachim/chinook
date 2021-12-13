@@ -8,8 +8,8 @@
         session_destroy();
     
     // If the user is already logged in, s/he is redirected to the search page
-    } else if (isset($_SESSION['userID'])) {    
-        header('Location: index.php');
+    } else if (isset($_SESSION['customerId'])) {    
+        header('Location: browsePage.php');
 
     // If the user has filled the login fields, the authentication process is launched
     } else if (isset($_POST['loginEmail']) && isset($_POST['loginPass'])) {
@@ -20,22 +20,23 @@
         $email = $_POST['loginEmail'];
         $password = $_POST['loginPass'];
 
-        $validUser = $user->validate($email, $password);
-        if ($validUser) {
+        $customer = new Customer();
+        $validCustomer = $customer->validate($email, $password);
+        if ($validCustomer) {
             session_start();
 
-            $_SESSION['customerId'] = $user->userID;
-            $_SESSION['firstName'] = $user->firstName;
-            $_SESSION['lastName'] = $user->lastName;
+            $_SESSION['customerId'] = $customer->customerId;
+            $_SESSION['firstName'] = $customer->firstName;
+            $_SESSION['lastName'] = $customer->lastName;
             $_SESSION['password'] = $password;
-            $_SESSION['company'] = $email;
-            $_SESSION['address'] = $email;
-            $_SESSION['city'] = $email;
-            $_SESSION['state'] = $email;
-            $_SESSION['country'] = $email;
-            $_SESSION['postalCode'] = $email;
-            $_SESSION['phone'] = $email;
-            $_SESSION['fax'] = $email;
+            $_SESSION['company'] = $customer->company;
+            $_SESSION['address'] = $customer->address;
+            $_SESSION['city'] = $customer->city;
+            $_SESSION['state'] = $customer->state;
+            $_SESSION['country'] = $customer->country;
+            $_SESSION['postalCode'] = $customer->postalCode;
+            $_SESSION['phone'] = $customer->phone;
+            $_SESSION['fax'] = $customer->fax;
             $_SESSION['email'] = $email;
 
 

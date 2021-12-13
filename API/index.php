@@ -14,6 +14,11 @@ define('MAX_PIECES', 3);
 
 define('ENTITY_ARTIST', 'aritst');
 define('ENTITY_ALBUMS', 'albums');
+define('ENTITY_TRACKS', 'tracks');
+define('ENTITY_CUSTOMER', 'customers');
+define('ENTITY_INVOICES', 'invoices');
+define('ENTITY_INVOICELINES', 'invoicelines');
+define('ENTITY_ADMINS', 'admins');
 
 $url = strtok($_SERVER['REQUEST_URI'], "?");    // GET parameters are removed
 

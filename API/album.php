@@ -67,13 +67,13 @@ class Album{
         } 
         //SQL
         $query = <<<'SQL'
-            INSERT INTO track (Title, ArtistId)
+            INSERT INTO album (Title, ArtistId)
             VALUES (?, ?)
-            WHERE ArtistId = ?
+            WHERE AlbumId = ?
         SQL;
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
-        $stmt->bind_param("si", $title, $artistId);
+        $stmt->bind_param("sii", $title, $artistId, $albumId);
         $stmt->execute();
         //cut connection
         
@@ -81,8 +81,24 @@ class Album{
         return 'Album updated';
     
     }
-    public function Delete(){
-
+    public function Delete($albumId){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');
+        } 
+        //prepare statement
+        $query = <<<'SQL'
+        DELETE FROM album
+        WHERE AlbumId = ?
+        SQL;
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("i", $albumId);
+        $stmt->execute();
+        //cut and return
+        $db->cutConnection($con);
+        return 'Album deleted';
     }
 }
 

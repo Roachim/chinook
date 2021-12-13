@@ -13,7 +13,7 @@ class Track{
     //constructor
     //methods
      //getAllMethod
-     public function TrackList(){
+     public function GetAll(){
         $db = new DataBase();
         $con = $db->connect();
 
@@ -30,12 +30,12 @@ class Track{
             return 'Connection error';
         }
         //array to return. retres = return result ᕕ( ᐛ )ᕗ
-        $retres = [];
+        $list = [];
 
         //populate the return result
         // "custom name" => $row['database id']
         while ($row = mysqli_fetch_array($result)) {
-            $retres[] = array(
+            $list[] = array(
             "TrackId" => $row['TrackId'], 
             "Name" => $row['Name'],
             "AlbumId" => $row['AlbumId'],
@@ -53,7 +53,7 @@ class Track{
         //cut connection to database before ending function
         $db->cutConnection($con);
 
-        return $retres;
+        return $list;
     }
     public function Create($name, $albumId, $MedieTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice){
         $db = new DataBase();
@@ -98,12 +98,26 @@ class Track{
         return 'Track updated';
     
     }
-    public function Delete(){
-        
+    public function Delete($trackId){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');
+        } 
+        //prepare statement
+        $query = <<<'SQL'
+        DELETE FROM track
+        WHERE TrackId = ?
+        SQL;
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("i", $trackId);
+        $stmt->execute();
+        //cut and return
+        $db->cutConnection($con);
+        return 'Track deleted';
     }
     
 }
-$track = new Track();
-$track->TrackList();
 
 ?>

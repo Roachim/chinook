@@ -104,14 +104,9 @@ class Artist{
         $stmt->execute();
         //cut and return
         $db->cutConnection($con);
-        return 'Artist updated';
+        return 'Artist deleted';
     }
 
 }
-
-$in = new Artist();
-
-
-$in->ArtistList();
 
 ?>

@@ -144,6 +144,44 @@ class Customer{
         return 'User account updated';
     
     }
+    function validate($email, $password) {
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');
+        } 
+        // SQL
+        $query = <<<'SQL'
+            SELECT CustomerId, FirstName, LastName, Password 
+            FROM user
+            WHERE email = ?;
+        SQL;
+        //prepare, bind, execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param('s',$email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        //check amount
+        while ($row = mysqli_fetch_array($result)) {
+            $list[] = array(
+                "CustomerId" => $row['CustomerId']
+                );
+        }
+        if(count($row) == 0 || count($row) == null){
+            return false;
+        }
+
+        // $user = $stmt->fetch();
+
+        // $this->userID = $user['CustomerId'];
+        // $this->firstName = $user['FirstName'];
+        // $this->lastName = $user['LastName'];
+        // $this->email = $email;
+
+        // Check the password
+        return (password_verify($password, $result['password']));
+    }
 }
 
 

@@ -1,4 +1,5 @@
 <?php
+//file access
 require_once "artist.php";
 require_once "album.php";
 require_once "track.php";
@@ -7,6 +8,7 @@ require_once "customer.php";
 require_once "invoice.php";
 require_once "invoiceline.php";
 
+//pos_entity gets the name trailing after API/, such as: albums or customers. accepted parameters are defined below as ENTITY_ALBUMS and ENTITY_CUSTOMER
 define('POS_ENTITY', 1);
 define('POS_ID', 2);
 define('MAX_PIECES', 3);
@@ -14,10 +16,12 @@ define('MAX_PIECES', 3);
 define('ENTITY_ARTIST', 'artists');
 define('ENTITY_ALBUMS', 'albums');
 define('ENTITY_TRACKS', 'tracks');
-define('ENTITY_CUSTOMER', 'customers');
+define('ENTITY_CUSTOMERS', 'customers');
 define('ENTITY_INVOICES', 'invoices');
 define('ENTITY_INVOICELINES', 'invoicelines');
 define('ENTITY_ADMINS', 'admins');
+
+
 
 $url = strtok($_SERVER['REQUEST_URI'], "?");    // GET parameters are removed
 
@@ -27,6 +31,7 @@ if (substr($url, strlen($url) - 1) == '/') {
 }
 // Everything up to the folder where this file exists is removed.
 // This allows the API to be deployed to any directory in the server
+//cool
 $url = substr($url, strpos($url, basename(__DIR__)));
 
 $urlPieces = explode('/', urldecode($url));
@@ -36,18 +41,21 @@ header('Accept-version: v1');
 
 $pieces = count($urlPieces);
 
+//lets make sure they have access first using sessions.
 session_start();
-
-    if (!isset($_SESSION['customerId'])) {
+    
+    if (!isset($_SESSION['customerId']) && !isset($_SESSION['AdminId'])) {
         die('Session variable userID not set.<br>User not authenticated.');
     }
-//json encode for correct return type = json_encode()
+
+//define what type of request is made. e.g. GET or POST
+$verb = $_SERVER['REQUEST_METHOD'];
 
 if ($pieces == 1) {
-    echo json_encode('APIDescription placeholder. Please use the readme.md included for info.');
+    echo json_encode('API description placeholder. Please use the readme.md included for info.');
 } else {
     if ($pieces > MAX_PIECES) {
-        echo 'format error';
+        echo 'Invalid request form';
     } else {
 
         $entity = $urlPieces[POS_ENTITY];
@@ -56,8 +64,6 @@ if ($pieces == 1) {
             case ENTITY_ALBUMS: //----------------------------------------------------ALBUMS--------------------------------------------------------------------------------
                 require_once('album.php');
                 $album = new Album();
-
-                $verb = $_SERVER['REQUEST_METHOD'];
 
                 switch ($verb) {
                     case 'GET':                             //get all album
@@ -94,15 +100,15 @@ if ($pieces == 1) {
                 require_once('artist.php');
                 $artist = new Artist();
 
-                $verb = $_SERVER['REQUEST_METHOD'];
-                $type = $_POST['action'];
+                //$type = $_POST['action'];
                 switch ($verb) {
                     case 'GET':
                         echo json_encode($artist->GetAll());                     //get all artists
                         break;
                     case 'POST':                                                //create new artist
                         if ($type = 'UPDATE') {
-                            echo json_encode($artist->Update($artistId, $name));
+                            echo json_encode($artist->Update($_SERVER['artistId'], $_SERVER['name']));
+                            break;
                         }
                         
                         if (!isset($_POST['title'])) {
@@ -130,13 +136,11 @@ if ($pieces == 1) {
                         }
                         break;
                 }
-                $movie = null;
+                $artist = null;
                 break; 
-            case ENTITY_CUSTOMER: //----------------------------------------------------CUSTOMERS--------------------------------------------------------------------------------
+            case ENTITY_CUSTOMERS: //----------------------------------------------------CUSTOMERS--------------------------------------------------------------------------------
                 require_once('customer.php');
                 $customer = new Customer();
-
-                $verb = $_SERVER['REQUEST_METHOD'];
                 
                 switch ($verb) {
                     case 'GET':
@@ -167,8 +171,11 @@ if ($pieces == 1) {
             case ENTITY_INVOICES: //----------------------------------------------------INVOICES--------------------------------------------------------------------------------
                 require_once('invoice.php');
                 $artist = new Invoice();
-
-                $verb = $_SERVER['REQUEST_METHOD'];
+                case 'POST':                                                //create new artist
+                    if ($type = 'UPDATE') {
+                        echo json_encode($artist->Update($artistId, $name));
+                        break;
+                    }
                 break;
             case ENTITY_INVOICELINES: //----------------------------------------------------INVOICELINES--------------------------------------------------------------------------------
                 require_once('invoiceline.php');
@@ -179,8 +186,6 @@ if ($pieces == 1) {
              case ENTITY_ADMINS: //----------------------------------------------------ADMINS--------------------------------------------------------------------------------
                 require_once('admin.php');
                 $artist = new Admin();
-
-                $verb = $_SERVER['REQUEST_METHOD'];
                 break;
             case 'session':
                 $action = $_POST['action'];

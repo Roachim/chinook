@@ -8,7 +8,10 @@
         session_destroy();
     
     // If the user is already logged in, s/he is redirected to the search page
-    } else if (isset($_SESSION['customerId'])) {    
+    } else if(isset($_SESSION['admin'])){
+
+    } 
+    else if (isset($_SESSION['customerId'])) {    
         header('Location: browsePage.php');
 
     // If the user has filled the login fields, the authentication process is launched

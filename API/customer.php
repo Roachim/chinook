@@ -68,19 +68,19 @@ class Customer{
         $list = [];
         while ($row = mysqli_fetch_array($result)) {
             $list[] = array(
-            "CustomerId" => $row['CustomerId'], 
-            "FirstName" => $row['FirstName'],
-            "LastName" => $row['LastName'],
-            "Password" => $row['Password'],
-            "Company" => $row['Company'],
-            "Address" => $row['Address'],
-            "City" => $row['City'],
-            "State" => $row['State'],
-            "Country" => $row['Country'],
-            "PostalCode" => $row['PostalCode'],
-            "Phone" => $row['Phone'],
-            "Fax" => $row['Fax'],
-            "Email" => $row['Email'],
+                "CustomerId" => htmlspecialchars($row['CustomerId']), 
+                "FirstName" => htmlspecialchars($row['FirstName']),
+                "LastName" => htmlspecialchars($row['LastName']),
+                "Password" => htmlspecialchars($row['Password']),
+                "Company" => htmlspecialchars($row['Company']),
+                "Address" => htmlspecialchars($row['Address']),
+                "City" => htmlspecialchars($row['City']),
+                "State" => htmlspecialchars($row['State']),
+                "Country" => htmlspecialchars($row['Country']),
+                "PostalCode" => htmlspecialchars($row['PostalCode']),
+                "Phone" => htmlspecialchars($row['Phone']),
+                "Fax" => htmlspecialchars($row['Fax']),
+                "Email" => htmlspecialchars($row['Email'])
             );
         }
         //cut connection to database before ending function ᕕ( ᐛ )ᕗ
@@ -110,7 +110,7 @@ class Customer{
         // custom name => database id. Custom name is what i look for in ajax call
         $list = [];
         while ($row = mysqli_fetch_array($result)) {
-            $list[] = array(
+            $list = array(
                 "CustomerId" => htmlspecialchars($row['CustomerId']), 
                 "FirstName" => htmlspecialchars($row['FirstName']),
                 "LastName" => htmlspecialchars($row['LastName']),

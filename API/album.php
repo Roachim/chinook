@@ -21,13 +21,17 @@ class Album{
         $query = <<<'SQL'
         SELECT * FROM album
         SQL;
-        $result = mysqli_query($con, $query);
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         //populate the return result
         // custom name => database id
         $list=[];
         while ($row = mysqli_fetch_array($result)) {
-            $list = array(
+
+            $list[] = array(
             "AlbumId" => htmlspecialchars($row['AlbumId']),
             "ArtistId" => htmlspecialchars($row['ArtistId']), 
             "Title" => htmlspecialchars($row['Title'])

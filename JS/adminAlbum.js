@@ -10,7 +10,6 @@ $("#editAlbumBtn").on("click", function(e){
     })
     .done(function(data) {
         console.log('in function');
-        console.log(data);
         //table to append with results
         const table = $('#editAlbumList');
         const div = $("<div></div>");
@@ -37,23 +36,22 @@ $("#editAlbumBtn").on("click", function(e){
                     row.append(cell);
                     x = x+1;
                 }
+                
+                div.append(row);
 
+            });
             cell = $('<button>Edit</button>', { 'id': item.TrackId});
-            
+                
             row.append(cell);
             cell = $('<button>Delete</button>', { 'id': item.TrackId});
             deleteAlbumFunc(cell);
             row.append(cell);
-            
-            div.append(row);
-
+            table.append(div);
         });
-        table.append(div);
     });
-    });
-    $("#trackList").css("display", "none");
-    $("#artistList").css("display", "none");
-    $("#albumList").css("display", "block");
+    $("#editArackList").css("display", "none");
+    $("#editArtistList").css("display", "none");
+    $("#editAlbumList").css("display", "block");
 });
 
 const editAlbumfunction = (function(button) {

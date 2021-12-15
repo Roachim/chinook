@@ -51,6 +51,7 @@ session_start();
 //define what type of request is made. e.g. GET or POST
 $verb = $_SERVER['REQUEST_METHOD'];
 
+
 if ($pieces == 1) {
     echo json_encode('API description placeholder. Please use the readme.md included for info.');
 } else {
@@ -59,9 +60,12 @@ if ($pieces == 1) {
     } else {
         //from array of urlPieces, get the second and third. ignoring value 0, as 0 = API.
         $entity = $urlPieces[POS_ENTITY];
-        if(count($urlPieces) < 2)
+        if(count($urlPieces) > 2)
         {
             $id = $urlPieces[POS_ID];
+        }
+        else{
+            $id = null;
         }
         
 
@@ -135,9 +139,9 @@ if ($pieces == 1) {
                     case 'POST':                                                 //update artist
                 
                         if ($pieces < MAX_PIECES || !isset($movieData['title'])) {
-                            echo json_encode('format error');
+                            
                         } else {
-                            echo $movie->update($urlPieces[POS_ID], $movieData);
+                            
                         }
                         break;
                     case 'DELETE':                                  //delete artist
@@ -159,8 +163,7 @@ if ($pieces == 1) {
                         echo json_encode($customer->GetAll());                     //get all customers
                         break;
                     case 'POST':
-                        $type = $_POST['action'];
-                        if ($type = 'UPDATE') {
+                        if (count($urlPieces) > 2) {
                             echo json_encode($customer->Update($_POST['customerId'] ,$_POST['firstName'], 
                             $_POST['lastName'], $_POST['company'], $_POST['address'], $_POST['city'], 
                             $_POST['state'], $_POST['country'], $_POST['postalCode'], $_POST['phone'], 

@@ -228,7 +228,7 @@ class Customer{
         $result = $stmt->get_result();
 
         $row = $result->fetch_assoc();
-        $this->customerId = htmlspecialchars($row['CustomerId']); 
+        $this->customerId = $row['CustomerId']; 
         $this->firstName = htmlspecialchars($row['FirstName']);
         $this->lastName = htmlspecialchars($row['LastName']);
         $this->password = $row['Password'];

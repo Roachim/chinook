@@ -3,60 +3,63 @@
 
     $userValidation = false;    
 
-    // If the user has clicked on 'Logout', the session is destroyed
+    // Get sent here from browsepage or admin page if having pressed the logout button. also destroy session.
     if (isset($_POST['logout'])) { 
         session_destroy();
     
-    // If the user is already logged in, s/he is redirected to the search page
-    } else if(isset($_SESSION['admin'])){
-
+    // If already logged in, they are redirected to the proper page
+    }
+    if(isset($_SESSION['admin'])){
+        header('location: adminPage.php');
     } 
     else if (isset($_SESSION['customerId'])) {    
         header('Location: browsePage.php');
+    } 
+    else if (isset($_POST['loginEmail']) && isset($_POST['loginPass'])) {
+        //Try to login as admin if no email was given. otherwise login as customer
+        if($_POST['loginEmail'] == ''){
+            require_once('API/admin.php');
+            $password = $_POST['loginPass'];
+            $admin = new Admin();
+            $validAdmin = $admin->validate($password);
+            if ($validAdmin === true) {
+                session_start();
 
-    // If the user has filled the login fields, the authentication process is launched
-    } else if (isset($_POST['loginEmail']) && isset($_POST['loginPass'])) {
+                $_SESSION['adminId'] = true;
+                header('Location: adminPage.php');
+            }
+        } else{
+            require_once('API/customer.php');
         
-        $userValidation = true;
-        require_once('API/customer.php');
-
-        $email = $_POST['loginEmail'];
-        $password = $_POST['loginPass'];
-
-        $customer = new Customer();
-        $validCustomer = $customer->validate($email, $password);
-        if ($validCustomer === true) {
-            session_start();
-
-            $_SESSION['customerId'] = $customer->customerId;
-            $_SESSION['firstName'] = $customer->firstName;
-            $_SESSION['lastName'] = $customer->lastName;
-            $_SESSION['password'] = $password;
-            $_SESSION['company'] = $customer->company;
-            $_SESSION['address'] = $customer->address;
-            $_SESSION['city'] = $customer->city;
-            $_SESSION['state'] = $customer->state;
-            $_SESSION['country'] = $customer->country;
-            $_SESSION['postalCode'] = $customer->postalCode;
-            $_SESSION['phone'] = $customer->phone;
-            $_SESSION['fax'] = $customer->fax;
-            $_SESSION['email'] = $email;
-
-            header('Location: browsePage.php');
-        } else if($validCustomer === false){
-            echo 'customer is false';
-            echo $email;
-            echo $password;
-        } 
-        else {
-            if(is_int($validCustomer)){
-                echo $validCustomer;
-            }
-            else{
-                echo $validCustomer;
-            }
+            $email = $_POST['loginEmail'];
+            $password = $_POST['loginPass'];
+    
+            $customer = new Customer();
+            $validCustomer = $customer->validate($email, $password);
+            if ($validCustomer === true) {
+                session_start();
+    
+                $_SESSION['customerId'] = $customer->customerId;
+                $_SESSION['firstName'] = $customer->firstName;
+                $_SESSION['lastName'] = $customer->lastName;
+                $_SESSION['password'] = $password;
+                $_SESSION['company'] = $customer->company;
+                $_SESSION['address'] = $customer->address;
+                $_SESSION['city'] = $customer->city;
+                $_SESSION['state'] = $customer->state;
+                $_SESSION['country'] = $customer->country;
+                $_SESSION['postalCode'] = $customer->postalCode;
+                $_SESSION['phone'] = $customer->phone;
+                $_SESSION['fax'] = $customer->fax;
+                $_SESSION['email'] = $email;
+    
+                header('Location: browsePage.php');
+            } else if($validCustomer === false){
+                echo 'Invalid credentials';
+            } 
             
         }
+        
         //$CustomerId ,$FirstName, $LastName, $Password, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email
     }
 

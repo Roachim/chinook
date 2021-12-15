@@ -133,8 +133,8 @@ $(document).ready(function() {
         
     });
 });
-
-    $("button#btnProfileOk").on("click", function() {
+    //change customer data
+    $("#btnProfileOk").on("click", function() {
         const customerId = $("#txtCustId").val().trim();
         const firstName = $("#txtFirstName").val().trim();
         const lastName = $("#txtLastName").val().trim();
@@ -199,7 +199,17 @@ $(document).ready(function() {
             }
         });
     });
-
+    // $("#logout").on("click", function(event){
+    //     $.ajax({
+    //         url: url+'/session',
+    //         type: "POST",
+    //         data: {},
+    //     })
+    //     .done(function(data) {
+    //         window.location.replace('login.php');
+    //     });   
+    // });
+    
     //Show/Hide buttons----------------------------------------------------------------------------------------------------------------------------------------------------
     $("#trackBtn").on("click", function(event){
         $("#trackList").css("display", "block");

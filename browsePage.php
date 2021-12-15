@@ -4,6 +4,10 @@
     if (!isset($_SESSION['customerId'])) {    
         header('Location: loginPage.php');
     }
+    // if (isset($_POST['LogOut'])) {
+    //     session_destroy();
+    //     header('Location: loginPage.php');
+    // }
     $customerId = $_SESSION['customerId'];
     $firstName = $_SESSION['firstName'];
     $lastName = $_SESSION['lastName'];
@@ -33,6 +37,10 @@
      <div>
          <button>User profile</button>
          <button>Cart</button>
+         <form action="loginPage.php" method="POST" id="logoutFrm" class="logoutFrm">
+             <input type="submit" name="logout" value="Log Out">
+         </form>
+         
      </div>
     </header>
     <div id="modalUserProfile" class="modal">

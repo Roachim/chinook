@@ -56,6 +56,14 @@ footer{
 .albumList{
     display: none;
 }
+.logoutFrm{
+    max-width: 60.48px;
+}
+.logoutFrm input{
+    max-width: 60.48px;
+    max-height: 25px;
+    text-align: center;
+}
 
 @media only screen and (min-width: 800px){
     h1{

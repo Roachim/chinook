@@ -16,20 +16,20 @@ class Track{
      public function GetAll(){
         $db = new DataBase();
         $con = $db->connect();
-
-        if ($con) {
-            $query = <<<'SQL'
-            SELECT TrackId, t.Name, AlbumId, mt.Name as MediaType, g.Name as Genre, Composer, Milliseconds, Bytes, UnitPrice FROM track t
-            LEFT JOIN mediatype mt ON mt.MediaTypeId = t.MediaTypeId
-            LEFT JOIN genre g ON g.GenreId = t.GenreId
-            SQL;
-
-            $result = mysqli_query($con, $query);
-
-        } else {
-            return 'Connection error';
-        }
-        //array to return. retres = return result ᕕ( ᐛ )ᕗ
+        if (!$con) {
+            die('Connection error');
+        } 
+        
+        $query = <<<'SQL'
+        SELECT TrackId, t.Name, AlbumId, mt.Name as MediaType, g.Name as Genre, Composer, Milliseconds, Bytes, UnitPrice FROM track t
+        LEFT JOIN mediatype mt ON mt.MediaTypeId = t.MediaTypeId
+        LEFT JOIN genre g ON g.GenreId = t.GenreId
+        SQL;
+        $stmt = $con->prepare($query);
+            
+        $stmt->execute();
+        $result = $stmt->get_result();
+        //array to return 
         $list = [];
 
         //populate the return result
@@ -50,7 +50,7 @@ class Track{
             );
         }
 
-        //cut connection to database before ending function
+        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
         $db->cutConnection($con);
 
         return $list;

@@ -24,6 +24,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Styles/style.css">
     <title>Document</title>
 </head>
 <body>
@@ -76,12 +77,15 @@
                 </form>
             </main>
             <div class="buttons">
-                <button id="btnProfileOk">Ok</button>
+                <button id="btnProfileOk">Change data</button>
                 <button id="btnProfileCancel">Cancel</button>
             </div>
-        </div>
-    <section>
-        <table id="trackList">
+    </div>
+    <div>
+    <button id="trackBtn">Track List</button>
+    <button id="artistBtn">Artist List</button>
+    <button id="albumBtn">Album List</button>
+        <table id="trackList" class="trackList">
             <div>
                 <tr></tr>
                 <td></td>
@@ -89,13 +93,15 @@
                 <button></button>
             </div>
         </table>
-        <table id="artistList">
-
+        
+        <table id="artistList" class="artistList">
         </table>
-        <table id="albumList">
 
+        <table id="albumList" class="albumList">
         </table>
-    </section>
+    </div>
+        
+    
     <footer>
 
     </footer>

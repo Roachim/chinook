@@ -95,5 +95,5 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
     <script src="JS/loginPage.js" defer></script>
 </body>
-
+<?php unset($customer) ?>
 </html>

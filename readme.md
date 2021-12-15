@@ -13,31 +13,31 @@ Admin--
 GET http://localhost/chinook/
 
 Artist--
-GET http://localhost/chinook/artists
-POST http://localhost/chinook/artists
-PUT http://localhost/chinook/artists/5
-DELETE http://localhost/chinook/artists/5
+GET http://localhost/chinook/API/artists
+POST http://localhost/chinook/API/artists
+PUT http://localhost/chinook/API/artists/{id}
+DELETE http://localhost/chinook/API/artists/{id}
 
 Albums--
-GET http://localhost/chinook/albums
-POST http://localhost/chinook/albums
-PUT http://localhost/chinook/albums/5
-DELETE http://localhost/chinook/albums/5
+GET http://localhost/chinook/API/albums
+POST http://localhost/chinook/API/albums
+PUT http://localhost/chinook/API/albums/{id}
+DELETE http://localhost/chinook/API/albums/{id}
 
 Tracks--
-GET http://localhost/chinook/tracks
-POST http://localhost/chinook/tracks
-PUT http://localhost/chinook/tracks/10
-DELETE http://localhost/chinook/tracks/10
+GET http://localhost/chinook/API/tracks
+POST http://localhost/chinook/API/tracks
+PUT http://localhost/chinook/API/tracks/{id}
+DELETE http://localhost/chinook/API/tracks/{id}
 
 Customers--
-GET http://localhost/chinook/customers
-POST http://localhost/chinook/customers
-POST http://localhost/chinook/customers/validate
-PUT http://localhost/chinook/customers/5
+GET http://localhost/chinook/API/customers
+POST http://localhost/chinook/API/customers
+POST http://localhost/chinook/API/customers/validate
+PUT http://localhost/chinook/API/customers/{id}
 
 invoices--
-POST http://localhost/chinook/invoices
+POST http://localhost/chinook/API/invoices
 
 invoiceLine--
-POST http://localhost/chinook/invoiceline
+POST http://localhost/chinook/API/invoiceline

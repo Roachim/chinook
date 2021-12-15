@@ -1,74 +1,87 @@
 //const base_url = "http://127.0.0.1/chinook/";
-const url = 'API/calls.php';
-$("#BtnTracks").on("click", function(e){
-    $("#name").empty();
-    
-    
+const url = 'API';
+//url + /entity + /id
 
-    //use to get info from html/php page via id of item
-    //const keyword = $("#somethinhg").val();
-    //const url = base_url + "Backend/track.php";
-    
-    
-
+//load up data as sson as page is ready
+$(document).ready(function() {
+    //Load in all tracks
     $.ajax({
-        url: url,
+        url: url+"/tracks",
         type: 'GET',
-        //expect json data
-        //contentType : 'text/json',
         dataType : 'json'
     })
     .done(function(data) {
         console.log(data);
         //table to append with results
-        const table = $('#name');
+        const table = $('#trackList');
         const div = $("<div></div>");
-        //alert(typeof(data));
-        //console.log(data);
 
         $.each(data, function(i, item){
-            
-            let row = $('<tr></tr>', {'id': 'text'});
-
-            let cell = $('<td></td>', { 'text': "Name" });
-            
-            cell = $('<td></td>', { 'text': item.Name });
-            row.append(cell);
-            row.append(cell);
-            
-            cell = $('<td></td>', { 'text': 'Album' });
-            row.append(cell);
-            cell = $('<td></td>', { 'text': item.Album });
-            row.append(cell);
-
-            cell = $('<td></td>', { 'text': 'MediaType' });
-            row.append(cell);
-            cell = $('<td></td>', { 'text': item.MediaType });
-            row.append(cell);
-
-            cell = $('<td></td>', { 'text': 'Genre' });
-            row.append(cell);
-            cell = $('<td></td>', { 'text': item.Genre });
-            row.append(cell);
-
-            cell = $('<td></td>', { 'text': 'Composer' });
-            row.append(cell);
-            cell = $('<td></td>', { 'text': item.Composer });
+            const row = $('<tr></tr>', {'id': 'text'});
+            let cell;
+            const array = ["Name", "Albums", "MediaType", "Genre", "Composer", "Milliseconds", "Byte size", 'Price'];
+            let x = 0;
+            //set this to ignore the first value. It's the id
+            let y=0;
+            properties = $.each(item, function(p, property) {
+                if(y==0)
+                {
+                    y=1;
+                    return;
+                } else{
+                    if(property == '' || property == null){
+                        property = 'Unknown';
+                    }
+                    cell = $('<td></td>', { 'text': array[x] +': ' });
+                    row.append(cell);
+                    cell = $('<td></td>', { 'text': property +'.'});
+                    row.append(cell);
+                    x = x+1;
+                }
+            });
+            cell = $('<button>Add to cart</button>', { 'id': item.TrackId});
             row.append(cell);
 
-            cell = $('<td></td>', { 'text': 'Milliseconds' });
-            row.append(cell);
-            cell = $('<td></td>', { 'text': item.Milliseconds });
-            row.append(cell);
+            div.append(row);
+        });
+        table.append(div);
+        
+    });
+    //load in all albums
+    $.ajax({
+        url: url+"/albums",
+        type: 'GET',
+        dataType : 'json'
+    })
+    .done(function(data) {
+        console.log(data);
+        //table to append with results
+        const table = $('#albumList');
+        const div = $("<div></div>");
 
-            cell = $('<td></td>', { 'text': 'Bytes' });
-            row.append(cell);
-            cell = $('<td></td>', { 'text': item.Bytes });
-            row.append(cell);
-
-            cell = $('<td></td>', { 'text': 'UnitPrice' });
-            row.append(cell);
-            cell = $('<td></td>', { 'text': item.UnitPrice });
+        $.each(data, function(i, item){
+            const row = $('<tr></tr>', {'id': 'text'});
+            let cell;
+            const array = ["Title", "Artist"];
+            let x = 0;
+            //set this to ignore the first value. It's the id
+            let y=0;
+            properties = $.each(item, function(p, property) {
+                if(y==0)
+                {
+                    y=1;
+                    return;
+                } else{
+                    if(property == '' || property == null){
+                        property = 'Unknown';
+                    }
+                    cell = $('<td></td>', { 'text': array[x] +': ' });
+                    row.append(cell);
+                    cell = $('<td></td>', { 'text': property +'.'});
+                    row.append(cell);
+                    x = x+1;
+                }
+            });
             row.append(cell);
 
             div.append(row);
@@ -77,87 +90,50 @@ $("#BtnTracks").on("click", function(e){
         table.append(div);
         
     });
+    //load in all artists
+    $.ajax({
+        url: url+"/artists",
+        type: 'GET',
+        dataType : 'json'
+    })
+    .done(function(data) {
+        console.log(data);
+        //table to append with results
+        const table = $('#artistList');
+        const div = $("<div></div>");
+
+        $.each(data, function(i, item){
+            const row = $('<tr></tr>', {'id': 'text'});
+            let cell;
+            const array = ['Name'];
+            let x = 0;
+            //set this to ignore the first value. It's the id
+            let y=0;
+            properties = $.each(item, function(p, property) {
+                if(y==0)
+                {
+                    y=1;
+                    return;
+                } else{
+                    if(property == '' || property == null){
+                        property = 'Unknown';
+                    }
+                    cell = $('<td></td>', { 'text': array[x] +': ' });
+                    row.append(cell);
+                    cell = $('<td></td>', { 'text': property +'.'});
+                    row.append(cell);
+                    x = x+1;
+                }
+            });
+            row.append(cell);
+
+            div.append(row);
+        });
+        table.append(div);
+        
+    });
 });
 
-$("#BtnArtists").on("click", function(e){
-        e.preventDefault();
-        //location.reload();
-        
-         alert("in old");
-        //use to get info from html/php page via id of item
-        var keyword = $("#somethinhg").val();
-        var url = base_url + "Backend/artists.php";
-
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType : 'json'
-        })
-        .done(function(data) {
-            //table to append with results
-            const table = $('#name');
-            const div = $("<div></div>");
-            //alert(typeof(data));
-            //console.log(data);
-
-            $.each(data, function(i, item){
-                
-                let row = $('<tr></tr>', {'id': 'text'});
-
-                let cell = $('<td></td>', { 'text': "ArtistId" });
-                row.append(cell);
-                cell = $('<td></td>', { 'text': item.ArtistId });
-                row.append(cell);
-                
-                cell = $('<td></td>', { 'text': 'Name' });
-                row.append(cell);
-                cell = $('<td></td>', { 'text': item.Name });
-                row.append(cell);
-                div.append(row);
-
-            });
-            table.append(div);
-            
-        });
-    });
-    $("#BtnAlbums").on("click", function(e){
-        e.preventDefault();
-        //use to get info from html/php page via id of item
-        var keyword = $("#somethinhg").val();
-        var url ="API/calls.php";
-
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType : 'json'
-        })
-        .done(function(data) {
-            //table to append with results
-            const table = $('#name');
-            const div = $("<div></div>");
-            //alert(typeof(data));
-            //console.log(data);
-
-            $.each(data, function(i, item){
-                
-                let row = $('<tr></tr>', {'id': 'text'});
-
-                let cell = $('<td></td>', { 'text': "ArtistId" });
-                row.append(cell);
-                cell = $('<td></td>', { 'text': item.ArtistId });
-                row.append(cell);
-                
-                cell = $('<td></td>', { 'text': 'Name' });
-                row.append(cell);
-                cell = $('<td></td>', { 'text': item.Name });
-                row.append(cell);
-                div.append(row);
-
-            });
-            table.append(div);
-            
-        });
-    });
     $("button#btnProfileOk").on("click", function() {
         const customerId = $("#txtCustId").val().trim();
         const firstName = $("#txtFirstName").val().trim();
@@ -175,12 +151,9 @@ $("#BtnArtists").on("click", function(e){
         const newPassword = $("#txtNewPassword").val().trim();
 
         $.ajax({
-            url: url,
+            url: url +"/customers/" + customerId,
             type: "POST",
             data: {
-                entity: "customers",
-                action: "UPDATE",
-                customerId: customerId,
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
@@ -211,11 +184,9 @@ $("#BtnArtists").on("click", function(e){
                     // Call the PHP API to end the session and redirect to the login page
                     //aye aye sir. Kinda cruel function though.
                     $.ajax({
-                        url: url,
+                        url: url + "/session",
                         type: "POST",
                         data: {
-                            entity: "session",
-                            action: "destroy"
                         },
                         success: function(data) {
                             window.location.replace('loginPage.php');
@@ -227,4 +198,21 @@ $("#BtnArtists").on("click", function(e){
                 }
             }
         });
+    });
+
+    //Show/Hide buttons----------------------------------------------------------------------------------------------------------------------------------------------------
+    $("#trackBtn").on("click", function(event){
+        $("#trackList").css("display", "block");
+        $("#artistList").css("display", "none");
+        $("#albumList").css("display", "none");
+    });
+    $("#artistBtn").on("click", function(event){
+        $("#trackList").css("display", "none");
+        $("#artistList").css("display", "block");
+        $("#albumList").css("display", "none");
+    });
+    $("#albumBtn").on("click", function(event){
+        $("#trackList").css("display", "none");
+        $("#artistList").css("display", "none");
+        $("#albumList").css("display", "block");
     });

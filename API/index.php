@@ -57,8 +57,13 @@ if ($pieces == 1) {
     if ($pieces > MAX_PIECES) {
         echo 'Invalid request form';
     } else {
-
+        //from array of urlPieces, get the second and third. ignoring value 0, as 0 = API.
         $entity = $urlPieces[POS_ENTITY];
+        if(count($urlPieces) < 2)
+        {
+            $id = $urlPieces[POS_ID];
+        }
+        
 
         switch ($entity) {
             case ENTITY_ALBUMS: //----------------------------------------------------ALBUMS--------------------------------------------------------------------------------
@@ -67,9 +72,7 @@ if ($pieces == 1) {
 
                 switch ($verb) {
                     case 'GET':                             //get all album
-                        
                         echo json_encode($album->GetAll());
-                        
                         break;
                     case 'POST':                            //create new album
                         if (!isset($_POST['Title']) || !isset($_POST['ArtistId'])) {
@@ -95,7 +98,20 @@ if ($pieces == 1) {
                         break;                     
                 }
                 $album = null;
-                break;  
+                break;
+            case ENTITY_TRACKS://----------------------------------------------------TRACKS--------------------------------------------------------------------------------
+                $track = new Track();
+                switch($verb){
+                    case 'GET':
+                        echo json_encode($track->GetAll());
+                    break;
+                    case 'POST':
+                        break;
+                    case 'DELETE':
+                        break;
+                }
+                $track = null;
+                break;
             case ENTITY_ARTIST: //----------------------------------------------------ARTISTS--------------------------------------------------------------------------------
                 require_once('artist.php');
                 $artist = new Artist();
@@ -106,11 +122,10 @@ if ($pieces == 1) {
                         echo json_encode($artist->GetAll());                     //get all artists
                         break;
                     case 'POST':                                                //create new artist
-                        if ($type = 'UPDATE') {
+                        if (isset($_POST['artistId'])) {
                             echo json_encode($artist->Update($_SERVER['artistId'], $_SERVER['name']));
                             break;
                         }
-                        
                         if (!isset($_POST['title'])) {
                             echo json_encode('format error');
                         } else {
@@ -118,9 +133,6 @@ if ($pieces == 1) {
                         }
                         break;
                     case 'POST':                                                 //update artist
-                        // Since PHP does not handle PUT parameters explicitly,
-                        // they must be read from the request body's raw data
-                        $movieData = (array) json_decode(file_get_contents('php://input'), TRUE);
                 
                         if ($pieces < MAX_PIECES || !isset($movieData['title'])) {
                             echo json_encode('format error');
@@ -167,6 +179,7 @@ if ($pieces == 1) {
                         break;
 
                 }
+                $customer = null;
                 break;
             case ENTITY_INVOICES: //----------------------------------------------------INVOICES--------------------------------------------------------------------------------
                 require_once('invoice.php');
@@ -180,24 +193,19 @@ if ($pieces == 1) {
             case ENTITY_INVOICELINES: //----------------------------------------------------INVOICELINES--------------------------------------------------------------------------------
                 require_once('invoiceline.php');
                 $artist = new InvoiceLine();
-
-                $verb = $_SERVER['REQUEST_METHOD'];
                 break;
              case ENTITY_ADMINS: //----------------------------------------------------ADMINS--------------------------------------------------------------------------------
                 require_once('admin.php');
                 $artist = new Admin();
                 break;
             case 'session':
-                $action = $_POST['action'];
-
-                switch ($action) {
-                    case 'destroy':
-                        session_destroy();
-                        //echo 'Session destroyed';
-                        break;
-                    }
+                session_destroy();
+                //echo 'Session destroyed';
+                break;
+                     
             default:
-                echo json_encode('format error');
+                echo json_encode('Wrong case: accepted cases can be seen in README.md');
+                break;
         }
     }
 }

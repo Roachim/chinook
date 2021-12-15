@@ -11,6 +11,9 @@ body{
 body form{
     width: 100%;
 }
+table{
+    max-width: 90%;
+}
 body form input{
     display: inline-block;
     width: 95%;
@@ -21,19 +24,21 @@ body form input{
 }
 h1{
     color: var(--color-1);
-    text-align: center;
 }
-.name div{
+table div{
     display: inline-block;
 }
-.name div tr{
+table div tr{
     display: inline-block;
     padding: 10px;
     margin: 5px;
     border-color: var(--color-1);
     border-style: solid;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
 }
-.name div tr td{
+table div tr td{
     display: inline-block;
     border-color: var(--color-1);
     
@@ -42,8 +47,20 @@ h1{
 footer{
     background-color: burlywood;
 }
+.trackList{
+    display: none;
+}
+.artistList{
+    display: none;
+}
+.albumList{
+    display: none;
+}
 
 @media only screen and (min-width: 800px){
+    h1{
+        text-align: center;
+    }
     body form{
         width: 50%;
     }
@@ -57,8 +74,16 @@ footer{
            margin-right: auto;
     }
     h1{
-        align-self: center;
+        
         margin-left: auto;
         margin-right: auto;
+    }
+    table{
+        align-content: center;
+        margin-left: +200px;
+    }
+    table div tr{
+        
+        flex-direction: row;
     }
 }

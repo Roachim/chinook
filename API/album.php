@@ -19,7 +19,8 @@ class Album{
         //array to return. retres = return result 
         //SQL
         $query = <<<'SQL'
-        SELECT * FROM album
+        SELECT AlbumId, Title, a.Name FROM album al
+        LEFT JOIN artist a ON a.ArtistId = al.ArtistId
         SQL;
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
@@ -33,8 +34,8 @@ class Album{
 
             $list[] = array(
             "AlbumId" => htmlspecialchars($row['AlbumId']),
-            "ArtistId" => htmlspecialchars($row['ArtistId']), 
-            "Title" => htmlspecialchars($row['Title'])
+            "Title" => htmlspecialchars($row['Title']), 
+            "Name" => htmlspecialchars($row['Name'])
             );
         }
         

@@ -44,7 +44,7 @@ $pieces = count($urlPieces);
 //lets make sure they have access first using sessions.
 session_start();
     
-    if (!isset($_SESSION['customerId']) && !isset($_SESSION['AdminId'])) {
+    if (!isset($_SESSION['customerId']) && !isset($_SESSION['adminId'])) {
         die('Session variable userID not set.<br>User not authenticated.');
     }
 
@@ -75,8 +75,14 @@ if ($pieces == 1) {
                 $album = new Album();
 
                 switch ($verb) {
-                    case 'GET':                             //get all album
-                        echo json_encode($album->GetAll());
+                    case 'GET':
+                        if($pieces == MAX_PIECES)
+                        {
+                            echo json_encode($album->Get($urlPieces[POS_ID]));                             //get album
+                        }else{
+                            echo json_encode($album->GetAll());                             //get all albums
+                        }
+                        
                         break;
                     case 'POST':                            //create new album
                         if (!isset($_POST['Title']) || !isset($_POST['ArtistId'])) {
@@ -85,19 +91,12 @@ if ($pieces == 1) {
                             echo json_encode($album->Create($_POST['Title'], $_POST['ArtistId']));
                         }                        
                         break;
-                    case 'PUT':                             //Update album
-                        if (!isset($_PUT['AlbumId']) || !isset($_PUT['Title']) || !isset($_PUT['ArtistId'])) {
-                            echo json_encode('format error');
-                        } else {
-                            echo json_encode($album->Update($_PUT['AlbumId'], $_PUT['Title'], $_PUT['ArtistId']));
-                        }                        
-                        break;
                     case 'DELETE':                          //delete album
                         if ($pieces < MAX_PIECES) {
                             echo json_encode('format error');
                         }
                         else {
-                            echo json_encode($album->Delete(POS_ID));
+                            echo json_encode($album->Delete($urlPieces[POS_ID]));
                         }
                         break;                     
                 }
@@ -107,9 +106,17 @@ if ($pieces == 1) {
                 $track = new Track();
                 switch($verb){
                     case 'GET':
-                        echo json_encode($track->GetAll());
+                        if($pieces == MAX_PIECES){
+                            echo json_encode($track->Get($urlPieces[POS_ID]));                             //get track
+                        }
+                        else{
+                            echo json_encode($track->GetAll());                             //get all tracks
+                        }
+                        break;
+                        
                     break;
                     case 'POST':
+
                         break;
                     case 'DELETE':
                         break;
@@ -119,11 +126,14 @@ if ($pieces == 1) {
             case ENTITY_ARTIST: //----------------------------------------------------ARTISTS--------------------------------------------------------------------------------
                 require_once('artist.php');
                 $artist = new Artist();
-
-                //$type = $_POST['action'];
                 switch ($verb) {
                     case 'GET':
-                        echo json_encode($artist->GetAll());                     //get all artists
+                        if($pieces == MAX_PIECES){
+                            echo json_encode($artist->Get($urlPieces[POS_ID]));//get artist
+                        }else{
+                            echo json_encode($artist->GetAll());//get all artists
+                        }
+                                             
                         break;
                     case 'POST':                                                //create new artist
                         if (isset($_POST['artistId'])) {
@@ -132,16 +142,6 @@ if ($pieces == 1) {
                         }
                         if (!isset($_POST['title'])) {
                             echo json_encode('format error');
-                        } else {
-                            //echo json_encode($artist->Create()) ;
-                        }
-                        break;
-                    case 'POST':                                                 //update artist
-                
-                        if ($pieces < MAX_PIECES || !isset($movieData['title'])) {
-                            
-                        } else {
-                            
                         }
                         break;
                     case 'DELETE':                                  //delete artist

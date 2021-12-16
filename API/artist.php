@@ -43,6 +43,39 @@ class Artist{
 
         return $list;
     }
+    public function Get($id){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');   
+        }
+        //SQL
+        $query = <<<'SQL'
+            SELECT * FROM artist
+            WHERE ArtistId = ?
+        SQL;
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $row = $result->fetch_assoc();
+        
+        //populate the list from result
+        // custom name => database id
+        $return =null;
+        
+        $return = array(
+            "ArtistId" => $row['ArtistId'] , 
+            "Name" => htmlspecialchars($row['Name'])
+        );
+        
+        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
+        $db->cutConnection($con);
+
+        return $return;
+    }
     // = array of values?
     public function Create($name){
         $db = new DataBase();

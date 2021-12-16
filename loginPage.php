@@ -9,7 +9,7 @@
     
     // If already logged in, they are redirected to the proper page
     }
-    if(isset($_SESSION['admin'])){
+    if(isset($_SESSION['adminId'])){
         header('location: adminPage.php');
     } 
     else if (isset($_SESSION['customerId'])) {    

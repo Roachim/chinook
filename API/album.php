@@ -45,6 +45,41 @@ class Album{
 
         return $list;
     }
+    public function Get($id){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');   
+        }
+        //SQL
+        $query = <<<'SQL'
+        SELECT AlbumId, Title, a.Name FROM album al
+        LEFT JOIN artist a ON a.ArtistId = al.ArtistId
+        WHERE AlbumId = ?
+        SQL;
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $row = $result->fetch_assoc();
+        
+        //populate the list from result
+        // custom name => database id
+        $return =null;
+        
+        $return = array(
+            "AlbumId" => htmlspecialchars($row['AlbumId']),
+            "Title" => htmlspecialchars($row['Title']), 
+            "Name" => htmlspecialchars($row['Name'])
+        );
+        
+        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
+        $db->cutConnection($con);
+
+        return $return;
+    }
     public function Create($title, $artistId){
         $db = new DataBase();
         $con = $db->connect();

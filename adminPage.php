@@ -26,6 +26,36 @@ session_start();
     </form>
     </div>
     <div>
+        <form method="POST" id="trackFrm" class="trackEditFrm">
+            <h3>Input new values</h3>
+            <fieldset>
+                <input type="hidden" id="trackId" value="<?= $trackId?>" required>
+                <label for="TrackName">Name</label>
+                <input type="text" id="TrackName" value="<?= $TrackName?>" required>
+                <label for="TrackName">Name</label>
+                <input type="text" id="TrackName" value="<?= $firstName?>" required>
+            </fieldset>
+        </form>
+        <form method="POST" id="artistFrm" class="artistEditFrm">
+            <h3>Input new values</h3>
+            <fieldset>
+                <input type="hidden" id="artistId" value="<?= $artistId?>" required>
+                <label for="artistName">First name</label>
+                <input type="text" id="artistName" value="<?= $artistName?>" required>
+            </fieldset>
+        </form>
+        <form method="POST" id="albumFrm" class="albumEditFrm">
+            <h3>Input new values</h3>
+            <fieldset>
+                <input type="hidden" id="albumId" value="<?= $albumId?>" required>
+                <label for="albumTitle">First name</label>
+                <input type="text" id="albumTitle" value="<?= $albumTitle?>" required>
+                <label for="albumArtist">Name</label>
+                <input type="text" id="albumArtist" value="<?= $albumArtist?>" required>
+            </fieldset>
+        </form>
+    </div>
+    <div>
         <button id="editTrackBtn">Track List</button>
         <button id="editArtistBtn">Artist List</button>
         <button id="editAlbumBtn">Album List</button>

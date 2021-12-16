@@ -1,6 +1,4 @@
-//const base_url = "http://127.0.0.1/chinook/";
 const url = 'API';
-//url + /entity + /id
 
 //load up data as sson as page is ready
 $(document).ready(function() {

@@ -55,6 +55,50 @@ class Track{
 
         return $list;
     }
+    public function Get($id){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');   
+        }
+        //SQL
+        $query = <<<'SQL'
+            SELECT TrackId, t.Name, AlbumId, mt.Name as MediaType, g.Name as Genre, Composer, Milliseconds, Bytes, UnitPrice FROM track t
+            LEFT JOIN mediatype mt ON mt.MediaTypeId = t.MediaTypeId
+            LEFT JOIN genre g ON g.GenreId = t.GenreId
+            WHERE TrackId = ?
+        SQL;
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $row = $result->fetch_assoc();
+        
+        //populate the list from result
+        // custom name => database id
+        $return =null;
+        
+        $return = array(
+            "TrackId" => $row['TrackId'], 
+            "Name" => $row['Name'],
+            "AlbumId" => $row['AlbumId'],
+            //"MediaTypeId"
+            "MediaType" => $row['MediaType'],
+            //"GenreId"
+            "Genre" => $row['Genre'],
+            "Composer" => $row['Composer'],
+            "Milliseconds" => $row['Milliseconds'],
+            "Bytes" => $row['Bytes'],
+            "UnitPrice" => $row['UnitPrice']
+        );
+        
+        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
+        $db->cutConnection($con);
+
+        return $return;
+    }
     public function Create($name, $albumId, $MedieTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice){
         $db = new DataBase();
         $con = $db->connect();

@@ -27,6 +27,7 @@ h1{
 }
 table div{
     display: inline-block;
+    
 }
 table div tr{
     display: inline-block;
@@ -37,6 +38,10 @@ table div tr{
     display: flex;
     flex-direction: column;
     align-items:center;
+    background-color: var(--color-2);
+}
+table div tr button{
+    position: relative;
 }
 table div tr td{
     display: inline-block;
@@ -54,6 +59,15 @@ footer{
     display: none;
 }
 .albumList{
+    display: none;
+}
+.trackEditFrm{
+    display: none;
+}
+.artistEditFrm{
+    display: none;
+}
+.albumEditFrm{
     display: none;
 }
 .logoutFrm{

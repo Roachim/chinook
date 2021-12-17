@@ -1,7 +1,7 @@
 const url = 'API';
-$("#editAlbumBtn").on("click", function(e){
+$("#albumBtn").on("click", function(e){
     e.preventDefault();
-    console.log('start');
+    $("#albumList").empty();
     //load in all albums
     $.ajax({
         url: url + "/albums",
@@ -10,7 +10,7 @@ $("#editAlbumBtn").on("click", function(e){
     success: function(data) {
         console.log(data);
         //table to append with results
-        const table = $('#editAlbumList');
+        const table = $('#albumList');
         const div = $("<div></div>");
 
         $.each(data, function(i, item){
@@ -38,14 +38,18 @@ $("#editAlbumBtn").on("click", function(e){
                 
                 div.append(row);
             });
-            cell = $('<button>Edit</button>', { 'id': item.AlbumId});
-                
+            cell = $('<button>Edit</button>');
+            cell.attr("id", "e"+item.AlbumId.toString());
+            openAlbumfunction(cell);
             row.append(cell);
-            cell = $('<button>Delete</button>', { 'id': item.AlbumId});
+            
+            cell = $('<button>Delete</button>');
+            cell.attr("id", "d"+item.AlbumId.toString());
             deleteAlbumFunc(cell);
             row.append(cell);
-            table.append(div);
+            
         });
+        table.append(div);
     }, //end of success
     error: function(jqxhr, status, exception) {
         console.log('Exception:', exception);
@@ -55,70 +59,103 @@ $("#editAlbumBtn").on("click", function(e){
         console.log(console.warn(jqxhr.responseText));
     }//end of error
     }); //end of ajax
-    console.log('end');
-    $("#editArackList").css("display", "none");
-    $("#editArtistList").css("display", "none");
-    $("#editAlbumList").css("display", "block");
+    $("#trackList").css("display", "none");
+    $("#artistList").css("display", "none");
+    $("#albumList").css("display", "block");
 }); //end of button function
 
-const editAlbumfunction = (function(button) {
+const openAlbumfunction = (function(button) {
     button.on("click", function() {
-        //"get" using id from row
-            const trackId = this.id;
-            const title = $("#txtCustId").val().trim();
-            const artist = $("#txtCustId").val().trim();
-
+        //"get" using id from button pressed
+        const albumId = this.id.substring(1, this.id.length); 
+        console.log(albumId);
         $.ajax({
-            url: url +"/customers/" + customerId,
-            type: "POST",
-            data: {
-                title: title,
-                artist: artist
-            },
-            success: function(data) {
-                //parse from JSON to objects
-                
-                data = JSON.parse(JSON.stringify(data));
-                //hide the password information
-                $("#txtOldPassword").val("");
-                $("#txtNewPassword").val("");
-                
-                //hideModal("userProfile");
-                if (data) {
-                    alert("The user profile was successfully updated. Please log in again");
-                    
-                    // Call the PHP API to end the session and redirect to the login page
-                    //aye aye sir. Kinda cruel function though.
-                    $.ajax({
-                        url: url + "/session",
-                        type: "POST",
-                        data: {
-                        },
-                        success: function(data) {
-                            window.location.replace('loginPage.php');
-                        }
-                    })
-
-                } else {
-                    alert("Incorrect password");
-                }
-            }
+            url: url +"/albums/" + albumId,
+            type: "GET",
         })
-        
+        .done(function(data) {
+            $("#editAlbumList").css("display", "none");
+            $("#albumId").val(data.AlbumId);
+            $("#albumTitle").val(data.Title);
+            $("#albumArtist").val(data.Name);
+            $("#albumFrm").css("display", "block");
+        });
+    });
+});
+$("#addAlbum").on("click", function(e) {
+    e.preventDefault();
+    const title = $("#albumTitle").val().trim();
+    const artistId = $("#albumArtist").val().trim();
+    console.log("click");
+    $.ajax({
+        url: url +"/albums",
+        type: "POST",
+        dataType : 'json',
+        data: {
+            title: title,
+            artistId: artistId,
+        },
+        success: function(data) {
+                
+            console.log('success');
+        },
+        error: function(jqxhr, status, exception){
+            console.log('Exception:', exception);
+            console.log(status);
+            console.log(jqxhr.status);
+            console.log(exception.message);
+            console.log(console.warn(jqxhr.responseText));
+        }
+
+    });
+});
+$("#changeAlbum").on("click", function(e) {
+    e.preventDefault();
+    const albumId = $("#newAlbumId").val().trim();
+    const title = $("#newAlbumTitle").val().trim();
+    const artistId = $("#newAlbumArtist").val().trim();
+    console.log("click");
+    $.ajax({
+        url: url +"/albums/" + albumId,
+        type: "POST",
+        dataType : 'json',
+        data: {
+            albumId: albumId,
+            title: title,
+            artistId: artistId,
+        },
+        success: function(data) {
+                
+            console.log('success');
+
+        },
+        error: function(jqxhr, status, exception){
+            console.log('Exception:', exception);
+            console.log(status);
+            console.log(jqxhr.status);
+            console.log(exception.message);
+            console.log(console.warn(jqxhr.responseText));
+        }
+
     });
 });
 
 const deleteAlbumFunc = (function(button){
     button.on("click", function() {
-        //"get" using id from row
-            const trackId = this.id;
-
+        //"delete" using id from button pressed
+        const albumId = parseInt(this.id.substring(1, this.id.length)); 
         $.ajax({
-            url: url+"/albums/"+trackId,
+            url: url+"/albums/"+albumId,
             type: 'DELETE',
         })
         .done(function(data) {
-            $("#editAlbumList").css("display", "none");
+            $("#albumList").css("display", "none");
         });
     });
+});
+//Show/Hide buttons----------------------------------------------------------------------------------------------------------------------------------------------------
+$("#showAddAlbum").on("click", function(event){
+    $("#trackCreateFrm").css("display", "none");
+    $("#artistCreateFrm").css("display", "none");
+    $("#albumCreateFrm").css("display", "block");
 });

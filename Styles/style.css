@@ -48,7 +48,16 @@ table div tr td{
     border-color: var(--color-1);
     
 }
-
+.customerProfile input{
+    display: inline-block;
+    display: flex;
+    flex-direction: column;
+}
+.customerProfile{
+    display: inline-block;
+    display: flex;
+    flex-direction: column;
+}
 footer{
     background-color: burlywood;
 }
@@ -61,13 +70,13 @@ footer{
 .albumList{
     display: none;
 }
-.trackEditFrm{
+.trackFrm{
     display: none;
 }
-.artistEditFrm{
+.artistFrm{
     display: none;
 }
-.albumEditFrm{
+.albumFrm{
     display: none;
 }
 .logoutFrm{

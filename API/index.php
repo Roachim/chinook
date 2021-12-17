@@ -9,10 +9,11 @@ require_once "invoice.php";
 require_once "invoiceline.php";
 
 //pos_entity gets the name trailing after API/, such as: albums or customers. accepted parameters are defined below as ENTITY_ALBUMS and ENTITY_CUSTOMER
+//define constants
 define('POS_ENTITY', 1);
 define('POS_ID', 2);
 define('MAX_PIECES', 3);
-
+//define more constants
 define('ENTITY_ARTIST', 'artists');
 define('ENTITY_ALBUMS', 'albums');
 define('ENTITY_TRACKS', 'tracks');
@@ -26,6 +27,7 @@ define('ENTITY_ADMINS', 'admins');
 $url = strtok($_SERVER['REQUEST_URI'], "?");    // GET parameters are removed
 
 // If there is a trailing slash, it is removed, so that it is not taken into account by the explode function
+//smart
 if (substr($url, strlen($url) - 1) == '/') {
     $url = substr($url, 0, strlen($url) - 1);
 }
@@ -34,6 +36,7 @@ if (substr($url, strlen($url) - 1) == '/') {
 //cool
 $url = substr($url, strpos($url, basename(__DIR__)));
 
+// get a better read of the url by dividing and deleting the "/"
 $urlPieces = explode('/', urldecode($url));
 
 header('Content-Type: application/json');
@@ -45,11 +48,14 @@ $pieces = count($urlPieces);
 session_start();
     
     if (!isset($_SESSION['customerId']) && !isset($_SESSION['adminId'])) {
-        die('Session variable userID not set.<br>User not authenticated.');
+        die('Access denied. You are not authenticated to use this service.');
     }
 
 //define what type of request is made. e.g. GET or POST
 $verb = $_SERVER['REQUEST_METHOD'];
+if($pieces > MAX_PIECES){
+    die("Invalid URL.  Please check the readme.md");
+}
 
 
 if ($pieces == 1) {
@@ -60,13 +66,7 @@ if ($pieces == 1) {
     } else {
         //from array of urlPieces, get the second and third. ignoring value 0, as 0 = API.
         $entity = $urlPieces[POS_ENTITY];
-        if(count($urlPieces) > 2)
-        {
-            $id = $urlPieces[POS_ID];
-        }
-        else{
-            $id = null;
-        }
+        
         
 
         switch ($entity) {
@@ -85,10 +85,10 @@ if ($pieces == 1) {
                         
                         break;
                     case 'POST':                            //create new album
-                        if (!isset($_POST['Title']) || !isset($_POST['ArtistId'])) {
-                            echo json_encode('format error');
+                        if ($pieces == MAX_PIECES) {
+                            echo json_encode($album->Update($_POST['albumId'], $_POST['title'], $_POST['artistId']));
                         } else {
-                            echo json_encode($album->Create($_POST['Title'], $_POST['ArtistId']));
+                            echo json_encode($album->Create($_POST['title'], $_POST['artistId']));
                         }                        
                         break;
                     case 'DELETE':                          //delete album
@@ -103,23 +103,40 @@ if ($pieces == 1) {
                 $album = null;
                 break;
             case ENTITY_TRACKS://----------------------------------------------------TRACKS--------------------------------------------------------------------------------
+                require_once('track.php');
                 $track = new Track();
                 switch($verb){
                     case 'GET':
                         if($pieces == MAX_PIECES){
-                            echo json_encode($track->Get($urlPieces[POS_ID]));                             //get track
+                            echo json_encode($track->Get($urlPieces[POS_ID]));//get artist
+                        }else{
+                            echo json_encode($track->GetAll());//get all artists
                         }
-                        else{
-                            echo json_encode($track->GetAll());                             //get all tracks
-                        }
+                                             
                         break;
-                        
-                    break;
                     case 'POST':
 
+                        if ($pieces == MAX_PIECES) {                                                //create new artist
+                            echo json_encode($track->Update($urlPieces[POS_ID], $_POST['trackName'], $_POST['trackAlbumId'], $_POST['trackMediaTypeId'], $_POST['trackGenreId'], 
+                            $_POST['trackComposer'], $_POST['trackMilliseconds'], $_POST['trackBytes'], $_POST['trackUnitPrice']));
+                        } else {                                                //update artist
+                            echo json_encode($track->Create($_POST['trackName'], $_POST['trackAlbumId'], $_POST['trackMediaTypeId'], $_POST['trackGenreId'], 
+                            $_POST['trackComposer'], $_POST['trackMilliseconds'], $_POST['trackBytes'], $_POST['trackUnitPrice']));
+                        }                        
                         break;
-                    case 'DELETE':
-                        break;
+                    case 'DELETE':                                  //delete artist
+                        if ($pieces < MAX_PIECES) {
+                            
+                            echo json_encode('format error');
+                        }
+                        else {
+                            if($track->IntegrityCheck($urlPieces[POS_ID])){
+                                echo json_encode($track->Delete($urlPieces[POS_ID]));
+                            }else{
+                                echo json_encode('That track has an invoice. Cannot delete.');
+                            }
+                        }
+                        break; 
                 }
                 $track = null;
                 break;
@@ -136,21 +153,26 @@ if ($pieces == 1) {
                                              
                         break;
                     case 'POST':                                                //create new artist
-                        if (isset($_POST['artistId'])) {
-                            echo json_encode($artist->Update($_SERVER['artistId'], $_SERVER['name']));
-                            break;
-                        }
-                        if (!isset($_POST['title'])) {
-                            echo json_encode('format error');
-                        }
+
+                        if ($pieces == MAX_PIECES) {
+                            echo json_encode($artist->Update($_POST['artistId'], $_POST['artistName']));
+                        } else {
+                            echo json_encode($artist->Create($_POST['artistName']));
+                        }                        
                         break;
                     case 'DELETE':                                  //delete artist
                         if ($pieces < MAX_PIECES) {
+                            
                             echo json_encode('format error');
-                        } else {
-                            echo $movie->delete($urlPieces[POS_ID]);
                         }
-                        break;
+                        else {
+                            if($artist->IntegrityCheck($urlPieces[POS_ID])){
+                                echo json_encode($artist->Delete($urlPieces[POS_ID]));
+                            }else{
+                                echo json_encode('That artist has an album.');
+                            }
+                        }
+                        break; 
                 }
                 $artist = null;
                 break; 
@@ -163,7 +185,7 @@ if ($pieces == 1) {
                         echo json_encode($customer->GetAll());                     //get all customers
                         break;
                     case 'POST':
-                        if (count($urlPieces) > 2) {
+                        if ($pieces == MAX_PIECES) {
                             echo json_encode($customer->Update($_POST['customerId'] ,$_POST['firstName'], 
                             $_POST['lastName'], $_POST['company'], $_POST['address'], $_POST['city'], 
                             $_POST['state'], $_POST['country'], $_POST['postalCode'], $_POST['phone'], 
@@ -196,10 +218,6 @@ if ($pieces == 1) {
             case ENTITY_INVOICELINES: //----------------------------------------------------INVOICELINES--------------------------------------------------------------------------------
                 require_once('invoiceline.php');
                 $artist = new InvoiceLine();
-                break;
-             case ENTITY_ADMINS: //----------------------------------------------------ADMINS--------------------------------------------------------------------------------
-                require_once('admin.php');
-                $artist = new Admin();
                 break;
             case 'session':
                 session_destroy();

@@ -1,12 +1,12 @@
 //const url = 'API';
-$(document).ready(function() {
-    //load in all artists
+$("#artistBtn").on("click", function(e){
+    e.preventDefault();
+    $("#artistList").empty();
+    //load in all artist
     $.ajax({
-        url: url+"/artists",
+        url: url + "/artists",
         type: 'GET',
-        dataType : 'json'
-    })
-    .done(function(data) {
+    success: function(data) {
         console.log(data);
         //table to append with results
         const table = $('#artistList');
@@ -15,7 +15,7 @@ $(document).ready(function() {
         $.each(data, function(i, item){
             const row = $('<tr></tr>', {'id': 'text'});
             let cell;
-            const array = ['Name'];
+            const array = ["Name"];
             let x = 0;
             //set this to ignore the first value. It's the id
             let y=0;
@@ -34,12 +34,149 @@ $(document).ready(function() {
                     row.append(cell);
                     x = x+1;
                 }
+                
+                div.append(row);
             });
+            cell = $('<button>Edit</button>');
+            cell.attr("id", "e"+item.ArtistId.toString());
+            openArtistfunc(cell);
             row.append(cell);
-
-            div.append(row);
+            
+            cell = $('<button>Delete</button>');
+            cell.attr("id", "d"+item.ArtistId.toString());
+            deleteArtistFunc(cell);
+            row.append(cell);
+            
         });
         table.append(div);
+    }, //end of success
+    error: function(jqxhr, status, exception) {
+        console.log('Exception:', exception);
+        console.log(status);
+        console.log(jqxhr.status);
+        console.log(exception.message);
+        console.log(console.warn(jqxhr.responseText));
+    }//end of error
+    }); //end of ajax
+    $("#trackList").css("display", "none");
+    $("#artistList").css("display", "block");
+    $("#albumList").css("display", "none");
+}); //end of button function
+
+
+$("#addArtist").on("click", function(e) {
+    e.preventDefault();
+    const artistName = $("#artistName").val().trim();
+    console.log("click");
+    $.ajax({
+        url: url +"/artists",
+        type: "POST",
+        dataType : 'json',
+        data: {
+            artistName: artistName,
+        },
+        success: function(data) {
+                
+            console.log('success');
+            $("#artistCreateFrm").css("display", "none");
+        },
+        error: function(jqxhr, status, exception){
+            console.log('Exception:', exception);
+            console.log(status);
+            console.log(jqxhr.status);
+            console.log(exception.message);
+            console.log(console.warn(jqxhr.responseText));
+        }
+
+    });
+});
+$("#changeArtist").on("click", function(e) {
+    e.preventDefault();
+    const artistId = $("#newArtistId").val().trim();
+    const artistName = $("#newArtistName").val().trim();
+    $.ajax({
+        url: url +"/artists/" + artistId,
+        type: "POST",
+        dataType : 'json',
+        data: {
+            artistId: artistId,
+            artistName: artistName,
+        },
+        success: function(data) {
+                
+            console.log('success');
+            $("#artistCreateFrm").css("display", "none");
+        },
+        error: function(jqxhr, status, exception){
+            console.log('Exception:', exception);
+            console.log(status);
+            console.log(jqxhr.status);
+            console.log(exception.message);
+            console.log(console.warn(jqxhr.responseText));
+        }
+
+    });
+});
+const openArtistfunc = (function(button) {
+    button.on("click", function() {
+        //"get" using id from button pressed
+        //remove first letter so it is now int'able
+        const artistId = this.id.substring(1, this.id.length); 
+        console.log(artistId);
+        $.ajax({
+            url: url +"/artists/" + artistId,
+            type: "GET",
+            success: function(data) {
+                
+                $("#artistList").css("display", "none");
+                $("#newArtistId").val(data.ArtistId);
+                $("#newArtistName").val(data.Name);
+                $("#artistFrm").css("display", "block");
+
+    
+            },
+            error: function(jqxhr, status, exception){
+                console.log('Exception:', exception);
+                console.log(status);
+                console.log(jqxhr.status);
+                console.log(exception.message);
+                console.log(console.warn(jqxhr.responseText));
+            }
+        });
+    });
+});
+
+
+const deleteArtistFunc = (function(button){
+    button.on("click", function() {
+        //"delete" using id from button pressed
+        const artistId = parseInt(this.id.substring(1, this.id.length)); 
+        $.ajax({
+            url: url+"/artists/"+artistId,
+            type: 'DELETE',
+            success: function(data) {
+                
+                $("#artistList").css("display", "none");
+            },
+            error: function(jqxhr, status, exception){
+                console.log('Exception:', exception);
+                console.log(status);
+                console.log(jqxhr.status);
+                console.log(exception.message);
+                console.log(console.warn(jqxhr.responseText));
+            }
+            
+        });
+        
         
     });
+});
+
+
+
+//Show/Hide buttons----------------------------------------------------------------------------------------------------------------------------------------------------
+$("#showAddArtist").on("click", function(event){
+    $("#trackCreateFrm").css("display", "none");
+    $("#artistCreateFrm").css("display", "block");
+    $("#albumCreateFrm").css("display", "none");
 });

@@ -1,16 +1,17 @@
 //const url = 'API';
-$(document).ready(function() {
-    //Load in all tracks
+$("#trackBtn").on("click", function(e){
+    e.preventDefault();
+    $("#trackList").empty();
+    //load in all track
     $.ajax({
-        url: url+"/tracks",
+        url: url + "/tracks",
         type: 'GET',
-        dataType : 'json'
-    })
-    .done(function(data) {
+    success: function(data) {
         console.log(data);
         //table to append with results
         const table = $('#trackList');
         const div = $("<div></div>");
+
         $.each(data, function(i, item){
             const row = $('<tr></tr>', {'id': 'text'});
             let cell;
@@ -33,14 +34,183 @@ $(document).ready(function() {
                     row.append(cell);
                     x = x+1;
                 }
+                
+                div.append(row);
             });
-            cell = $('<button>Edit</button>', { 'id': item.TrackId});
+            cell = $('<button>Edit</button>');
+            cell.attr("id", "e"+item.TrackId.toString());
+            openTrackfunc(cell);
             row.append(cell);
-            cell = $('<button>Delete</button>', { 'id': item.TrackId});
+            
+            cell = $('<button>Delete</button>');
+            cell.attr("id", "d"+item.TrackId.toString());
+            deleteTrackFunc(cell);
             row.append(cell);
-
-            div.append(row);
+            
         });
         table.append(div);
+    }, //end of success
+    error: function(jqxhr, status, exception) {
+        console.log('Exception:', exception);
+        console.log(status);
+        console.log(jqxhr.status);
+        console.log(exception.message);
+        console.log(console.warn(jqxhr.responseText));
+    }//end of error
+    }); //end of ajax
+    $("#trackList").css("display", "block");
+    $("#artistList").css("display", "none");
+    $("#albumList").css("display", "none");
+}); //end of button function
+
+
+$("#addTrack").on("click", function(e) {
+    e.preventDefault();
+    const trackName = $("#trackName").val().trim();
+    const trackAlbumId = $("#trackAlbumId").val().trim();
+    const trackMediaTypeId = $("#trackMediaTypeId").val().trim();
+    const trackGenreId = $("#trackGenreId").val().trim();
+    const trackComposer = $("#trackComposer").val().trim();
+    const trackMilliseconds = $("#trackMilliseconds").val().trim();
+    const trackBytes = $("#trackBytes").val().trim();
+    const trackUnitPrice = $("#trackUnitPrice").val().trim();
+    console.log("click");
+    $.ajax({
+        url: url +"/tracks",
+        type: "POST",
+        dataType : 'json',
+        data: {
+            trackName: trackName,
+            trackAlbumId: trackAlbumId,
+            trackMediaTypeId: trackMediaTypeId,
+            trackGenreId: trackGenreId,
+            trackComposer: trackComposer,
+            trackMilliseconds: trackMilliseconds,
+            trackBytes: trackBytes,
+            trackUnitPrice: trackUnitPrice,
+        },
+        success: function(data) {
+                
+            console.log('success');
+            $("#trackCreateFrm").css("display", "none");
+        },
+        error: function(jqxhr, status, exception){
+            console.log('Exception:', exception);
+            console.log(status);
+            console.log(jqxhr.status);
+            console.log(exception.message);
+            console.log(console.warn(jqxhr.responseText));
+        }
+
     });
+});
+$("#changeTrack").on("click", function(e) {
+    e.preventDefault();
+    const trackId = $("#newTrackId").val().trim();
+    const trackName = $("#newTrackName").val().trim();
+    const trackAlbumId = $("#newTrackAlbumId").val().trim();
+    const trackMediaTypeId = $("#newTrackMediaTypeId").val().trim();
+    const trackGenreId = $("#newTrackGenreId").val().trim();
+    const trackComposer = $("#newTrackComposer").val().trim();
+    const trackMilliseconds = $("#newTrackMilliseconds").val().trim();
+    const trackBytes = $("#newTrackBytes").val().trim();
+    const trackUnitPrice = $("#newTrackUnitPrice").val().trim();
+    $.ajax({
+        url: url +"/tracks/" + trackId,
+        type: "POST",
+        dataType : 'json',
+        data: {
+            trackName: trackName,
+            trackAlbumId: trackAlbumId,
+            trackMediaTypeId: trackMediaTypeId,
+            trackGenreId: trackGenreId,
+            trackComposer: trackComposer,
+            trackMilliseconds: trackMilliseconds,
+            trackBytes: trackBytes,
+            trackUnitPrice: trackUnitPrice,
+        },
+        success: function(data) {
+                
+            console.log('success');
+            $("#trackFrm").css("display", "none");
+        },
+        error: function(jqxhr, status, exception){
+            console.log('Exception:', exception);
+            console.log(status);
+            console.log(jqxhr.status);
+            console.log(exception.message);
+            console.log(console.warn(jqxhr.responseText));
+        }
+
+    });
+});
+const openTrackfunc = (function(button) {
+    button.on("click", function() {
+        //"get" using id from button pressed
+        //remove first letter so it is now int'able
+        const trackId = this.id.substring(1, this.id.length); 
+        console.log(trackId);
+        $.ajax({
+            url: url +"/tracks/" + trackId,
+            type: "GET",
+            success: function(data) {
+                
+                $("#trackList").css("display", "none");
+
+                $("#newTrackId").val(data.TrackId);
+                $("#newTrackName").val(data.Name);
+                $("#newTrackAlbumId").val(data.AlbumId);
+                $("#newTrackMediaTypeId").val(data.MediaType);
+                $("#newTrackGenreId").val(data.Genre);
+                $("#newTrackComposer").val(data.Composer);
+                $("#newTrackMilliseconds").val(data.Milliseconds);
+                $("#newTrackBytes").val(data.Bytes);
+                $("#newTrackUnitPrice").val(data.UnitPrice);
+
+                $("#trackFrm").css("display", "block");
+            },
+            error: function(jqxhr, status, exception){
+                console.log('Exception:', exception);
+                console.log(status);
+                console.log(jqxhr.status);
+                console.log(exception.message);
+                console.log(console.warn(jqxhr.responseText));
+            }
+        });
+    });
+});
+
+
+const deleteTrackFunc = (function(button){
+    button.on("click", function() {
+        //"delete" using id from button pressed
+        const trackId = parseInt(this.id.substring(1, this.id.length)); 
+        $.ajax({
+            url: url+"/tracks/"+trackId,
+            type: 'DELETE',
+            success: function(data) {
+                
+                $("#trackList").css("display", "none");
+            },
+            error: function(jqxhr, status, exception){
+                console.log('Exception:', exception);
+                console.log(status);
+                console.log(jqxhr.status);
+                console.log(exception.message);
+                console.log(console.warn(jqxhr.responseText));
+            }
+            
+        });
+        
+        
+    });
+});
+
+
+
+//Show/Hide buttons----------------------------------------------------------------------------------------------------------------------------------------------------
+$("#showAddTrack").on("click", function(event){
+    $("#trackCreateFrm").css("display", "block");
+    $("#artistCreateFrm").css("display", "none");
+    $("#albumCreateFrm").css("display", "none");
 });

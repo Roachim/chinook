@@ -99,7 +99,7 @@ class Track{
 
         return $return;
     }
-    public function Create($name, $albumId, $MedieTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice){
+    public function Create($name, $albumId, $MediaTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice){
         $db = new DataBase();
         $con = $db->connect();
         if (!$con) {
@@ -107,20 +107,32 @@ class Track{
         } 
         //SQL
         $query = <<<'SQL'
-            INSERT INTO track (Name, AlbumId, MedieTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice)
+            INSERT INTO track (Name, AlbumId, MediaTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         SQL;
         //Prepare statement, bind and execute
-        $stmt = $con->prepare($query);
-        $stmt->bind_param("siiisiid", $name, $albumId, $MedieTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice);
-        $stmt->execute();
+        $object = $stmt = $con->prepare($query);
+        if($object == false){
+            return $con->error;
+        }
+        $bindStatus = $stmt->bind_param("siiisiid", $name, $albumId, $MediaTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice);
+        
+        if(!$bindStatus){
+            return $con->error;
+        }
+        $execstatus = $stmt->execute();
         //cut connection
         
         $db->cutConnection($con);
-        return 'Track created';
+        if($execstatus){
+            return true;
+        }else{
+            return $con->error;
+        }
+        
 
     }
-    public function Update($TrackId ,$name, $albumId, $MedieTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice){
+    public function Update($TrackId ,$name, $albumId, $MediaTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice){
         $db = new DataBase();
         $con = $db->connect();
         if (!$con) {
@@ -128,13 +140,13 @@ class Track{
         } 
         //SQL
         $query = <<<'SQL'
-            INSERT INTO track (Name, AlbumId, MedieTypeId, GenreId, Composer, Milliseconds, Bytes, UnitPrice)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            Update track
+            SET Name = ?, AlbumId = ?, MediaTypeId = ?, GenreId = ?, Composer = ?, Milliseconds = ?, Bytes = ?, UnitPrice = ?
             WHERE TrackId = ?
         SQL;
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
-        $stmt->bind_param("siiisiidi", $name, $albumId, $MedieTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice, $TrackId);
+        $stmt->bind_param("siiisiidi", $name, $albumId, $MediaTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice, $TrackId);
         $stmt->execute();
         //cut connection
         
@@ -185,7 +197,7 @@ class Track{
                 "InvoiceLineId" => $row['InvoiceLineId']
                 );
         }
-        if(count($row) == 0 || count($row) == null){
+        if(empty($list)){
             return true;
         }
         return false;

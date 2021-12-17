@@ -168,19 +168,11 @@ $(document).ready(function() {
                 newPassword: newPassword
             },
             success: function(data) {
-                //parse from JSON to objects
                 
-                data = JSON.parse(JSON.stringify(data));
-                //hide the password information
-                $("#txtOldPassword").val("");
-                $("#txtNewPassword").val("");
-                
-                //hideModal("userProfile");
                 if (data) {
                     alert("The user profile was successfully updated. Please log in again");
                     
-                    // Call the PHP API to end the session and redirect to the login page
-                    //aye aye sir. Kinda cruel function though.
+                    // end session
                     $.ajax({
                         url: url + "/session",
                         type: "POST",
@@ -197,16 +189,6 @@ $(document).ready(function() {
             }
         });
     });
-    // $("#logout").on("click", function(event){
-    //     $.ajax({
-    //         url: url+'/session',
-    //         type: "POST",
-    //         data: {},
-    //     })
-    //     .done(function(data) {
-    //         window.location.replace('login.php');
-    //     });   
-    // });
     
     //Show/Hide buttons----------------------------------------------------------------------------------------------------------------------------------------------------
     $("#trackBtn").on("click", function(event){

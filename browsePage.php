@@ -43,13 +43,11 @@
          
      </div>
     </header>
-    <div id="modalUserProfile" class="modal">
-            <header>
-                <h3 ie="headerProfile">Edit user profile</h3>
-            </header>
+    <div>
             <main>
                 <form id="editCustomerProfile" method="POST">
                     <fieldset>
+                        <h3>Edit user profile</h3>
                         <legend>customer profile</legend>
                         <input type="hidden" id="txtCustId" value="<?= $customerId?>" required>
                         <label for="txtFirstName">First name</label>

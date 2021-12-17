@@ -33,7 +33,7 @@ class Album{
         while ($row = mysqli_fetch_array($result)) {
 
             $list[] = array(
-            "AlbumId" => htmlspecialchars($row['AlbumId']),
+            "AlbumId" => $row['AlbumId'],
             "Title" => htmlspecialchars($row['Title']), 
             "Name" => htmlspecialchars($row['Name'])
             );
@@ -94,11 +94,15 @@ class Album{
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
         $stmt->bind_param("si", $title, $artistId);
-        $stmt->execute();
+        $status = $stmt->execute();
         //cut connection
         
         $db->cutConnection($con);
-        return 'Album created';
+        if($status){
+            return true;
+        } else{
+            return false;
+        }
 
     }
     public function Update($albumId ,$title, $artistId){
@@ -109,18 +113,23 @@ class Album{
         } 
         //SQL
         $query = <<<'SQL'
-            INSERT INTO album (Title, ArtistId)
-            VALUES (?, ?)
-            WHERE AlbumId = ?
+            UPDATE album
+            SET Title = ?, ArtistId = ?
+            WHERE AlbumId = ?;
         SQL;
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
         $stmt->bind_param("sii", $title, $artistId, $albumId);
-        $stmt->execute();
+        $status = $stmt->execute();
         //cut connection
         
         $db->cutConnection($con);
-        return 'Album updated';
+        if($status){
+            return true;
+        } else{
+            return false;
+        }
+        
     
     }
     public function Delete($albumId){
@@ -129,6 +138,20 @@ class Album{
         if (!$con) {
             die('Connection error');
         } 
+        //first, remove albumId from associated tracks
+        $query = <<<'SQL'
+            UPDATE track
+            SET AlbumId = NULL
+            WHERE AlbumId = ?;
+        SQL;
+        //prepare, bind, execute
+        $prepared = $stmt = $con->prepare($query);
+        if(!$prepared){
+            return $con->error;
+        }
+        $stmt->bind_param('i', $albumId);
+        $stmt->execute();
+        //Now delete the actual track
         //prepare statement
         $query = <<<'SQL'
         DELETE FROM album
@@ -137,11 +160,39 @@ class Album{
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
         $stmt->bind_param("i", $albumId);
-        $stmt->execute();
+        $deleted = $stmt->execute();
         //cut and return
+        $message = '';
+        if($deleted){
+            $message ='Album deleted';
+        }else {
+            $message = 'Error. Could not delete album. Error = ' . $con->error;
+        }
         $db->cutConnection($con);
-        return 'Album deleted';
+        return $message;
     }
+    // function DeleteFromTrack($albumId) {
+    //     $db = new DataBase();
+    //     $con = $db->connect();
+    //     if (!$con) {
+    //         die('Connection error');
+    //     } 
+    //     // SQL
+    //     $query = <<<'SQL'
+    //         INSERT INTO track (AlbumId)
+    //         Values(NULL)
+    //         WHERE AlbumId = ?;
+    //     SQL;
+    //     //prepare, bind, execute
+    //     $stmt = $con->prepare($query);
+    //     $stmt->bind_param('i', $albumId);
+    //     $stmt->execute();
+        
+        
+    //         return true;
+        
+    //     return false;
+    // }
     
 
 }

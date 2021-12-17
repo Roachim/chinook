@@ -85,7 +85,7 @@ class Artist{
         } 
         //SQL
         $query = <<<'SQL'
-            INSERT INTO track (Name)
+            INSERT INTO artist (Name)
             VALUES (?)
         SQL;
         //Prepare statement, bind and execute
@@ -106,8 +106,8 @@ class Artist{
         } 
         //SQL
         $query = <<<'SQL'
-            INSERT INTO track (Name)
-            VALUES (?)
+            UPDATE artist
+            SET Name = ?
             WHERE ArtistId = ?
         SQL;
         //Prepare statement, bind and execute
@@ -163,7 +163,7 @@ class Artist{
                 "AlbumId" => $row['AlbumId']
                 );
         }
-        if(count($row) == 0 || count($row) == null){
+        if(empty($list)){
             return true;
         }
         return false;

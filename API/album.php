@@ -127,10 +127,10 @@ class Album{
         //cut connection
         
         $db->cutConnection($con);
-        if($status){
-            return true;
-        } else{
+        if(!$status || $con->affected_rows < 1){
             return false;
+        } else{
+            return true;
         }
         
     
@@ -150,7 +150,7 @@ class Album{
         //prepare, bind, execute
         $prepared = $stmt = $con->prepare($query);
         if(!$prepared){
-            return $con->error;
+            return false;
         }
         $stmt->bind_param('i', $albumId);
         $stmt->execute();
@@ -166,10 +166,10 @@ class Album{
         $deleted = $stmt->execute();
         //cut and return
         $message = '';
-        if($deleted){
-            $message ='Album deleted';
+        if(!$deleted || $con->affected_rows < 1){
+            $message =false;
         }else {
-            $message = 'Error. Could not delete album. Error = ' . $con->error;
+            $message = true;
         }
         $db->cutConnection($con);
         return $message;

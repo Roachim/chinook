@@ -21,6 +21,12 @@
     $phone = $_SESSION['phone'];
     $fax = $_SESSION['fax'];
     $email = $_SESSION['email'];
+
+    //generate random token
+    $token = openssl_random_pseudo_bytes(16);
+
+    $token = bin2hex($token);
+    $_SESSION['token'] = $token;
 ?>
 <?php
 if(empty($_SESSION['cart'])){
@@ -40,6 +46,7 @@ if(empty($_SESSION['cart'])){
     <title>Document</title>
 </head>
 <body>
+    <input type="hidden" id="csrf_token" value="<?=$token?>">
     <input id="cartItems" type="hidden" value="">
     <header>
      <h1>Browsing page</h1>

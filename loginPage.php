@@ -52,6 +52,7 @@
                 $_SESSION['phone'] = $customer->phone;
                 $_SESSION['fax'] = $customer->fax;
                 $_SESSION['email'] = $email;
+
     
                 header('Location: browsePage.php');
             } else if($validCustomer === false){

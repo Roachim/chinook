@@ -68,12 +68,15 @@ class Album{
         //populate the list from result
         // custom name => database id
         $return =null;
+        if(!empty($row)){
+            $return = array(
+                "AlbumId" => htmlspecialchars($row['AlbumId']),
+                "Title" => htmlspecialchars($row['Title']), 
+                "Name" => htmlspecialchars($row['Name'])
+            );
+        }
         
-        $return = array(
-            "AlbumId" => htmlspecialchars($row['AlbumId']),
-            "Title" => htmlspecialchars($row['Title']), 
-            "Name" => htmlspecialchars($row['Name'])
-        );
+        
         
         //cut connection to database before ending function ᕕ( ᐛ )ᕗ
         $db->cutConnection($con);

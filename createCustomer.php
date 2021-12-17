@@ -24,6 +24,8 @@
                         <input type="text" id="lastName" value="" required>
                         <label for="email">Email</label>
                         <input type="text" id="email" value="" required>
+                        <label for="password">Password</label>
+                        <input type="password" id="password">
                         <label for="company">Company</label>
                         <input type="text" id="company" value="" >
                         <label for="address">Address</label>
@@ -40,9 +42,10 @@
                         <input type="text" id="phone" value="" >
                         <label for="fax">Fax</label>
                         <input type="text" id="fax" value="" >
-                        <label for="txtNewPassword">New password</label>
-                        <input type="password" id="txtNewPassword">
-                        <button>Create User</button>                    
+                        
+                        <button id="profileBtn">Create Profile</button>                    
                     </fieldset>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
+    <script src="JS/createCustomer.js" defer></script>
 </body>
 </html>

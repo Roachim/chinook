@@ -171,30 +171,7 @@ class Album{
         $db->cutConnection($con);
         return $message;
     }
-    // function DeleteFromTrack($albumId) {
-    //     $db = new DataBase();
-    //     $con = $db->connect();
-    //     if (!$con) {
-    //         die('Connection error');
-    //     } 
-    //     // SQL
-    //     $query = <<<'SQL'
-    //         INSERT INTO track (AlbumId)
-    //         Values(NULL)
-    //         WHERE AlbumId = ?;
-    //     SQL;
-    //     //prepare, bind, execute
-    //     $stmt = $con->prepare($query);
-    //     $stmt->bind_param('i', $albumId);
-    //     $stmt->execute();
-        
-        
-    //         return true;
-        
-    //     return false;
-    // }
     
-
 }
 
 

@@ -92,7 +92,7 @@
     <footer>
         <tr>Don't have an account?</tr>
         <br>
-        <a href="createUser.php">Sign Up Here</a>
+        <a href="createCustomer.php">Sign Up Here</a>
     </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>

@@ -44,18 +44,15 @@ header('Accept-version: v1');
 
 $pieces = count($urlPieces);
 
-//lets make sure they have access first using sessions.
-session_start();
-    
-    if (!isset($_SESSION['customerId']) && !isset($_SESSION['adminId'])) {
-        die('Access denied. You are not authenticated to use this service.');
-    }
+
+
 
 //define what type of request is made. e.g. GET or POST
 $verb = $_SERVER['REQUEST_METHOD'];
 if($pieces > MAX_PIECES){
     die("Invalid URL.  Please check the readme.md");
 }
+
 
 
 if ($pieces == 1) {
@@ -66,7 +63,13 @@ if ($pieces == 1) {
     } else {
         //from array of urlPieces, get the second and third. ignoring value 0, as 0 = API.
         $entity = $urlPieces[POS_ENTITY];
-        
+        //lets make sure they have access first using sessions.
+        session_start();
+        if($entity == "customers" && $pieces == 2){
+            //continue. can make a new customer without auth
+        } else if (!isset($_SESSION['customerId']) && !isset($_SESSION['adminId'])) {
+            die('Access denied. You are not authenticated to use this service.');
+        }
         
 
         switch ($entity) {
@@ -186,7 +189,7 @@ if ($pieces == 1) {
                         break;
                     case 'POST':
                         if ($pieces == MAX_PIECES) {
-                            echo json_encode($customer->Update($_POST['customerId'] ,$_POST['firstName'], 
+                            echo json_encode($customer->Update($urlPieces[POS_ID] ,$_POST['firstName'], 
                             $_POST['lastName'], $_POST['company'], $_POST['address'], $_POST['city'], 
                             $_POST['state'], $_POST['country'], $_POST['postalCode'], $_POST['phone'], 
                             $_POST['fax'], $_POST['email'], $_POST['password'],$_POST['newPassword'])); //Update customer
@@ -196,11 +199,10 @@ if ($pieces == 1) {
                         }
                         break;
                     case 'DELETE':                                                  //delete customer
-                        if ($pieces < MAX_PIECES) {
-                            echo json_encode('format error');
-                        } else {
-                            echo $movie->delete($urlPieces[POS_ID]);
-                        }
+                        //the assignment does not specify having to remove customers at any point.
+                        //Don't know if either admins or customers are supposed to be able to do it.
+                        //As there is no specification about this function, it has been left empty.
+                        //customers are permament. Once a customer, always a customer :D
                         break;
 
                 }
@@ -220,7 +222,7 @@ if ($pieces == 1) {
                 $artist = new InvoiceLine();
                 break;
             case 'session':
-                session_destroy();
+                return json_encode(session_destroy());
                 //echo 'Session destroyed';
                 break;
                      

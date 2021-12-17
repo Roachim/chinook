@@ -111,7 +111,7 @@ class Customer{
         $list = [];
         while ($row = mysqli_fetch_array($result)) {
             $list = array(
-                "CustomerId" => htmlspecialchars($row['CustomerId']), 
+                "CustomerId" => $row['CustomerId'], 
                 "FirstName" => htmlspecialchars($row['FirstName']),
                 "LastName" => htmlspecialchars($row['LastName']),
                 "Password" => htmlspecialchars($row['Password']),
@@ -174,37 +174,68 @@ class Customer{
             Phone = ?, 
             Fax = ?, 
             Email = ?
+            WHERE CustomerId = ?
         SQL;
         //split the SQL, insert new password before the 'where' clause to sandwich in updating the password when appropriate
         $passwordChange = (trim($newPassword) !== '');
+        //add password change if new password isnt empty
         if ($passwordChange) {
-            if ($this->validate($Email, $Password)) {                
+            if ($this->validate($Email, $Password)) {    
+                //remember to hash password before inserting            
                 $newPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-                $query .= ', Password = ?';
+                $query = <<<'SQL'
+                UPDATE customer 
+                SET FirstName = ?, 
+                LastName = ?, 
+                Company = ?, 
+                Address = ?, 
+                City = ?, 
+                State = ?, 
+                Country = ?, 
+                PostalCode = ?, 
+                Phone = ?, 
+                Fax = ?, 
+                Email = ?,
+                Password = ?
+                WHERE CustomerId = ?
+            SQL;
             } else {
                 return false;
             }
         }
-        $query .= ' WHERE CustomerId = ?;';
-
+        
         if($Password != null){
             //remember to hash password before inserting
             $Password = password_hash($Password, PASSWORD_DEFAULT);
         }
         //Prepare statement, bind and execute
-        $stmt = $con->prepare($query);
+        $prepareStatus = $stmt = $con->prepare($query);
+        
+        if(!$prepareStatus){
+            return $con->error;
+        }
         if($passwordChange){
-            $stmt->bind_param("sssssssssssss", $FirstName, $LastName, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email, $newPassword, $CustomerId);
+            $bindStatus = $stmt->bind_param("ssssssssssssi", $FirstName, $LastName, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email, $newPassword, $CustomerId);
         }
         else{
-            $stmt->bind_param("sssssssssssss", $FirstName, $LastName, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email, $CustomerId);
+            $bindStatus = $stmt->bind_param("sssssssssssi", $FirstName, $LastName, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email, $CustomerId);
+        }
+        //4 hours debugging just to see i used pos_entity instead of pos_id in index AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+        //return $FirstName . $LastName. $Company. $Address. $City. $State. $Country. $PostalCode. $Phone. $Fax. $Email. $CustomerId;
+        if(!$bindStatus){
+            return $con->error;
         }
         
-        $stmt->execute();
+        $status = $stmt->execute();
         //cut connection
         
         $db->cutConnection($con);
-        return true;
+        if($status){
+            return true;
+        } else{
+            return "error: " . $con->error;
+        }
+        
     
     }
     function validate($email, $password) {

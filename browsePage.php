@@ -22,6 +22,14 @@
     $fax = $_SESSION['fax'];
     $email = $_SESSION['email'];
 ?>
+<?php
+if(empty($_SESSION['cart'])){
+    $cart = [];
+    $_SESSION['cart'] = $cart;
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,7 +43,7 @@
     <header>
      <h1>Browsing page</h1>
      <div>
-         <button>User profile</button>
+         <button id='editProfile'>User profile</button>
          <button>Cart</button>
          <form action="loginPage.php" method="POST" id="logoutFrm" class="logoutFrm">
              <input type="submit" name="logout" value="Log Out">
@@ -43,9 +51,9 @@
          
      </div>
     </header>
-    <div>
+    <div id="editCustomerProfile" class="hideOnLoad">
             <main>
-                <form id="editCustomerProfile" method="POST">
+                <form >
                     <fieldset>
                         <h3>Edit user profile</h3>
                         <legend>customer profile</legend>
@@ -83,8 +91,8 @@
                 </form>
             </main>
             <div class="buttons">
-                <button id="btnProfileOk">Change data</button>
-                <button id="btnProfileCancel">Cancel</button>
+                <button id="profileEdit">Change data</button>
+                <button id="hideProfile">Hide Profile</button>
             </div>
     </div>
     <div>
@@ -92,12 +100,7 @@
     <button id="artistBtn">Artist List</button>
     <button id="albumBtn">Album List</button>
         <table id="trackList" class="trackList">
-            <div>
-                <tr></tr>
-                <td></td>
-                <td></td>
-                <button></button>
-            </div>
+            
         </table>
         
         <table id="artistList" class="artistList">

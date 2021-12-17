@@ -37,7 +37,9 @@ $(document).ready(function() {
                     x = x+1;
                 }
             });
-            cell = $('<button>Add to cart</button>', { 'id': item.TrackId});
+            cell = $('<button>Add to cart</button>');
+            cell.attr("id", "e"+item.TrackId.toString());
+            openAlbumfunction(cell);
             row.append(cell);
 
             div.append(row);
@@ -132,7 +134,7 @@ $(document).ready(function() {
     });
 });
     //change customer data
-    $("#btnProfileOk").on("click", function() {
+    $("#profileEdit").on("click", function() {
         const customerId = $("#txtCustId").val().trim();
         const firstName = $("#txtFirstName").val().trim();
         const lastName = $("#txtLastName").val().trim();
@@ -147,6 +149,10 @@ $(document).ready(function() {
         const fax = $("#txtFax").val().trim();
         const password = $("#txtOldPassword").val().trim();
         const newPassword = $("#txtNewPassword").val().trim();
+        // if(password == null){
+        //     alert("Please input your old password to update.");
+        //     stop();
+        // }
 
         $.ajax({
             url: url +"/customers/" + customerId,
@@ -180,13 +186,48 @@ $(document).ready(function() {
                         },
                         success: function(data) {
                             window.location.replace('loginPage.php');
-                        }
+                        },
+                        error: function(jqxhr, status, exception) {
+                            console.log('Exception:', exception);
+                            console.log(status);
+                            console.log(jqxhr.status);
+                            console.log(exception.message);
+                            console.log(console.warn(jqxhr.responseText));
+                        }//end of error
                     })
+                    //window.location.replace('loginPage.php');
 
-                } else {
-                    alert("Incorrect password");
+                } else if(!data) {
+                    alert("Error");
+                }else {
+                    alert(data);
                 }
-            }
+            }, //end of success
+            error: function(jqxhr, status, exception) {
+                console.log('Exception:', exception);
+                console.log(status);
+                console.log(jqxhr.status);
+                console.log(exception.message);
+                console.log(console.warn(jqxhr.responseText));
+            }//end of error
+        });
+    });
+    const addToCart = (function(button) {
+        button.on("click", function() {
+            //"get" using id from button pressed
+            const trackId = this.id.substring(1, this.id.length); 
+            console.log(albumId);
+            $.ajax({
+                url: url +"/albums/" + albumId,
+                type: "GET",
+            })
+            .done(function(data) {
+                $("#editAlbumList").css("display", "none");
+                $("#albumId").val(data.AlbumId);
+                $("#albumTitle").val(data.Title);
+                $("#albumArtist").val(data.Name);
+                $("#albumFrm").css("display", "block");
+            });
         });
     });
     
@@ -195,14 +236,26 @@ $(document).ready(function() {
         $("#trackList").css("display", "block");
         $("#artistList").css("display", "none");
         $("#albumList").css("display", "none");
+        $("#editCustomerProfile").css("display", "none");
     });
     $("#artistBtn").on("click", function(event){
         $("#trackList").css("display", "none");
         $("#artistList").css("display", "block");
         $("#albumList").css("display", "none");
+        $("#editCustomerProfile").css("display", "none");
     });
     $("#albumBtn").on("click", function(event){
         $("#trackList").css("display", "none");
         $("#artistList").css("display", "none");
         $("#albumList").css("display", "block");
+        $("#editCustomerProfile").css("display", "none");
+    });
+    $("#hideProfile").on("click", function(event){
+        $("#editCustomerProfile").css("display", "none");
+    });
+    $("#editProfile").on("click", function(event){
+        $("#editCustomerProfile").css("display", "block");
+        $("#trackList").css("display", "none");
+        $("#artistList").css("display", "none");
+        $("#albumList").css("display", "none");
     });

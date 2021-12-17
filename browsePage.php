@@ -40,11 +40,12 @@ if(empty($_SESSION['cart'])){
     <title>Document</title>
 </head>
 <body>
+    <input id="cartItems" type="hidden" value="">
     <header>
      <h1>Browsing page</h1>
      <div>
          <button id='editProfile'>User profile</button>
-         <button>Cart</button>
+         <button id="showCart">Cart</button>
          <form action="loginPage.php" method="POST" id="logoutFrm" class="logoutFrm">
              <input type="submit" name="logout" value="Log Out">
          </form>

@@ -66,14 +66,16 @@
     </header>
     <div id="cart" class="cart">
         <fieldset class="purchaseCart" id="purchaseCart">
-            <label for="billingAddress">Billing Address</label>
+            <label for="billingAddress">Billing Address, you can change it :D</label>
             <input type="text" id="billingAddress" value="<?= $address?>" >
             <label for="billingCity">Billing City</label>
-            <input type="text" id="billingCity" value="<?= $city ?>" >
+            <input type="text" id="billingCity" value="<?= $city ?>" readonly>
+            <label for="billingState">Billing State</label>
+            <input type="text" id="billingState" value="<?= $state?>" readonly>
             <label for="billingCountry">Billing Country</label>
-            <input type="text" id="billingCountry" value="<?= $country?>" >
+            <input type="text" id="billingCountry" value="<?= $country?>" readonly>
             <label for="billingPostalCode">Billing Postal Code</label>
-            <input type="text" id="billingPostalCode" value="<?= $postalCode?>" >
+            <input type="text" id="billingPostalCode" value="<?= $postalCode?>" readonly>
             <label for="billingTotal">Total</label>
             <input type="text" id="billingTotal" value="<?=$cartTotal ?>"readonly>
             <button id="buyTracks">Buy tracks</button>

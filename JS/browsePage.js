@@ -217,6 +217,7 @@ $(document).ready(function() {
         const customerId = $("#txtCustId").val().trim();
         const address = $("#billingAddress").val().trim();
         const city = $("#billingCity").val().trim();
+        const state = 
         const country = $("#billingCountry").val().trim();
         const postalCode = $("#billingPostalCode").val().trim();
         const total = $("#billingTotal").val().trim();
@@ -226,14 +227,18 @@ $(document).ready(function() {
 
         const token = $("#csrf_token").val().trim();
 
+        console.log(token);
+        console.log(itemArray);
+        console.log(total);
+
         $.ajax({
             url: url +"/invoices",
             type: "POST",
             data: {
                 customerId: customerId,
-                address: address,
-                city: city,
-                country: country,
+                billingAddress: address,
+                billingCity: city,
+                billingCountry: country,
                 postalCode: postalCode,
                 total: total,
                 itemArray: itemArray,
@@ -243,8 +248,7 @@ $(document).ready(function() {
             success: function(data) {
                 
                 if (data) {
-                    alert("The user profile was successfully updated. Please log in again.");
-                    
+                    alert('Purchase complete');
 
                 } else if(!data) {
                     alert("Error");
@@ -262,11 +266,14 @@ $(document).ready(function() {
         });
     });
     //this method is amazingly bad
+    //first: activate on button click
     const addToCart = (function(button) {
         button.on("click", function() {
             //"get" using id from button pressed
             const trackId = this.id.substring(1, this.id.length); 
             //alert('This button is under construction. Please use the input field above instead to add items to your cart.');
+            console.log(trackId);
+            //now make a call to cart.php to add item id to session cart
             $.ajax({
                 url: "cart.php",
                 type: "POST",
@@ -275,21 +282,25 @@ $(document).ready(function() {
                 }
             })
             .done(function(data) {
-                // $("#artistList").css("display", "none");
-                // $("#albumList").css("display", "none");
-                // $("#trackList").css("display", "none");
+                //when done: make a call to tracks to get the info of the track from newly inserted id. We want the price here.
                 $.ajax({
                     url: url +"/tracks/" + trackId,
                     type: "GET",
                     success: function(data) {
-                        
-                        $("#billingTotal").val() = $("#billingTotal").val() + data.UnitPrice;
+                        //assuming we succeed. now add the unit price from track to billing total on html page for the customer
+                        //$("#billingTotal").val($("#billingTotal").val() + data.UnitPrice);
+                        const price = data.UnitPrice;
+                        console.log(data.UnitPrice);
+                        //finally, add the price to cartTotal session as well by making a post request to cartTotal.php
                         $.ajax({
-                            url: "carTotal.php",
-                            type: "GET",
+                            url: "cartTotal.php",
+                            type: "POST",
+                            data:{
+                                price: price
+                            },
                             success: function(data) {
-                                
-                                $("#billingTotal").val() = $("#billingTotal").val() + data.UnitPrice;
+                                alert('item added to cart.');
+                                location.reload();
                 
                             },
                             error: function(jqxhr, status, exception){
@@ -298,7 +309,7 @@ $(document).ready(function() {
                                 console.log(jqxhr.status);
                                 console.log(exception.message);
                                 console.log(console.warn(jqxhr.responseText));
-                            }
+                            },
                         });
                     },
                     error: function(jqxhr, status, exception){

@@ -1,4 +1,4 @@
-const url = 'API';
+const url = 'api';
 
 //load up data as sson as page is ready
 $(document).ready(function() {

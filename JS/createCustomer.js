@@ -1,4 +1,4 @@
-const url = 'API';
+const url = 'api';
 
 $("#profileBtn").on("click", function() {
     const firstName = $("#firstName").val().trim();

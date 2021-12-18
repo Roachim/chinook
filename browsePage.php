@@ -144,11 +144,11 @@
     <button id="artistBtn">Artist List</button>
     <button id="albumBtn">Album List</button>
         <table id="trackList" class="trackList">
-            <form action="browsePage.php" method="POST">
+            <!-- <form action="browsePage.php" method="POST">
                 <label for="trackId">Track To Buy. Input Id</label>
                 <input type="text" id="trackId" name="trackId">
                 <input type="submit" value="Add to Cart" name="addToCart">
-            </form>
+            </form> -->
         </table>
         
         <table id="artistList" class="artistList">

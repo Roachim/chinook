@@ -1,4 +1,4 @@
-const url = 'API';
+const url = 'api';
 $("#albumBtn").on("click", function(e){
     e.preventDefault();
     $("#albumList").empty();

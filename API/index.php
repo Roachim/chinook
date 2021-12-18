@@ -12,7 +12,7 @@ require_once "invoice.php";
 //define constants
 define('POS_ENTITY', 1);
 define('POS_ID', 2);
-define('MAX_PIECES', 3);
+define('MAX_PIECES', 3); //the pieces are api/{collection}/{id} - 1/2/3 - array_[0]/[1]/[2]
 //define more constants
 define('ENTITY_ARTIST', 'artists');
 define('ENTITY_ALBUMS', 'albums');
@@ -72,14 +72,16 @@ if($pieces > MAX_PIECES){
 if($verb === 'POST'){
     //apply the tokens value to a variable while filtering. because why not
     $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
+    if($pieces == 2 && $urlPieces[POS_ENTITY] =="customers"){
+        //someone is trying to make new user, let them.
 
-    //if session has not token, or no token was sent, well thats a big no no.
-    if (!$token || $token !== $_SESSION['token']) {
+    }else if (!$token || $token !== $_SESSION['token']) {
+        //if session has not token, or no token was sent, well thats a big no no.
         // return 405 http status code
         header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
         exit;
     } else {
-        // process the form
+        // just continue
     }
 }
 

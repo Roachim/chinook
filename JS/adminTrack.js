@@ -1,5 +1,3 @@
-const { parseJSON } = require("jquery");
-
 //const url = 'API';
 $("#trackBtn").on("click", function(e){
     e.preventDefault();

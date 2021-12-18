@@ -50,9 +50,6 @@ class Track{
             );
         }
 
-        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
-        $db->cutConnection($con);
-
         return $list;
     }
     public function Get($id){
@@ -93,9 +90,6 @@ class Track{
             "Bytes" => $row['Bytes'],
             "UnitPrice" => $row['UnitPrice']
         );
-        
-        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
-        $db->cutConnection($con);
 
         return $return;
     }
@@ -120,14 +114,12 @@ class Track{
         if(!$bindStatus){
             return $con->error;
         }
-        $execstatus = $stmt->execute();
-        //cut connection
-        
-        $db->cutConnection($con);
-        if($execstatus){
-            return true;
+        $status = $stmt->execute();
+
+        if(!$status || $con->affected_rows < 1){
+            return false;
         }else{
-            return $con->error;
+            return true;
         }
         
 
@@ -147,11 +139,12 @@ class Track{
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
         $stmt->bind_param("siiisiidi", $name, $albumId, $MediaTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice, $TrackId);
-        $stmt->execute();
-        //cut connection
+        $status = $stmt->execute();
         
-        $db->cutConnection($con);
-        return 'Track updated';
+        if(!$status || $con->affected_rows < 1){
+            return false;
+        }
+        return true;
     
     }
     public function Delete($trackId){
@@ -168,10 +161,12 @@ class Track{
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
         $stmt->bind_param("i", $trackId);
-        $stmt->execute();
-        //cut and return
-        $db->cutConnection($con);
-        return 'Track deleted';
+        $status = $stmt->execute();
+        if(!$status || $con->affected_rows < 1 ){
+            return false;
+        }else {
+            return true;
+        }
     }
     function IntegrityCheck($trackId) {
         $db = new DataBase();

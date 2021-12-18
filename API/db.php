@@ -16,9 +16,6 @@ class DataBase{
         }
         return $connection;
     }
-    public function cutConnection($connection){
-        $connection = null;
-    }
 
 
 }

@@ -4,9 +4,6 @@ use PHPUnit\Framework\TestCase;
 
 class albumTest extends TestCase{
 
-     /**
-         * Basic unit tests (one test case per method)
-         */
         public function test_GetAll_IsArray() {
              // Arrange
             $album = new Album();
@@ -52,8 +49,7 @@ class albumTest extends TestCase{
         public function test_Update_True() {
             // Arrange
            $album = new Album();
-           $id = count($album->GetAll()); 
-           $array = [$id, 'forTest', 1];
+           $array = [1, 'forTest', 1];
            // Act           
            $result = $album->Update($array[0], $array[1], $array[2]);                  
            // Assert                            

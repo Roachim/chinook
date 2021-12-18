@@ -25,7 +25,7 @@ class Admin{
 
         $row = $result->fetch_assoc();
         $this->password = $row['Password'];
-
+        
         // hash check password
         if(!password_verify($password, $this->password)){
             return false;

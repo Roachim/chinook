@@ -38,8 +38,7 @@ class Artist{
                 "Name" => htmlspecialchars($row['Name'])
             );
         }
-        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
-        $db->cutConnection($con);
+        
 
         return $list;
     }
@@ -71,8 +70,6 @@ class Artist{
             "Name" => htmlspecialchars($row['Name'])
         );
         
-        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
-        $db->cutConnection($con);
 
         return $return;
     }
@@ -91,11 +88,13 @@ class Artist{
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
         $stmt->bind_param("s", $name);
-        $stmt->execute();
-        //cut connection
+        $status = $stmt->execute();
+        if(!$status || $con->affected_rows < 1){
+            return false;
+        } else{
+            return true;
+        }
         
-        $db->cutConnection($con);
-        return 'Artist created';
 
     }
     public function Update($artistId ,$name){
@@ -115,9 +114,8 @@ class Artist{
         $stmt->bind_param("si", $name, $artistId);
         $stmt->execute();
         //cut connection
-        
-        $db->cutConnection($con);
-        return 'Artist updated';
+
+        return true;
     
     }
     public function Delete($artistId){
@@ -134,10 +132,12 @@ class Artist{
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
         $stmt->bind_param("i", $artistId);
-        $stmt->execute();
-        //cut and return
-        $db->cutConnection($con);
-        return 'Artist deleted';
+        $status = $stmt->execute();
+        if(!$status || $con->affected_rows < 1){
+            return false;
+        }else{
+            return true;
+        }
     }
     function IntegrityCheck($artistId) {
         $db = new DataBase();

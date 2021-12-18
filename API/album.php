@@ -40,8 +40,7 @@ class Album{
         }
         
 
-        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
-        $db->cutConnection($con);
+        //ᕕ( ᐛ )ᕗ oh no
 
         return $list;
     }
@@ -76,10 +75,7 @@ class Album{
             );
         }
         
-        
-        
-        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
-        $db->cutConnection($con);
+        //ᕕ( ᐛ )ᕗ i might fail this
 
         return $return;
     }
@@ -98,9 +94,7 @@ class Album{
         $stmt = $con->prepare($query);
         $stmt->bind_param("si", $title, $artistId);
         $status = $stmt->execute();
-        //cut connection
-        
-        $db->cutConnection($con);
+
         if($status){
             return true;
         } else{
@@ -124,9 +118,7 @@ class Album{
         $stmt = $con->prepare($query);
         $stmt->bind_param("sii", $title, $artistId, $albumId);
         $status = $stmt->execute();
-        //cut connection
-        
-        $db->cutConnection($con);
+
         if(!$status || $con->affected_rows < 1){
             return false;
         } else{
@@ -171,7 +163,6 @@ class Album{
         }else {
             $message = true;
         }
-        $db->cutConnection($con);
         return $message;
     }
     

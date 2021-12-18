@@ -249,6 +249,10 @@ $(document).ready(function() {
                  
                 const itemArray = data;
                 console.log(itemArray);
+                JSON.stringify(itemArray);
+                console.log('**********************************');
+                console.log(itemArray);
+                console.log('**********************************');
                 console.log('**********************************');
                 $.ajax({
                     url: url +"/invoices",

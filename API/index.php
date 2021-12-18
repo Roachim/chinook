@@ -19,7 +19,6 @@ define('ENTITY_ALBUMS', 'albums');
 define('ENTITY_TRACKS', 'tracks');
 define('ENTITY_CUSTOMERS', 'customers');
 define('ENTITY_INVOICES', 'invoices');
-define('ENTITY_INVOICELINES', 'invoicelines');
 define('ENTITY_ADMINS', 'admins');
 
 
@@ -264,7 +263,7 @@ if ($pieces == 1) {
                 break;
                      
             default:
-                echo json_encode('Wrong case: accepted cases can be seen in README.md');
+                echo json_encode('Wrong case: accepted cases can be seen in readme.md');
                 break;
         }
     }

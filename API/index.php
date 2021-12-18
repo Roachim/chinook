@@ -247,8 +247,10 @@ if ($pieces == 1) {
                 $invoice = new Invoice();
                 switch ($verb){
                     case 'POST':      
+                        
+                        break;
                         echo json_encode($invoice->Create($_POST['customerId'], $_POST['billingAddress'], $_POST['billingCity'], 
-                        $_POST['billingState'], $_POST['billingCountry'], $_POST['billingPostal'], $_POST['total'], $_POST['itemArray']));
+                        $_POST['billingState'], $_POST['billingCountry'], $_POST['billingPostal'], $_POST['total'], json_decode($_POST['itemArray'], true) ));
                     break;
                 }
                 

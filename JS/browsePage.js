@@ -217,19 +217,22 @@ $(document).ready(function() {
         const customerId = $("#txtCustId").val().trim();
         const address = $("#billingAddress").val().trim();
         const city = $("#billingCity").val().trim();
-        const state = 
+        const state = $("#billingState").val().trim();
         const country = $("#billingCountry").val().trim();
         const postalCode = $("#billingPostalCode").val().trim();
         const total = $("#billingTotal").val().trim();
         
-        const dataString = $("#cartItems").val().trim();
-        const itemArray = JSON.stringify(dataString);
+        const itemArray = $("#cartItems").val().trim();
+        //const itemArray = JSON.stringify(dataString);
 
         const token = $("#csrf_token").val().trim();
 
         console.log(token);
-        console.log(itemArray);
+        //console.log(dataString);
         console.log(total);
+        console.log(itemArray);
+        console.log(jQuery.type(itemArray));
+        stop();
 
         $.ajax({
             url: url +"/invoices",
@@ -238,8 +241,9 @@ $(document).ready(function() {
                 customerId: customerId,
                 billingAddress: address,
                 billingCity: city,
+                billingState: state,
                 billingCountry: country,
-                postalCode: postalCode,
+                billingPostal: postalCode,
                 total: total,
                 itemArray: itemArray,
 
@@ -247,10 +251,10 @@ $(document).ready(function() {
             },
             success: function(data) {
                 
-                if (data) {
+                if (data == true) {
                     alert('Purchase complete');
 
-                } else if(!data) {
+                } else if(data == false) {
                     alert("Error");
                 }else {
                     alert(data);

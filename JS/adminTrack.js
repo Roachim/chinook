@@ -1,3 +1,5 @@
+const { parseJSON } = require("jquery");
+
 //const url = 'API';
 $("#trackBtn").on("click", function(e){
     e.preventDefault();
@@ -74,6 +76,8 @@ $("#addTrack").on("click", function(e) {
     const trackMilliseconds = $("#trackMilliseconds").val().trim();
     const trackBytes = $("#trackBytes").val().trim();
     const trackUnitPrice = $("#trackUnitPrice").val().trim();
+
+    const token = $("#csrf_token").val().trim();
     console.log("click");
     $.ajax({
         url: url +"/tracks",
@@ -88,9 +92,10 @@ $("#addTrack").on("click", function(e) {
             trackMilliseconds: trackMilliseconds,
             trackBytes: trackBytes,
             trackUnitPrice: trackUnitPrice,
+
+            token: token
         },
         success: function(data) {
-                
             console.log('success');
             $("#trackCreateFrm").css("display", "none");
         },
@@ -115,6 +120,8 @@ $("#changeTrack").on("click", function(e) {
     const trackMilliseconds = $("#newTrackMilliseconds").val().trim();
     const trackBytes = $("#newTrackBytes").val().trim();
     const trackUnitPrice = $("#newTrackUnitPrice").val().trim();
+
+    const token = $("#csrf_token").val().trim();
     $.ajax({
         url: url +"/tracks/" + trackId,
         type: "POST",
@@ -128,6 +135,8 @@ $("#changeTrack").on("click", function(e) {
             trackMilliseconds: trackMilliseconds,
             trackBytes: trackBytes,
             trackUnitPrice: trackUnitPrice,
+
+            token: token
         },
         success: function(data) {
                 

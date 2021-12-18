@@ -1,5 +1,5 @@
 <?php
-require_once 'API/adminphp';
+require_once 'API/admin.php';
 use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertTrue;

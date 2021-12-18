@@ -39,7 +39,7 @@ $(document).ready(function() {
             });
             cell = $('<button>Add to cart</button>');
             cell.attr("id", "e"+item.TrackId.toString());
-            openAlbumfunction(cell);
+            addToCart(cell);
             row.append(cell);
 
             div.append(row);
@@ -149,6 +149,8 @@ $(document).ready(function() {
         const fax = $("#txtFax").val().trim();
         const password = $("#txtOldPassword").val().trim();
         const newPassword = $("#txtNewPassword").val().trim();
+
+        const token = $("#csrf_token").val().trim();
         // if(password == null){
         //     alert("Please input your old password to update.");
         //     stop();
@@ -171,7 +173,9 @@ $(document).ready(function() {
                 fax: fax,
 
                 password: password,
-                newPassword: newPassword
+                newPassword: newPassword,
+
+                token: token
             },
             success: function(data) {
                 

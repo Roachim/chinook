@@ -26,6 +26,10 @@
                 session_start();
 
                 $_SESSION['adminId'] = true;
+                    //generate random token
+                    $token = openssl_random_pseudo_bytes(20);
+                    $token = bin2hex($token);
+                    $_SESSION['token'] = $token;
                 header('Location: adminPage.php');
             }
         } else{
@@ -53,6 +57,11 @@
                 $_SESSION['fax'] = $customer->fax;
                 $_SESSION['email'] = $email;
 
+                //generate random token
+                $token = openssl_random_pseudo_bytes(20);
+
+                $token = bin2hex($token);
+                $_SESSION['token'] = $token;
     
                 header('Location: browsePage.php');
             } else if($validCustomer === false){

@@ -21,12 +21,9 @@
     $phone = $_SESSION['phone'];
     $fax = $_SESSION['fax'];
     $email = $_SESSION['email'];
+        //CSRF token
+    $token = $_SESSION['token'];
 
-    //generate random token
-    $token = openssl_random_pseudo_bytes(16);
-
-    $token = bin2hex($token);
-    $_SESSION['token'] = $token;
 ?>
 <?php
 if(empty($_SESSION['cart'])){

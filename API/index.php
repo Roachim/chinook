@@ -52,6 +52,14 @@ $verb = $_SERVER['REQUEST_METHOD'];
 if($pieces > MAX_PIECES){
     die("Invalid URL.  Please check the readme.md");
 }
+//check csrf token if making a post request
+// if($verb == 'POST'){
+//     if(empty($_SESSION['token'])){
+//         return json_encode('No token registered. Try again with token this time.') ;
+//     } else if($_SESSION['token'] !=$_POST['token'] ){
+//         return json_encode('Wrong token registered. Try again with better token this time.');
+//     }
+// }
 
 
 

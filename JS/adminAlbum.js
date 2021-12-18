@@ -86,7 +86,8 @@ $("#addAlbum").on("click", function(e) {
     e.preventDefault();
     const title = $("#albumTitle").val().trim();
     const artistId = $("#albumArtist").val().trim();
-    console.log("click");
+
+    const token = $("#csrf_token").val().trim();
     $.ajax({
         url: url +"/albums",
         type: "POST",
@@ -94,6 +95,8 @@ $("#addAlbum").on("click", function(e) {
         data: {
             title: title,
             artistId: artistId,
+
+            token: token
         },
         success: function(data) {
                 
@@ -114,6 +117,8 @@ $("#changeAlbum").on("click", function(e) {
     const albumId = $("#newAlbumId").val().trim();
     const title = $("#newAlbumTitle").val().trim();
     const artistId = $("#newAlbumArtist").val().trim();
+
+    const token = $("#csrf_token").val().trim();
     console.log("click");
     $.ajax({
         url: url +"/albums/" + albumId,
@@ -123,6 +128,8 @@ $("#changeAlbum").on("click", function(e) {
             albumId: albumId,
             title: title,
             artistId: artistId,
+
+            token: token
         },
         success: function(data) {
                 

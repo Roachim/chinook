@@ -5,7 +5,7 @@ session_start();
     if (!isset($_SESSION['adminId'])) {    
         header('Location: loginPage.php');
     }
-
+    $token = $_SESSION['token'];
 
 
 ?>
@@ -19,6 +19,7 @@ session_start();
     <title>Document</title>
 </head>
 <body>
+    <input type="hidden" id="csrf_token" value="<?=$token?>">
     <h1>Admin Page</h1>
     <div>
     <form action="loginPage.php" method="POST" id="logoutFrm" class="logoutFrm">

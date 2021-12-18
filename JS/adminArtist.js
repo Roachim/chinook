@@ -67,6 +67,8 @@ $("#artistBtn").on("click", function(e){
 $("#addArtist").on("click", function(e) {
     e.preventDefault();
     const artistName = $("#artistName").val().trim();
+
+    const token = $("#csrf_token").val().trim();
     console.log("click");
     $.ajax({
         url: url +"/artists",
@@ -74,6 +76,7 @@ $("#addArtist").on("click", function(e) {
         dataType : 'json',
         data: {
             artistName: artistName,
+            token: token
         },
         success: function(data) {
                 
@@ -94,6 +97,8 @@ $("#changeArtist").on("click", function(e) {
     e.preventDefault();
     const artistId = $("#newArtistId").val().trim();
     const artistName = $("#newArtistName").val().trim();
+
+    const token = $("#csrf_token").val().trim();
     $.ajax({
         url: url +"/artists/" + artistId,
         type: "POST",
@@ -101,6 +106,8 @@ $("#changeArtist").on("click", function(e) {
         data: {
             artistId: artistId,
             artistName: artistName,
+
+            token:token
         },
         success: function(data) {
                 

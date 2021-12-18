@@ -78,7 +78,7 @@ class artistTest extends TestCase{
         $artist = new Artist();
         $id = 1;
         // Act           
-        $result = $artist->Delete($id);                  
+        $result = $artist->IntegrityCheck($id);                  
         // Assert                            
         $this->assertFalse($result, "Result should return False.");   
     }
@@ -87,7 +87,7 @@ class artistTest extends TestCase{
         $artist = new Artist();
         $id = 1000000;
         // Act           
-        $result = $artist->Delete($id);                  
+        $result = $artist->IntegrityCheck($id);                  
         // Assert                            
         $this->assertFalse($result, "Result should return true.");   
     }

@@ -52,7 +52,7 @@
 <body>
     <input type="hidden" id="csrf_token" value="<?=$token?>">
     <!-- Could i add items to this hidden field and read when making a transaction?-->
-    <input id="cartItems" type="hidden" value="<?=$rangeOfItems?>">
+    <input id="cartItems" type="hidden" value="">
     <header>
      <h1>Browsing page</h1>
      <div>
@@ -87,7 +87,7 @@
                 <?php
                 if(!empty($_SESSION['cart'])){
                     foreach($_SESSION['cart'] as $item){
-                        echo 'item: '. $item . "<br>";
+                        echo 'item Id: '. $item . "<br>";
                     }
                 }
                 

@@ -1,5 +1,6 @@
 <?php
 
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\Foreach_;
 
 include_once "db.php";
@@ -20,6 +21,7 @@ class Invoice{
     public function Create($customerId, $billingAddress, $billingCity, $billingState, $billingCountry, $billingPostalCode, $total, $itemArray){
         $db = new DataBase();
         $con = $db->connect();
+        $con->autocommit(false);
         $con->begin_transaction();
         try{
             if (!$con) {
@@ -32,7 +34,9 @@ class Invoice{
             SQL;
             //set time to denmark and get dateTime
             date_default_timezone_set('Europe/Copenhagen');
-            $invoiceDate = date('m/d/Y h:i:s a', time());
+            //why is this one empty=???
+            //it woks!!! get current date tiem to insert into invoice
+            $invoiceDate = date('Y-m-d H:i:s');
 
             //Prepare statement, bind and execute
             $preparetatus = $stmt = $con->prepare($query);
@@ -44,25 +48,40 @@ class Invoice{
                 return $con->error_list;
             }
             $stmt->execute();
-            $invoiceId = $con->insert_id;
-            //insert each invoiceLine with id of just inserte invoice id. Using each item sent in array.
+            $lastId = $con->insert_id;
+            
+            $track = new Track();
+            //insert each invoiceLine with id of just inserted invoice id. Using each item sent in array.
+            
             foreach ($itemArray as $trackId) {
-                global $invoiceId;
+                $invoiceId = $lastId;
+                //lets make more mess
+                $item = $track->get($trackId);
+                $unitPrice = $item['UnitPrice'];
+                
+                //really want to count the actual amount. this will have to do for now. no time
+                $quantity = 1;
+                
                 $query = <<<'SQL'
-                INSERT INTO invoice (InvoiceId, TrackId, UnitPrice, Quantity)
+                INSERT INTO invoiceline (InvoiceId, TrackId, UnitPrice, Quantity)
                 VALUES (?, ?, ?, ?)
                 SQL;
                 //Prepare statement, bind and execute
                 $stmt = $con->prepare($query);
-
+                //return 'InvoiceId: '.$invoiceId.'trakId: '. $trackId. 'UnitPrice: '.$unitPrice. 'Quantity: '.$quantity;
                 $stmt->bind_param("iidi", $invoiceId, $trackId, $unitPrice, $quantity);
-                $stmt->execute();
+                $lineStatus = $stmt->execute();
+                if(!$lineStatus || $con->affected_rows <1){
+                    $con->rollback();
+                    return false;
+                }
             }
+            
             $con->commit();
             return true;
         } catch (mysqli_sql_exception $exception) {
-            $$con->rollback();
-            return false;
+            $con->rollback();
+            return $exception;
         }
     }
 }

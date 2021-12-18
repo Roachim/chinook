@@ -222,52 +222,79 @@ $(document).ready(function() {
         const postalCode = $("#billingPostalCode").val().trim();
         const total = $("#billingTotal").val().trim();
         
-        const itemArray = $("#cartItems").val().trim();
+        //const itemArray = $("#cartItems").val().trim();
         //const itemArray = JSON.stringify(dataString);
-
         const token = $("#csrf_token").val().trim();
 
-        console.log(token);
         //console.log(dataString);
+        console.log('**********************************');
+        console.log(customerId);
+        console.log(address);
+        console.log(city);
+        console.log(state);
+        console.log(country);
+        console.log(postalCode);
         console.log(total);
-        console.log(itemArray);
-        console.log(jQuery.type(itemArray));
-        stop();
-
+        console.log('*************************');
+        console.log();
+        console.log();
+        console.log();
+        //console.log(jQuery.type(itemArray));
+       
         $.ajax({
-            url: url +"/invoices",
-            type: "POST",
-            data: {
-                customerId: customerId,
-                billingAddress: address,
-                billingCity: city,
-                billingState: state,
-                billingCountry: country,
-                billingPostal: postalCode,
-                total: total,
-                itemArray: itemArray,
-
-                token: token
-            },
+            url: "cart.php",
+            type: "GET",
             success: function(data) {
-                
-                if (data == true) {
-                    alert('Purchase complete');
+                //$.each(data, function(i, item){});
+                 
+                const itemArray = data;
+                console.log(itemArray);
+                console.log('**********************************');
+                $.ajax({
+                    url: url +"/invoices",
+                    type: "POST",
+                    data: {
+                        customerId: customerId,
+                        billingAddress: address,
+                        billingCity: city,
+                        billingState: state,
+                        billingCountry: country,
+                        billingPostal: postalCode,
+                        total: total,
+                        itemArray: itemArray,
+        
+                        token: token
+                    },
+                    success: function(data) {
+                        console.log('in success');
+                        if (data == true) {
+                            alert('Purchase complete');
+        
+                        } else {
+                            alert(data);
+                        }
+                    }, //end of success
+                    error: function(jqxhr, status, exception) {
+                        console.log('Exception:', exception);
+                        console.log(status);
+                        console.log(jqxhr.status);
+                        console.log(exception.message);
+                        console.log(console.warn(jqxhr.responseText));
+                    }//end of error
+                });
 
-                } else if(data == false) {
-                    alert("Error");
-                }else {
-                    alert(data);
-                }
-            }, //end of success
-            error: function(jqxhr, status, exception) {
+            },
+            error: function(jqxhr, status, exception){
                 console.log('Exception:', exception);
                 console.log(status);
                 console.log(jqxhr.status);
                 console.log(exception.message);
                 console.log(console.warn(jqxhr.responseText));
-            }//end of error
+            },
         });
+
+        
+        
     });
     //this method is amazingly bad
     //first: activate on button click

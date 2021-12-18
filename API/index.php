@@ -7,7 +7,6 @@ require_once "track.php";
 require_once "admin.php";
 require_once "customer.php";
 require_once "invoice.php";
-require_once "invoiceline.php";
 
 //pos_entity gets the name trailing after API/, such as: albums or customers. accepted parameters are defined below as ENTITY_ALBUMS and ENTITY_CUSTOMER
 //define constants
@@ -68,9 +67,13 @@ if($pieces > MAX_PIECES){
 //         exit;
 //     }
 // }
+
+
 if($verb === 'POST'){
+    //apply the tokens value to a variable while filtering. because why not
     $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
 
+    //if session has not token, or no token was sent, well thats a big no no.
     if (!$token || $token !== $_SESSION['token']) {
         // return 405 http status code
         header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
@@ -228,7 +231,8 @@ if ($pieces == 1) {
                             $_POST['state'], $_POST['country'], $_POST['postalCode'], $_POST['phone'], $_POST['fax'], $_POST['email'])); //create new customer
                         }
                         break;
-                    case 'DELETE':                                                  //delete customer
+                    case 'DELETE':                        
+                        echo header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');                          //delete customer
                         //the assignment does not specify having to remove customers at any point.
                         //Don't know if either admins or customers are supposed to be able to do it.
                         //As there is no specification about this function, it has been left empty.
@@ -240,16 +244,15 @@ if ($pieces == 1) {
                 break;
             case ENTITY_INVOICES: //----------------------------------------------------INVOICES--------------------------------------------------------------------------------
                 require_once('invoice.php');
-                $artist = new Invoice();
-                case 'POST':                                                //create new artist
-                    if ($type = 'UPDATE') {
-                        echo json_encode($artist->Update($artistId, $name));
-                        break;
-                    }
-                break;
-            case ENTITY_INVOICELINES: //----------------------------------------------------INVOICELINES--------------------------------------------------------------------------------
-                require_once('invoiceline.php');
-                $artist = new InvoiceLine();
+                $invoice = new Invoice();
+                switch ($verb){
+                    case 'POST':      
+                        echo json_encode($invoice->Create($_POST['customerId'], $_POST['invoiceDate'], $_POST['billingAddress'], $_POST['billingCity'], 
+                        $_POST['billingState'], $_POST['billingCountry'], $_POST['billingPostal'], $_POST['total'], $_POST['itemArray']));
+                    break;
+                }
+                
+                $invoice = null;
                 break;
             case 'session':
                 session_destroy();

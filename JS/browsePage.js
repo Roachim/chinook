@@ -221,17 +221,15 @@ $(document).ready(function() {
         button.on("click", function() {
             //"get" using id from button pressed
             const trackId = this.id.substring(1, this.id.length); 
-            console.log(albumId);
+            alert('This button is under construction. Please use the input field above instead to add items to your cart.');
             $.ajax({
                 url: url +"/albums/" + albumId,
                 type: "GET",
             })
             .done(function(data) {
-                $("#editAlbumList").css("display", "none");
-                $("#albumId").val(data.AlbumId);
-                $("#albumTitle").val(data.Title);
-                $("#albumArtist").val(data.Name);
-                $("#albumFrm").css("display", "block");
+                $("#artistList").css("display", "none");
+                $("#albumList").css("display", "none");
+                $("#trackList").css("display", "none");
             });
         });
     });

@@ -28,10 +28,8 @@ class InvoiceLine{
 
         $stmt->bind_param("iidi", $invoiceId, $trackId, $unitPrice, $quantity);
         $stmt->execute();
-        //cut connection
         
-        $db->cutConnection($con);
-        return 'InvoiceLine created';
+        return true;
 
     }
 }

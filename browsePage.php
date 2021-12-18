@@ -29,6 +29,10 @@
 if(empty($_SESSION['cart'])){
     $cart = [];
     $_SESSION['cart'] = $cart;
+    
+}
+if(isset($_POST['addToCart'])){
+    array_push($_SESSION['cart'], $_POST['trackId']);
 }
 
 
@@ -44,6 +48,7 @@ if(empty($_SESSION['cart'])){
 </head>
 <body>
     <input type="hidden" id="csrf_token" value="<?=$token?>">
+    <!-- Could i add items to this hidden field and read when making a transaction?-->
     <input id="cartItems" type="hidden" value="">
     <header>
      <h1>Browsing page</h1>
@@ -56,6 +61,34 @@ if(empty($_SESSION['cart'])){
          
      </div>
     </header>
+    <div id="cart" class="cart">
+        <fieldset>
+            <label for="billinAddress">Billing Address</label>
+            <input type="text" id="billinAddress" value="<?= $address?>" >
+            <label for="billingCity">Billing City</label>
+            <input type="text" id="billingCity" value="<?= $city ?>" >
+            <label for="billingCountry">Billing Country</label>
+            <input type="text" id="billingCountry" value="<?= $country?>" >
+            <label for="billingPostalCode">Billing Postal Code</label>
+            <input type="text" id="billingPostalCode" value="<?= $postalCode?>" >
+            <label for="billingTotal">Total</label>
+            <input type="text" id="billingTotal" value="<?= $firstName?>" required readonly>
+        </fieldset>
+        <div id="cartItems" class="">
+            <fieldset>
+                <h3>Things in Cart</h3>
+                <?php
+                if(!empty($_SESSION['cart'])){
+                    foreach($_SESSION['cart'] as $item){
+                        echo 'item: '. $item;
+                    }
+                }
+                
+                ?>
+            </fieldset>
+            
+        </div>
+    </div>
     <div id="editCustomerProfile" class="hideOnLoad">
             <main>
                 <form >
@@ -105,7 +138,11 @@ if(empty($_SESSION['cart'])){
     <button id="artistBtn">Artist List</button>
     <button id="albumBtn">Album List</button>
         <table id="trackList" class="trackList">
-            
+            <form action="browsePage.php" method="POST">
+                <label for="trackId">Track To Buy. Input Id</label>
+                <input type="text" id="trackId" name="trackId">
+                <input type="submit" value="Add to Cart" name="addToCart">
+            </form>
         </table>
         
         <table id="artistList" class="artistList">

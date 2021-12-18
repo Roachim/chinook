@@ -64,6 +64,23 @@ footer{
 .trackList{
     display: none;
 }
+.trackList form{
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    width: 100px;
+    white-space: nowrap;
+}
+
+.cart{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-1);
+}
+.cartItems{
+    background-color:var(--color-4);
+    color: var(--color-4);
+}
 .artistList{
     display: none;
 }

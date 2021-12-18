@@ -69,6 +69,7 @@ $("#addArtist").on("click", function(e) {
     const artistName = $("#artistName").val().trim();
 
     const token = $("#csrf_token").val().trim();
+    alert(token);
     console.log("click");
     $.ajax({
         url: url +"/artists",

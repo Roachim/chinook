@@ -95,11 +95,11 @@ class Album{
         $stmt->bind_param("si", $title, $artistId);
         $status = $stmt->execute();
 
-        if($status){
-            return true;
-        } else{
+        if(!$status || $con->affected_rows < 1)
+        {
             return false;
         }
+        return true;
 
     }
     public function Update($albumId ,$title, $artistId){
@@ -119,11 +119,11 @@ class Album{
         $stmt->bind_param("sii", $title, $artistId, $albumId);
         $status = $stmt->execute();
 
-        if(!$status || $con->affected_rows < 1){
+        if(!$status || $con->affected_rows < 1)
+        {
             return false;
-        } else{
-            return true;
         }
+        return true;
         
     
     }
@@ -155,17 +155,15 @@ class Album{
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
         $stmt->bind_param("i", $albumId);
-        $deleted = $stmt->execute();
+        $status = $stmt->execute();
         //cut and return
-        $message = '';
-        if(!$deleted || $con->affected_rows < 1){
-            $message =false;
-        }else {
-            $message = true;
+
+        if(!$status || $con->affected_rows < 1)
+        {
+            return false;
         }
-        return $message;
+        return true;
     }
-    
 }
 
 

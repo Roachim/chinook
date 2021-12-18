@@ -1,4 +1,5 @@
 <?php
+session_start();
 //file access
 require_once "artist.php";
 require_once "album.php";
@@ -52,14 +53,34 @@ $verb = $_SERVER['REQUEST_METHOD'];
 if($pieces > MAX_PIECES){
     die("Invalid URL.  Please check the readme.md");
 }
-//check csrf token if making a post request
+//check csrf token if making a post request and validate
 // if($verb == 'POST'){
 //     if(empty($_SESSION['token'])){
-//         return json_encode('No token registered. Try again with token this time.') ;
-//     } else if($_SESSION['token'] !=$_POST['token'] ){
-//         return json_encode('Wrong token registered. Try again with better token this time.');
+//         echo header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed. No session.');
+//         exit;
+//     } else if(empty($_POST['token'])){
+//         echo header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed. No token.');
+//         exit;
+//     } 
+//     else if($_SESSION['token'] !=$_POST['token'] ){
+//         $token = $_SESSION['token'];
+//         echo header($_SERVER['SERVER_PROTOCOL'] . '405 Method Not Allowed. Tokens do not match.');
+//         exit;
 //     }
 // }
+if($verb === 'POST'){
+    $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
+
+    if (!$token || $token !== $_SESSION['token']) {
+        // return 405 http status code
+        header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+        exit;
+    } else {
+        // process the form
+    }
+}
+
+
 
 
 
@@ -67,12 +88,13 @@ if ($pieces == 1) {
     echo json_encode('API description placeholder. Please use the readme.md included for info.');
 } else {
     if ($pieces > MAX_PIECES) {
-        echo 'Invalid request form';
+        echo header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+        exit;
     } else {
         //from array of urlPieces, get the second and third. ignoring value 0, as 0 = API.
         $entity = $urlPieces[POS_ENTITY];
         //lets make sure they have access first using sessions.
-        session_start();
+        
         if($entity == "customers" && $pieces == 2){
             //continue. can make a new customer without auth
         } else if (!isset($_SESSION['customerId']) && !isset($_SESSION['adminId'])) {
@@ -230,8 +252,8 @@ if ($pieces == 1) {
                 $artist = new InvoiceLine();
                 break;
             case 'session':
-                return json_encode(session_destroy());
-                //echo 'Session destroyed';
+                session_destroy();
+                echo json_encode(true);
                 break;
                      
             default:

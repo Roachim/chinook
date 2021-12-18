@@ -187,9 +187,10 @@ $(document).ready(function() {
                         url: url + "/session",
                         type: "POST",
                         data: {
+                            token: token
                         },
                         success: function(data) {
-                            window.location.replace('loginPage.php');
+                            //window.location.replace('loginPage.php');
                         },
                         error: function(jqxhr, status, exception) {
                             console.log('Exception:', exception);
@@ -199,7 +200,7 @@ $(document).ready(function() {
                             console.log(console.warn(jqxhr.responseText));
                         }//end of error
                     })
-                    //window.location.replace('loginPage.php');
+                    window.location.replace('loginPage.php');
 
                 } else if(!data) {
                     alert("Error");

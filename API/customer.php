@@ -83,8 +83,7 @@ class Customer{
                 "Email" => htmlspecialchars($row['Email'])
             );
         }
-        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
-        $db->cutConnection($con);
+
 
         return $list;
     }
@@ -126,8 +125,7 @@ class Customer{
                 "Email" => htmlspecialchars($row['Email'])
                 );
         }
-        //cut connection to database before ending function ᕕ( ᐛ )ᕗ
-        $db->cutConnection($con);
+
 
         return $list;
     }
@@ -147,11 +145,12 @@ class Customer{
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
         $stmt->bind_param("ssssssssssss", $FirstName, $LastName, $Password, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email);
-        $stmt->execute();
-        //cut connection
-        
-        $db->cutConnection($con);
-        return 'User account created';
+        $status = $stmt->execute();
+        if(!$status || $con->affected_rows < 1)
+        {
+            return false;
+        }
+        return true;
 
     }
     public function Update($CustomerId, $FirstName, $LastName, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email, $Password, $newPassword){
@@ -227,14 +226,12 @@ class Customer{
         }
         
         $status = $stmt->execute();
-        //cut connection
-        
-        $db->cutConnection($con);
-        if($status){
-            return true;
-        } else{
-            return "error: " . $con->error;
+
+        if(!$status || $con->affected_rows < 1)
+        {
+            return false;
         }
+        return true;
         
     
     }
@@ -304,13 +301,10 @@ class Customer{
                 "InvoiceId" => $row['InvoiceId']
                 );
         }
-        if(count($row) == 0 || count($row) == null){
+        if(empty($row)){
             return true;
         }
         return false;
-    }
-    function PasswordCheck($password){
-
     }
 }
 

@@ -89,6 +89,7 @@ class Artist{
         $stmt = $con->prepare($query);
         $stmt->bind_param("s", $name);
         $status = $stmt->execute();
+        
         if(!$status || $con->affected_rows < 1){
             return false;
         } else{
@@ -112,9 +113,13 @@ class Artist{
         //Prepare statement, bind and execute
         $stmt = $con->prepare($query);
         $stmt->bind_param("si", $name, $artistId);
-        $stmt->execute();
+        $status = $stmt->execute();
         //cut connection
 
+        if(!$status || $con->affected_rows < 1)
+        {
+            return false;
+        }
         return true;
     
     }

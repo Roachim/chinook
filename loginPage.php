@@ -59,7 +59,6 @@
 
                 //generate random token
                 $token = openssl_random_pseudo_bytes(20);
-
                 $token = bin2hex($token);
                 $_SESSION['token'] = $token;
     

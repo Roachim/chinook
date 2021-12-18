@@ -165,7 +165,7 @@ class Track{
         $stmt->bind_param("siiisiidi", $name, $albumId, $MediaTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice, $TrackId);
         $status = $stmt->execute();
         
-        if(!$status || $con->affected_rows < 1){
+        if(!$status){
             return false;
         }
         return true;

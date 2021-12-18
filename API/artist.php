@@ -63,8 +63,12 @@ class Artist{
         
         //populate the list from result
         // custom name => database id
-        $return =null;
         
+        if(empty($row))
+        {
+            return null;
+        }
+        $return =null;
         $return = array(
             "ArtistId" => $row['ArtistId'] , 
             "Name" => htmlspecialchars($row['Name'])
@@ -116,7 +120,7 @@ class Artist{
         $status = $stmt->execute();
         //cut connection
 
-        if(!$status || $con->affected_rows < 1)
+        if(!$status)
         {
             return false;
         }

@@ -227,7 +227,7 @@ class Customer{
         
         $status = $stmt->execute();
 
-        if(!$status || $con->affected_rows < 1)
+        if(!$status)
         {
             return false;
         }
@@ -256,6 +256,9 @@ class Customer{
         $result = $stmt->get_result();
 
         $row = $result->fetch_assoc();
+        if(empty($row)){
+            return false;
+        }
         $this->customerId = $row['CustomerId']; 
         $this->firstName = htmlspecialchars($row['FirstName']);
         $this->lastName = htmlspecialchars($row['LastName']);

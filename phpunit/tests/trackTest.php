@@ -19,14 +19,6 @@ class trackTest extends TestCase{
       // Assert                            
       $this->assertNotNull($result, "Result should not be empty.");   
    }
-   public function test_Get_Null() {
-       // Arrange
-       $track = new Track();
-      // Act           
-      $result = $track->Get(100000);                  
-      // Assert                            
-      $this->assertNull($result, "Result should be empty.");   
-   }
    public function test_Create_True() {
        // Arrange
        $track = new Track();

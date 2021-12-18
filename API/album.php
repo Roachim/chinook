@@ -119,7 +119,7 @@ class Album{
         $stmt->bind_param("sii", $title, $artistId, $albumId);
         $status = $stmt->execute();
 
-        if(!$status || $con->affected_rows < 1)
+        if(!$status)
         {
             return false;
         }

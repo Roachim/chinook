@@ -1,7 +1,7 @@
 <?php
 require_once 'API/invoice.php';
 use PHPUnit\Framework\TestCase;
-class dbTest extends TestCase{
+class invoiceTest extends TestCase{
 
     public function test_Create_True(){
         //arrange
@@ -37,7 +37,7 @@ class dbTest extends TestCase{
         //act
         $result = $invoice->Create($customerid,$billingAddress, $billingCity, $billingState, $billingCountry, $billingPostal, $total, $itemArray);
         //assert
-        $this->assertTrue($result, "The result should be null");
+        $this->assertFalse($result, "The result should be null");
     }
 }
 

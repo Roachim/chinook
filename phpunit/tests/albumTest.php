@@ -31,38 +31,33 @@ class albumTest extends TestCase{
         public function test_Create_True() {
             // Arrange
            $album = new Album();
-           $array = ['forTest', 'hello'];
+           $title = "testMade";
+           $artistId = 1;
            // Act           
-           $result = $album->Create($array[0], $array[1]);                  
+           $result = $album->Create($title, $artistId);                  
            // Assert                            
            $this->assertTrue($result, "Result should return true.");   
         }
         public function test_Create_False() {
             // Arrange
            $album = new Album();
-           $array = ['forTest', 'hello'];
+           $title = "testMade";
+           $artistId = 10000000;
            // Act           
-           $result = $album->Create($array[0], $array[1]);                  
+           $result = $album->Create($title, $artistId);                  
            // Assert                            
            $this->assertFalse($result, "Result should return False.");   
         }
         public function test_Update_True() {
             // Arrange
            $album = new Album();
-           $array = [1, 'forTest', 1];
+           $albumId = 3;
+           $title = "testMade";
+           $artistId = 3;
            // Act           
-           $result = $album->Update($array[0], $array[1], $array[2]);                  
+           $result = $album->Update($albumId, $title, $artistId);                  
            // Assert                            
            $this->assertTrue($result, "Result should return true.");   
-        }
-        public function test_Update_False() {
-            // Arrange
-           $album = new Album();
-           $id = 100000; 
-           // Act           
-           $result = $album->Update($id, 'forTest', 'hello');                  
-           // Assert                            
-           $this->assertFalse($result, "Result should return False.");   
         }
         public function test_Delete_True() {
             // Arrange

@@ -40,20 +40,12 @@ class artistTest extends TestCase{
    public function test_Update_True() {
        // Arrange
        $artist = new Artist();
-      $array = [1, 'forTest', 1];
+      $artistId = 1;
+      $name = "testName";
       // Act           
-      $result = $artist->Update($array[0], $array[1], $array[2]);                  
+      $result = $artist->Update($artistId, $name);                  
       // Assert                            
       $this->assertTrue($result, "Result should return true.");   
-   }
-   public function test_Update_False() {
-       // Arrange
-       $artist = new Artist();
-      $id = 100000; 
-      // Act           
-      $result = $artist->Update($id, 'forTest', 'hello');                  
-      // Assert                            
-      $this->assertFalse($result, "Result should return False.");   
    }
    public function test_Delete_True() {
        // Arrange
@@ -89,7 +81,7 @@ class artistTest extends TestCase{
         // Act           
         $result = $artist->IntegrityCheck($id);                  
         // Assert                            
-        $this->assertFalse($result, "Result should return true.");   
+        $this->assertTrue($result, "Result should return true.");   
     }
 }
 

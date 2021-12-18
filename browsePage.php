@@ -100,6 +100,7 @@
                 <form >
                     <fieldset>
                         <h3>Edit user profile</h3>
+                        <h4>Email cannot be changed</h4>
                         <legend>customer profile</legend>
                         <input type="hidden" id="txtCustId" value="<?= $customerId?>" required>
                         <label for="txtFirstName">First name</label>
@@ -107,7 +108,7 @@
                         <label for="txtLastName">Last name</label>
                         <input type="text" id="txtLastName" value="<?= $lastName?>" required>
                         <label for="txtEmail">Email</label>
-                        <input type="text" id="txtEmail" value="<?= $email?>" required>
+                        <input type="text" id="txtEmail" value="<?= $email?>" readonly>
                         <label for="txtCompany">Company</label>
                         <input type="text" id="txtCompany" value="<?= $company?>" >
                         <label for="txtAddress">Address</label>

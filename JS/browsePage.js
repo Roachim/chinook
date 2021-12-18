@@ -151,11 +151,6 @@ $(document).ready(function() {
         const newPassword = $("#txtNewPassword").val().trim();
 
         const token = $("#csrf_token").val().trim();
-        // if(password == null){
-        //     alert("Please input your old password to update.");
-        //     stop();
-        // }
-
         $.ajax({
             url: url +"/customers/" + customerId,
             type: "POST",
@@ -217,19 +212,103 @@ $(document).ready(function() {
             }//end of error
         });
     });
+    //Buy tracks from cart - 
+    $("#buyTracks").on("click", function() {
+        const customerId = $("#txtCustId").val().trim();
+        const address = $("#billingAddress").val().trim();
+        const city = $("#billingCity").val().trim();
+        const country = $("#billingCountry").val().trim();
+        const postalCode = $("#billingPostalCode").val().trim();
+        const total = $("#billingTotal").val().trim();
+        
+        const dataString = $("#cartItems").val().trim();
+        const itemArray = JSON.stringify(dataString);
+
+        const token = $("#csrf_token").val().trim();
+
+        $.ajax({
+            url: url +"/invoices",
+            type: "POST",
+            data: {
+                customerId: customerId,
+                address: address,
+                city: city,
+                country: country,
+                postalCode: postalCode,
+                total: total,
+                itemArray: itemArray,
+
+                token: token
+            },
+            success: function(data) {
+                
+                if (data) {
+                    alert("The user profile was successfully updated. Please log in again.");
+                    
+
+                } else if(!data) {
+                    alert("Error");
+                }else {
+                    alert(data);
+                }
+            }, //end of success
+            error: function(jqxhr, status, exception) {
+                console.log('Exception:', exception);
+                console.log(status);
+                console.log(jqxhr.status);
+                console.log(exception.message);
+                console.log(console.warn(jqxhr.responseText));
+            }//end of error
+        });
+    });
+    //this method is amazingly bad
     const addToCart = (function(button) {
         button.on("click", function() {
             //"get" using id from button pressed
             const trackId = this.id.substring(1, this.id.length); 
-            alert('This button is under construction. Please use the input field above instead to add items to your cart.');
+            //alert('This button is under construction. Please use the input field above instead to add items to your cart.');
             $.ajax({
-                url: url +"/albums/" + albumId,
-                type: "GET",
+                url: "cart.php",
+                type: "POST",
+                data:{
+                    trackId: trackId
+                }
             })
             .done(function(data) {
-                $("#artistList").css("display", "none");
-                $("#albumList").css("display", "none");
-                $("#trackList").css("display", "none");
+                // $("#artistList").css("display", "none");
+                // $("#albumList").css("display", "none");
+                // $("#trackList").css("display", "none");
+                $.ajax({
+                    url: url +"/tracks/" + trackId,
+                    type: "GET",
+                    success: function(data) {
+                        
+                        $("#billingTotal").val() = $("#billingTotal").val() + data.UnitPrice;
+                        $.ajax({
+                            url: "carTotal.php",
+                            type: "GET",
+                            success: function(data) {
+                                
+                                $("#billingTotal").val() = $("#billingTotal").val() + data.UnitPrice;
+                
+                            },
+                            error: function(jqxhr, status, exception){
+                                console.log('Exception:', exception);
+                                console.log(status);
+                                console.log(jqxhr.status);
+                                console.log(exception.message);
+                                console.log(console.warn(jqxhr.responseText));
+                            }
+                        });
+                    },
+                    error: function(jqxhr, status, exception){
+                        console.log('Exception:', exception);
+                        console.log(status);
+                        console.log(jqxhr.status);
+                        console.log(exception.message);
+                        console.log(console.warn(jqxhr.responseText));
+                    }
+                });
             });
         });
     });
@@ -261,4 +340,12 @@ $(document).ready(function() {
         $("#trackList").css("display", "none");
         $("#artistList").css("display", "none");
         $("#albumList").css("display", "none");
+    });
+    $("#showCart").on("click", function(event){
+        $("#editCustomerProfile").css("display", "none");
+        $("#trackList").css("display", "none");
+        $("#artistList").css("display", "none");
+        $("#albumList").css("display", "none");
+        $("#purchaseCart").css("display", "block");
+        console.log('show cart');
     });

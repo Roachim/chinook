@@ -93,6 +93,30 @@ class Track{
 
         return $return;
     }
+    public function GetPrice($id){
+        $db = new DataBase();
+        $con = $db->connect();
+        if (!$con) {
+            die('Connection error');   
+        }
+        //SQL
+        $query = <<<'SQL'
+            SELECT UnitPrice FROM track 
+            WHERE TrackId = ?
+        SQL;
+        //Prepare statement, bind and execute
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $row = $result->fetch_assoc();
+        
+        $price = $row['UnitPrice'];
+        
+
+        return $price;
+    }
     public function Create($name, $albumId, $MediaTypeId, $GenreId, $Composer, $Milliseconds, $Bytes, $UnitPrice){
         $db = new DataBase();
         $con = $db->connect();

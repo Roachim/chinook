@@ -81,6 +81,9 @@ footer{
     background-color:var(--color-4);
     color: var(--color-4);
 }
+.purchaseCart{
+    display: none;
+}
 .artistList{
     display: none;
 }

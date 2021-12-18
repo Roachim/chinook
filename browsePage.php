@@ -24,17 +24,20 @@
         //CSRF token
     $token = $_SESSION['token'];
 
+    if(!empty($_SESSION['cart'])){
+        $rangeOfItems = $_SESSION['cart'];
+    }
 ?>
 <?php
-if(empty($_SESSION['cart'])){
-    $cart = [];
-    $_SESSION['cart'] = $cart;
-    
-}
-if(isset($_POST['addToCart'])){
-    array_push($_SESSION['cart'], $_POST['trackId']);
-}
+    $cartTotal = 0;
 
+    if(empty($_SESSION['cartTotal'])){
+
+        $_SESSION['cartTotal'] = 0;
+        
+    }else{
+        $cartTotal = $_SESSION['cartTotal'];
+    }
 
 ?>
 <!DOCTYPE html>
@@ -49,12 +52,12 @@ if(isset($_POST['addToCart'])){
 <body>
     <input type="hidden" id="csrf_token" value="<?=$token?>">
     <!-- Could i add items to this hidden field and read when making a transaction?-->
-    <input id="cartItems" type="hidden" value="">
+    <input id="cartItems" type="hidden" value="<?=$rangeOfItems?>">
     <header>
      <h1>Browsing page</h1>
      <div>
          <button id='editProfile'>User profile</button>
-         <button id="showCart">Cart</button>
+         <!-- <button id="showCart">Cart</button> -->
          <form action="loginPage.php" method="POST" id="logoutFrm" class="logoutFrm">
              <input type="submit" name="logout" value="Log Out">
          </form>
@@ -62,9 +65,9 @@ if(isset($_POST['addToCart'])){
      </div>
     </header>
     <div id="cart" class="cart">
-        <fieldset>
-            <label for="billinAddress">Billing Address</label>
-            <input type="text" id="billinAddress" value="<?= $address?>" >
+        <fieldset class="purchaseCart" id="purchaseCart">
+            <label for="billingAddress">Billing Address</label>
+            <input type="text" id="billingAddress" value="<?= $address?>" >
             <label for="billingCity">Billing City</label>
             <input type="text" id="billingCity" value="<?= $city ?>" >
             <label for="billingCountry">Billing Country</label>
@@ -72,23 +75,24 @@ if(isset($_POST['addToCart'])){
             <label for="billingPostalCode">Billing Postal Code</label>
             <input type="text" id="billingPostalCode" value="<?= $postalCode?>" >
             <label for="billingTotal">Total</label>
-            <input type="text" id="billingTotal" value="<?= $firstName?>" required readonly>
+            <input type="text" id="billingTotal" value="<?=$cartTotal ?>"readonly>
+            <button id="buyTracks">Buy tracks</button>
         </fieldset>
-        <div id="cartItems" class="">
+    </div>
+    <div id="cartItems" class="cartItems">
             <fieldset>
                 <h3>Things in Cart</h3>
                 <?php
                 if(!empty($_SESSION['cart'])){
                     foreach($_SESSION['cart'] as $item){
-                        echo 'item: '. $item;
+                        echo 'item: '. $item . "<br>";
                     }
                 }
                 
                 ?>
             </fieldset>
-            
+            <button id="showCart">To Cart</button>
         </div>
-    </div>
     <div id="editCustomerProfile" class="hideOnLoad">
             <main>
                 <form >

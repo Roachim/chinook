@@ -144,15 +144,15 @@ if ($pieces == 1) {
                 switch($verb){
                     case 'GET':
                         if($pieces == MAX_PIECES){
-                            echo json_encode($track->Get($urlPieces[POS_ID]));//get artist
+                            echo json_encode($track->Get($urlPieces[POS_ID]));//get track
                         }else{
-                            echo json_encode($track->GetAll());//get all artists
+                            echo json_encode($track->GetAll());//get all tracks
                         }
                                              
                         break;
                     case 'POST':
 
-                        if ($pieces == MAX_PIECES) {                                                //create new artist
+                        if ($pieces == MAX_PIECES) {                                                //create new track
                             echo json_encode($track->Update($urlPieces[POS_ID], $_POST['trackName'], $_POST['trackAlbumId'], $_POST['trackMediaTypeId'], $_POST['trackGenreId'], 
                             $_POST['trackComposer'], $_POST['trackMilliseconds'], $_POST['trackBytes'], $_POST['trackUnitPrice']));
                         } else {                                                //update artist
@@ -160,7 +160,7 @@ if ($pieces == 1) {
                             $_POST['trackComposer'], $_POST['trackMilliseconds'], $_POST['trackBytes'], $_POST['trackUnitPrice']));
                         }                        
                         break;
-                    case 'DELETE':                                  //delete artist
+                    case 'DELETE':                                  //delete track
                         if ($pieces < MAX_PIECES) {
                             
                             echo json_encode('format error');

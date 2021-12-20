@@ -62,11 +62,11 @@ class albumTest extends TestCase{
         public function test_Delete_True() {
             // Arrange
            $album = new Album();
-           $id = count($album->GetAll());
+           $id = 2;
            // Act           
            $result = $album->Delete($id);
            // Assert                            
-           $this->assertTrue($result, "Result should return False.");   
+           $this->assertTrue($result, "Result should return True.");   
         }
         public function test_Delete_False() {
             // Arrange

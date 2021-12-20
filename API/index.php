@@ -170,7 +170,7 @@ if ($pieces == 1) {
                             if($track->IntegrityCheck($urlPieces[POS_ID])){
                                 echo json_encode($track->Delete($urlPieces[POS_ID]));
                             }else{
-                                echo json_encode('That track has an invoice. Cannot delete.');
+                                echo header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
                             }
                         }
                         break; 
@@ -206,7 +206,7 @@ if ($pieces == 1) {
                             if($artist->IntegrityCheck($urlPieces[POS_ID])){
                                 echo json_encode($artist->Delete($urlPieces[POS_ID]));
                             }else{
-                                echo json_encode('That artist has an album.');
+                                echo header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
                             }
                         }
                         break; 

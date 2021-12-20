@@ -50,11 +50,11 @@ class artistTest extends TestCase{
    public function test_Delete_True() {
        // Arrange
        $artist = new Artist();
-      $id = count($artist->GetAll());
+      $id = 278;
       // Act           
       $result = $artist->Delete($id);
       // Assert                            
-      $this->assertTrue($result, "Result should return False.");   
+      $this->assertTrue($result, "Result should return True.");   
    }
    public function test_Delete_False() {
        // Arrange
@@ -77,7 +77,7 @@ class artistTest extends TestCase{
     public function test_IntegrityCheck_True() {
         // Arrange
         $artist = new Artist();
-        $id = 1000000;
+        $id = 276;
         // Act           
         $result = $artist->IntegrityCheck($id);                  
         // Assert                            

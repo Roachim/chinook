@@ -35,7 +35,7 @@ class trackTest extends TestCase{
         // Act           
         $result = $track->Create($array[0], $array[1], $array[2], $array[3], $array[4], $array[5], $array[6], $array[7]);                  
         // Assert                            
-        $this->assertTrue($result, "Result should return true.");   
+        $this->assertFalse($result, "Result should return true.");   
     }
    
    public function test_Update_True() {
@@ -48,24 +48,14 @@ class trackTest extends TestCase{
       // Assert                            
       $this->assertTrue($result, "Result should return true.");   
    }
-   public function test_Update_False() {
-       // Arrange
-       $track = new Track();
-      $id = 100000; 
-      $array = ['testName', 1, 1, 1, 'theTest', 55555, 60000, 0.99];
-      // Act           
-      $result = $track->Update($id, $array[0], $array[1], $array[2], $array[3], $array[4], $array[5], $array[6], $array[7]);                  
-      // Assert                            
-      $this->assertFalse($result, "Result should return False.");   
-   }
    public function test_Delete_True() {
        // Arrange
        $track = new Track();
-      $id = count($track->GetAll());
+      $id = 3505;
       // Act           
       $result = $track->Delete($id);
       // Assert                            
-      $this->assertTrue($result, "Result should return False.");   
+      $this->assertTrue($result, "Result should return True");   
    }
    public function test_Delete_False() {
        // Arrange
@@ -92,7 +82,7 @@ class trackTest extends TestCase{
         // Act           
         $result = $track->IntegrityCheck($id);                  
         // Assert                            
-        $this->assertFalse($result, "Result should return true.");   
+        $this->assertTrue($result, "Result should return true.");   
     }
 }
 

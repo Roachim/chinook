@@ -3,7 +3,7 @@ session_start();
 
 if( $_SERVER['REQUEST_METHOD'] === 'POST'){
     if(empty($_SESSION['cart'])){
-        //maybe be assoc array instead? damn json string convert.
+        //maybe be assoc array instead?
         $cart = [$_POST['trackId']];
         $_SESSION['cart'] = $cart;
         
@@ -15,8 +15,17 @@ if( $_SERVER['REQUEST_METHOD'] === 'POST'){
 }
 else if($_SERVER['REQUEST_METHOD'] === 'GET'){
     //reminder to myself. don't use 5 hours looking for a bug, if all you did was use 'return' instead of 'echo'...
-    echo json_encode($_SESSION['cart']);
+    if(empty($_SESSION['cart'])){
+        echo json_encode(false);
+    }else{
+        echo json_encode($_SESSION['cart']);
+    }
+    
     //$_SESSION['cart']
+}else if($_SERVER['REQUEST_METHOD'] === 'DELETE'){
+    //unset the cart session so cart is empty
+    unset($_SESSION['cart']);
+    $_SESSION['cartTotal'] = 0;
 }
 
 

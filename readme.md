@@ -1,3 +1,6 @@
+## Using the App
+-- To log in as admin, simply write "admin" in password field without an email
+-- To log in as a customer, fill in both fields with the relevant info
 
 
 
@@ -5,12 +8,12 @@ http://_<server_name>_/chinook/api/_<collection>_/_<id>_
 
 ## API how to:
 --All id's at the end of a url is an <int>
---Required fields must not be null/empty
---All fields should be sent with the request, but non-required can be left null/empty
+--Required fields must not be null/empty in value field
+--All fields should be sent with the request, but non-required can be left null/empty in value field
 --All post request most include a token in the body called "token". The token is created when logged in as either customer or admin and can be found in a hidden field in the html. Use DevTools to find it. This token changes when logging out and logging in again.
---When using postman or otherwise, include a key "Cookie" in the headers with value set to "PHPSESSID={theSessionToken}". A valid session token can be found in under cookies, called "PHPSESSID" after logging in as either admin or customer. This session token will change when logging out and back in, as well as being useless when not logged in at all.
+--When using postman or otherwise, include a key "Cookie" in the headers with value set to "PHPSESSID={theSessionToken}". A valid session token can be found in under cookies, called "PHPSESSID" while logged in as either admin or customer. This session token will change when logging out and back in, as well as being useless when not logged in at all.
 
-## defult. Nothing here really
+## default. Nothing here really
 GET http://localhost/chinook/api
 
 ## Artist--

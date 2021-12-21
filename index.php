@@ -89,7 +89,7 @@
 
     </header>
     
-    <form action="loginPage.php" method="POST">
+    <form action="index.php" method="POST">
         <input type="text" name="loginEmail" id="" placeholder="Email">
         <input type="password" name="loginPass" placeholder="password">
         <input type="submit" id="LoginBtn" value="Login">

@@ -77,7 +77,7 @@ if($verb === 'POST'){
     }else if (!$token || $token !== $_SESSION['token']) {
         //if session has not token, or no token was sent, well thats a big no no.
         // return 405 http status code
-        header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+        header($_SERVER['SERVER_PROTOCOL'] . ' 400 No token or false token.');
         exit;
     } else {
         // just continue
@@ -98,11 +98,12 @@ if ($pieces == 1) {
         //from array of urlPieces, get the second and third. ignoring value 0, as 0 = API.
         $entity = $urlPieces[POS_ENTITY];
         //lets make sure they have access first using sessions.
-        
+        //check to see if they are making a new account. If not, deny access.
         if($entity == "customers" && $pieces == 2){
             //continue. can make a new customer without auth
         } else if (!isset($_SESSION['customerId']) && !isset($_SESSION['adminId'])) {
-            die('Access denied. You are not authenticated to use this service.');
+            header($_SERVER['SERVER_PROTOCOL'] . ' 400 Authorisation required');
+            exit;
         }
         
 
@@ -170,7 +171,7 @@ if ($pieces == 1) {
                             if($track->IntegrityCheck($urlPieces[POS_ID])){
                                 echo json_encode($track->Delete($urlPieces[POS_ID]));
                             }else{
-                                echo header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+                                echo header($_SERVER['SERVER_PROTOCOL'] . ' 400 Track has invoice');
                             }
                         }
                         break; 
@@ -206,7 +207,7 @@ if ($pieces == 1) {
                             if($artist->IntegrityCheck($urlPieces[POS_ID])){
                                 echo json_encode($artist->Delete($urlPieces[POS_ID]));
                             }else{
-                                echo header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+                                echo header($_SERVER['SERVER_PROTOCOL'] . ' 400 Artist has album');
                             }
                         }
                         break; 
@@ -233,7 +234,7 @@ if ($pieces == 1) {
                         }
                         break;
                     case 'DELETE':                        
-                        echo header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');                          //delete customer
+                        echo header($_SERVER['SERVER_PROTOCOL'] . ' 400 Method Not Allowed');                          //delete customer
                         //the assignment does not specify having to remove customers at any point.
                         //Don't know if either admins or customers are supposed to be able to do it.
                         //As there is no specification about this function, it has been left empty.

@@ -61,6 +61,13 @@ $("#artistBtn").on("click", function(e){
     $("#trackList").css("display", "none");
     $("#artistList").css("display", "block");
     $("#albumList").css("display", "none");
+    //hide other forms
+    $("#trackCreateFrm").css("display", "none");
+    $("#artistCreateFrm").css("display", "none");
+    $("#albumCreateFrm").css("display", "none");
+    $("#albumFrm").css("display", "none");
+    $("#trackFrm").css("display", "none");
+    $("#artistFrm").css("display", "none");
 }); //end of button function
 
 
@@ -69,7 +76,6 @@ $("#addArtist").on("click", function(e) {
     const artistName = $("#artistName").val().trim();
 
     const token = $("#csrf_token").val().trim();
-    alert(token);
     console.log("click");
     $.ajax({
         url: url +"/artists",
@@ -93,6 +99,8 @@ $("#addArtist").on("click", function(e) {
         }
 
     });
+    alert('Artist Added');
+    location.reload();
 });
 $("#changeArtist").on("click", function(e) {
     e.preventDefault();
@@ -139,6 +147,8 @@ const openArtistfunc = (function(button) {
                 $("#artistList").css("display", "none");
                 $("#newArtistId").val(data.ArtistId);
                 $("#newArtistName").val(data.Name);
+                $("#albumFrm").css("display", "none");
+                $("#trackFrm").css("display", "none");
                 $("#artistFrm").css("display", "block");
 
     
@@ -149,6 +159,7 @@ const openArtistfunc = (function(button) {
                 console.log(jqxhr.status);
                 console.log(exception.message);
                 console.log(console.warn(jqxhr.responseText));
+                alert(exception);
             }
         });
     });
@@ -163,7 +174,7 @@ const deleteArtistFunc = (function(button){
             url: url+"/artists/"+artistId,
             type: 'DELETE',
             success: function(data) {
-                
+                alert('Artist deleted');
                 $("#artistList").css("display", "none");
             },
             error: function(jqxhr, status, exception){
@@ -172,11 +183,10 @@ const deleteArtistFunc = (function(button){
                 console.log(jqxhr.status);
                 console.log(exception.message);
                 console.log(console.warn(jqxhr.responseText));
+                alert('Artist has album(s) and cannot be deleted');
             }
             
         });
-        
-        
     });
 });
 
@@ -184,7 +194,17 @@ const deleteArtistFunc = (function(button){
 
 //Show/Hide buttons----------------------------------------------------------------------------------------------------------------------------------------------------
 $("#showAddArtist").on("click", function(event){
+    //hide Forms for update table
+    $("#albumFrm").css("display", "none");
+    $("#trackFrm").css("display", "none");
+    $("#artistFrm").css("display", "none");
+    //hide Lists
+    $("#artistList").css("display", "none");
+    $("#albumList").css("display", "none");
+    $("#trackList").css("display", "none");
+    //only specific create form
     $("#trackCreateFrm").css("display", "none");
     $("#artistCreateFrm").css("display", "block");
     $("#albumCreateFrm").css("display", "none");
+    
 });

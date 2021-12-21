@@ -2,12 +2,9 @@
     session_start();
 
     if (!isset($_SESSION['customerId'])) {    
-        header('Location: loginPage.php');
+        header('Location: index.php');
     }
-    // if (isset($_POST['LogOut'])) {
-    //     session_destroy();
-    //     header('Location: loginPage.php');
-    // }
+    //Add data from customer to their data displayed in the html
     $customerId = $_SESSION['customerId'];
     $firstName = $_SESSION['firstName'];
     $lastName = $_SESSION['lastName'];
@@ -29,6 +26,7 @@
     }
 ?>
 <?php
+    //for the cart
     $cartTotal = 0;
 
     if(empty($_SESSION['cartTotal'])){
@@ -64,23 +62,26 @@
          
      </div>
     </header>
-    <div id="cart" class="cart">
-        <fieldset class="purchaseCart" id="purchaseCart">
-            <label for="billingAddress">Billing Address, you can change it :D</label>
-            <input type="text" id="billingAddress" value="<?= $address?>" >
-            <label for="billingCity">Billing City</label>
-            <input type="text" id="billingCity" value="<?= $city ?>" readonly>
-            <label for="billingState">Billing State</label>
-            <input type="text" id="billingState" value="<?= $state?>" readonly>
-            <label for="billingCountry">Billing Country</label>
-            <input type="text" id="billingCountry" value="<?= $country?>" readonly>
-            <label for="billingPostalCode">Billing Postal Code</label>
-            <input type="text" id="billingPostalCode" value="<?= $postalCode?>" readonly>
-            <label for="billingTotal">Total</label>
-            <input type="text" id="billingTotal" value="<?=$cartTotal ?>"readonly>
-            <button id="buyTracks">Buy tracks</button>
-        </fieldset>
+    <div id="modal" class="modal">
+        <div id="cart" class="cart">
+            <fieldset class="purchaseCart" id="purchaseCart">
+                <label for="billingAddress">Billing Address, you can change it :D</label>
+                <input type="text" id="billingAddress" value="<?= $address?>" >
+                <label for="billingCity">Billing City</label>
+                <input type="text" id="billingCity" value="<?= $city ?>" readonly>
+                <label for="billingState">Billing State</label>
+                <input type="text" id="billingState" value="<?= $state?>" readonly>
+                <label for="billingCountry">Billing Country</label>
+                <input type="text" id="billingCountry" value="<?= $country?>" readonly>
+                <label for="billingPostalCode">Billing Postal Code</label>
+                <input type="text" id="billingPostalCode" value="<?= $postalCode?>" readonly>
+                <label for="billingTotal">Total</label>
+                <input type="text" id="billingTotal" value="<?=$cartTotal ?>"readonly>
+                <button id="buyTracks">Buy tracks</button>
+            </fieldset>
+        </div>
     </div>
+    
     <div id="cartItems" class="cartItems">
             <fieldset>
                 <h3>Things in Cart</h3>
@@ -141,9 +142,12 @@
             </div>
     </div>
     <div>
-    <button id="trackBtn">Track List</button>
-    <button id="artistBtn">Artist List</button>
-    <button id="albumBtn">Album List</button>
+        <div class="buttons">
+            <button id="trackBtn">Track List</button>
+            <button id="artistBtn">Artist List</button>
+            <button id="albumBtn">Album List</button>
+        </div>
+    
         <table id="trackList" class="trackList">
             <!-- <form action="browsePage.php" method="POST">
                 <label for="trackId">Track To Buy. Input Id</label>

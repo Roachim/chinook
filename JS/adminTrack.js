@@ -61,6 +61,13 @@ $("#trackBtn").on("click", function(e){
     $("#trackList").css("display", "block");
     $("#artistList").css("display", "none");
     $("#albumList").css("display", "none");
+    //hide other forms
+    $("#trackCreateFrm").css("display", "none");
+    $("#artistCreateFrm").css("display", "none");
+    $("#albumCreateFrm").css("display", "none");
+    $("#albumFrm").css("display", "none");
+    $("#trackFrm").css("display", "none");
+    $("#artistFrm").css("display", "none");
 }); //end of button function
 
 
@@ -174,7 +181,10 @@ const openTrackfunc = (function(button) {
                 $("#newTrackBytes").val(data.Bytes);
                 $("#newTrackUnitPrice").val(data.UnitPrice);
 
+                $("#albumFrm").css("display", "none");
                 $("#trackFrm").css("display", "block");
+                $("#artistFrm").css("display", "none");
+
             },
             error: function(jqxhr, status, exception){
                 console.log('Exception:', exception);
@@ -196,7 +206,7 @@ const deleteTrackFunc = (function(button){
             url: url+"/tracks/"+trackId,
             type: 'DELETE',
             success: function(data) {
-                
+                alert('Track deleted');
                 $("#trackList").css("display", "none");
             },
             error: function(jqxhr, status, exception){
@@ -205,6 +215,7 @@ const deleteTrackFunc = (function(button){
                 console.log(jqxhr.status);
                 console.log(exception.message);
                 console.log(console.warn(jqxhr.responseText));
+                alert('Track has invoice(s) and cannot be deleted');
             }
             
         });
@@ -217,6 +228,15 @@ const deleteTrackFunc = (function(button){
 
 //Show/Hide buttons----------------------------------------------------------------------------------------------------------------------------------------------------
 $("#showAddTrack").on("click", function(event){
+    //hide Forms for update table
+    $("#albumFrm").css("display", "none");
+    $("#trackFrm").css("display", "none");
+    $("#artistFrm").css("display", "none");
+    //hide Lists
+    $("#artistList").css("display", "none");
+    $("#albumList").css("display", "none");
+    $("#trackList").css("display", "none");
+    //only specific create form
     $("#trackCreateFrm").css("display", "block");
     $("#artistCreateFrm").css("display", "none");
     $("#albumCreateFrm").css("display", "none");

@@ -1,3 +1,5 @@
+//import { isEmptyObject } from "jquery";
+
 const url = 'api';
 
 //load up data as sson as page is ready
@@ -213,6 +215,7 @@ $(document).ready(function() {
         });
     });
     //Buy tracks from cart - 
+    // 4 ajax calls in 1 what the bip
     $("#buyTracks").on("click", function() {
         const customerId = $("#txtCustId").val().trim();
         const address = $("#billingAddress").val().trim();
@@ -222,38 +225,21 @@ $(document).ready(function() {
         const postalCode = $("#billingPostalCode").val().trim();
         const total = $("#billingTotal").val().trim();
         
-        //const itemArray = $("#cartItems").val().trim();
-        //const itemArray = JSON.stringify(dataString);
         const token = $("#csrf_token").val().trim();
-
-        //console.log(dataString);
-        console.log('**********************************');
-        console.log(customerId);
-        console.log(address);
-        console.log(city);
-        console.log(state);
-        console.log(country);
-        console.log(postalCode);
-        console.log(total);
-        console.log('*************************');
-        console.log();
-        console.log();
-        console.log();
-        //console.log(jQuery.type(itemArray));
-       
         $.ajax({
             url: "cart.php",
             type: "GET",
             success: function(data) {
-                //$.each(data, function(i, item){});
                  
                 const itemArray = data;
+                //if click button when cart === 'false'. stop.
+                if(itemArray === 'false'){
+                    alert('Cart is empty.');
+                    $("#modal").css("display", "none");
+                    return;
+                }
                 console.log(itemArray);
                 JSON.stringify(itemArray);
-                console.log('**********************************');
-                console.log(itemArray);
-                console.log('**********************************');
-                console.log('**********************************');
                 $.ajax({
                     url: url +"/invoices",
                     type: "POST",
@@ -272,7 +258,16 @@ $(document).ready(function() {
                     success: function(data) {
                         console.log('in success');
                         if (data == true) {
-                            alert('Purchase complete');
+                            $.ajax({
+                                url: "cart.php",
+                                type: "DELETE",
+                            })
+                            .done(function(data) {
+                                alert('Purchase complete');
+                                $("#modal").css("display", "none");
+                                location.reload();
+                            });
+                            
         
                         } else {
                             alert(data);
@@ -388,10 +383,13 @@ $(document).ready(function() {
         $("#albumList").css("display", "none");
     });
     $("#showCart").on("click", function(event){
+        $("#modal").css("display", "block");
         $("#editCustomerProfile").css("display", "none");
         $("#trackList").css("display", "none");
         $("#artistList").css("display", "none");
         $("#albumList").css("display", "none");
         $("#purchaseCart").css("display", "block");
-        console.log('show cart');
+    });
+    $("#modal").on("click", function(event){
+        $("#modal").css("display", "none");
     });

@@ -26,9 +26,12 @@ session_start();
     </form>
     </div>
     <div> <!-- Create table -->
-        <button id="showAddTrack">New Track</button>
+    <div class="buttons">
+        <button id="showAddTrack">New Track</button>    
         <button id="showAddArtist">New Artist</button>
         <button id="showAddAlbum">New Album</button>
+    </div>
+
 
         <form method="POST" id="trackCreateFrm" class="trackFrm">
             <h3>Create new track</h3>
@@ -87,13 +90,13 @@ session_start();
                 <label for="newTrackName">Name</label>
                 <input type="text" id="newTrackName" value="" required>
 
-                <label for="newTrackAlbumId">AlbumId</label>
+                <label for="newTrackAlbumId">AlbumId(enter the id)</label>
                 <input type="text" id="newTrackAlbumId" value="" required>
 
-                <label for="newTrackMediaTypeId">MediaTypeId</label>
+                <label for="newTrackMediaTypeId">MediaTypeId(enter the id)</label>
                 <input type="text" id="newTrackMediaTypeId" value="" required>
 
-                <label for="newTrackGenreId">GenreId</label>
+                <label for="newTrackGenreId">GenreId(enter the id)</label>
                 <input type="text" id="newTrackGenreId" value="" required>
 
                 <label for="newTrackComposer">Composer</label>
@@ -133,9 +136,12 @@ session_start();
         </form>
     </div>
     <div>
-        <button id="trackBtn">Track List</button>
-        <button id="artistBtn">Artist List</button>
-        <button id="albumBtn">Album List</button>
+        <div class="buttons">
+            <button id="trackBtn">Track List</button>
+            <button id="artistBtn">Artist List</button>
+            <button id="albumBtn">Album List</button>
+        </div>
+
 
         <table id="trackList" class="trackList">
         </table>

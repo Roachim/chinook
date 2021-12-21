@@ -62,26 +62,16 @@ $("#albumBtn").on("click", function(e){
     $("#trackList").css("display", "none");
     $("#artistList").css("display", "none");
     $("#albumList").css("display", "block");
+    //hide other forms
+    $("#trackCreateFrm").css("display", "none");
+    $("#artistCreateFrm").css("display", "none");
+    $("#albumCreateFrm").css("display", "none");
+    $("#albumFrm").css("display", "none");
+    $("#trackFrm").css("display", "none");
+    $("#artistFrm").css("display", "none");
 }); //end of button function
 
-const openAlbumfunction = (function(button) {
-    button.on("click", function() {
-        //"get" using id from button pressed
-        const albumId = this.id.substring(1, this.id.length); 
-        console.log(albumId);
-        $.ajax({
-            url: url +"/albums/" + albumId,
-            type: "GET",
-        })
-        .done(function(data) {
-            $("#editAlbumList").css("display", "none");
-            $("#albumId").val(data.AlbumId);
-            $("#albumTitle").val(data.Title);
-            $("#albumArtist").val(data.Name);
-            $("#albumFrm").css("display", "block");
-        });
-    });
-});
+
 $("#addAlbum").on("click", function(e) {
     e.preventDefault();
     const title = $("#albumTitle").val().trim();
@@ -111,6 +101,8 @@ $("#addAlbum").on("click", function(e) {
         }
 
     });
+    alert('Album Added');
+    location.reload();
 });
 $("#changeAlbum").on("click", function(e) {
     e.preventDefault();
@@ -146,7 +138,26 @@ $("#changeAlbum").on("click", function(e) {
 
     });
 });
-
+const openAlbumfunction = (function(button) {
+    button.on("click", function() {
+        //"get" using id from button pressed
+        const albumId = this.id.substring(1, this.id.length); 
+        console.log(albumId);
+        $.ajax({
+            url: url +"/albums/" + albumId,
+            type: "GET",
+        })
+        .done(function(data) {
+            $("#editAlbumList").css("display", "none");
+            $("#newAlbumId").val(data.AlbumId);
+            $("#newAlbumTitle").val(data.Title);
+            $("#newAlbumArtist").val(data.Name);
+            $("#albumFrm").css("display", "block");
+            $("#trackFrm").css("display", "none");
+            $("#artistFrm").css("display", "none");
+        });
+    });
+});
 const deleteAlbumFunc = (function(button){
     button.on("click", function() {
         //"delete" using id from button pressed
@@ -157,11 +168,21 @@ const deleteAlbumFunc = (function(button){
         })
         .done(function(data) {
             $("#albumList").css("display", "none");
+            alert('Album deleted');
         });
     });
 });
 //Show/Hide buttons----------------------------------------------------------------------------------------------------------------------------------------------------
 $("#showAddAlbum").on("click", function(event){
+    //hide Forms for update table
+    $("#albumFrm").css("display", "none");
+    $("#trackFrm").css("display", "none");
+    $("#artistFrm").css("display", "none");
+    //hide Lists
+    $("#artistList").css("display", "none");
+    $("#albumList").css("display", "none");
+    $("#trackList").css("display", "none");
+    //only specific create form
     $("#trackCreateFrm").css("display", "none");
     $("#artistCreateFrm").css("display", "none");
     $("#albumCreateFrm").css("display", "block");

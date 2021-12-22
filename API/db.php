@@ -6,17 +6,17 @@ class DataBase{
 
     public function connect(){
         //Get Heroku ClearDB connection information
-        $cleardb_url = parse_url(getenv("CLEARDB_DATABASE_URL"));
-        $cleardb_server = $cleardb_url["eu-cdbr-west-02.cleardb.net"];
-        $cleardb_username = $cleardb_url["bffea5c4d1ff42"];
-        $cleardb_password = $cleardb_url["49c8a9dd"];
-        $cleardb_db = substr($cleardb_url["path"],1);
-        $active_group = 'default';
-        $query_builder = TRUE;
+        // $cleardb_url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+        // $cleardb_server = $cleardb_url["eu-cdbr-west-02.cleardb.net"];
+        // $cleardb_username = $cleardb_url["bffea5c4d1ff42"];
+        // $cleardb_password = $cleardb_url["49c8a9dd"];
+        //$cleardb_db = substr($cleardb_url["path"],1);
+        // $active_group = 'default';
+        // $query_builder = TRUE;
 
         try 
         {
-            $connection = new mysqli($cleardb_server, $cleardb_username, $cleardb_password, $cleardb_db);
+            $connection = new mysqli('eu-cdbr-west-02.cleardb.net', 'bffea5c4d1ff42', '49c8a9dd', 'heroku_647a2a0520c3f71');
         } catch (mysqli_sql_exception)
         {
             echo mysqli_error($connection);

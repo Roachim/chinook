@@ -216,6 +216,7 @@ $(document).ready(function() {
     });
     //Buy tracks from cart - 
     // 4 ajax calls in 1 what the bip
+    //Commit purchase. send list of items to make invoice + invoiceLines
     $("#buyTracks").on("click", function() {
         const customerId = $("#txtCustId").val().trim();
         const address = $("#billingAddress").val().trim();
@@ -296,6 +297,7 @@ $(document).ready(function() {
         
     });
     //this method is amazingly bad
+    //adds track to cart by session. also add price of track to cartTotal
     //first: activate on button click
     const addToCart = (function(button) {
         button.on("click", function() {
@@ -318,7 +320,6 @@ $(document).ready(function() {
                     type: "GET",
                     success: function(data) {
                         //assuming we succeed. now add the unit price from track to billing total on html page for the customer
-                        //$("#billingTotal").val($("#billingTotal").val() + data.UnitPrice);
                         const price = data.UnitPrice;
                         console.log(data.UnitPrice);
                         //finally, add the price to cartTotal session as well by making a post request to cartTotal.php
@@ -355,33 +356,39 @@ $(document).ready(function() {
     });
     
     //Show/Hide buttons----------------------------------------------------------------------------------------------------------------------------------------------------
+    //show track list
     $("#trackBtn").on("click", function(event){
         $("#trackList").css("display", "block");
         $("#artistList").css("display", "none");
         $("#albumList").css("display", "none");
         $("#editCustomerProfile").css("display", "none");
     });
+    //show artist list list
     $("#artistBtn").on("click", function(event){
         $("#trackList").css("display", "none");
         $("#artistList").css("display", "block");
         $("#albumList").css("display", "none");
         $("#editCustomerProfile").css("display", "none");
     });
+    //show album list
     $("#albumBtn").on("click", function(event){
         $("#trackList").css("display", "none");
         $("#artistList").css("display", "none");
         $("#albumList").css("display", "block");
         $("#editCustomerProfile").css("display", "none");
     });
+    //hide customer profile
     $("#hideProfile").on("click", function(event){
         $("#editCustomerProfile").css("display", "none");
     });
+    //show customer profile
     $("#editProfile").on("click", function(event){
         $("#editCustomerProfile").css("display", "block");
         $("#trackList").css("display", "none");
         $("#artistList").css("display", "none");
         $("#albumList").css("display", "none");
     });
+    //bring up the invoice
     $("#showCart").on("click", function(event){
         $("#modal").css("display", "block");
         $("#editCustomerProfile").css("display", "none");
@@ -390,6 +397,10 @@ $(document).ready(function() {
         $("#albumList").css("display", "none");
         $("#purchaseCart").css("display", "block");
     });
+    //clicking outside modal box, closes it.
     $("#modal").on("click", function(event){
-        $("#modal").css("display", "none");
+        if (event.target == modal) {
+            $("#modal").css("display", "none");
+            
+        }
     });

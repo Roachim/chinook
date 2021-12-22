@@ -4,7 +4,7 @@ $("#albumBtn").on("click", function(e){
     $("#albumList").empty();
     //load in all albums
     $.ajax({
-        url: url + "/albums",
+        url: url + "/api.php/albums",
         type: 'GET',
         //dataType : 'json',
     success: function(data) {

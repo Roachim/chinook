@@ -8,7 +8,7 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="loginPage.php">back to login</a>
+    <a href="index.php">back to login</a>
                     <fieldset id="customerProfile">
                         <h3>Create New Profile</h3>
                         <legend>customer profile</legend>

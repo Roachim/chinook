@@ -2,7 +2,7 @@
 session_start();
 
     if (!isset($_SESSION['adminId'])) {    
-        header('Location: loginPage.php');
+        header('Location: index.php');
     }
     $token = $_SESSION['token'];
 

@@ -21,7 +21,7 @@ session_start();
     <input type="hidden" id="csrf_token" value="<?=$token?>">
     <h1>Admin Page</h1>
     <div>
-    <form action="loginPage.php" method="POST" id="logoutFrm" class="logoutFrm">
+    <form action="index.php" method="POST" id="logoutFrm" class="logoutFrm">
             <input type="submit" name="logout" value="Log Out">
     </form>
     </div>

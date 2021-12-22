@@ -56,7 +56,7 @@
      <div>
          <button id='editProfile'>User profile</button>
          <!-- <button id="showCart">Cart</button> -->
-         <form action="loginPage.php" method="POST" id="logoutFrm" class="logoutFrm">
+         <form action="index.php" method="POST" id="logoutFrm" class="logoutFrm">
              <input type="submit" name="logout" value="Log Out">
          </form>
          

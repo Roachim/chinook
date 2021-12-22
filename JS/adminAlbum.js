@@ -125,8 +125,8 @@ $("#changeAlbum").on("click", function(e) {
         },
         success: function(data) {
                 
-            console.log('success');
-
+            alert('Album edited');
+            $("#albumCreateFrm").css("display", "none");
         },
         error: function(jqxhr, status, exception){
             console.log('Exception:', exception);
@@ -148,7 +148,7 @@ const openAlbumfunction = (function(button) {
             type: "GET",
         })
         .done(function(data) {
-            $("#editAlbumList").css("display", "none");
+            $("#albumList").css("display", "none");
             $("#newAlbumId").val(data.AlbumId);
             $("#newAlbumTitle").val(data.Title);
             $("#newAlbumArtist").val(data.Name);

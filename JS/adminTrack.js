@@ -125,7 +125,26 @@ $("#changeTrack").on("click", function(e) {
     const trackMilliseconds = $("#newTrackMilliseconds").val().trim();
     const trackBytes = $("#newTrackBytes").val().trim();
     const trackUnitPrice = $("#newTrackUnitPrice").val().trim();
-
+    //check if numeric
+    if(!$.isNumeric(trackUnitPrice)){
+        alert('Please input the price as a number');
+        return;
+    }
+    // //check if id is numeric
+    // if(!$.isNumeric(trackAlbumId) || !$.isNumeric(trackMediaTypeId) || !$.isNumeric(trackGenreId)){
+    //     alert('Please make sure all id fields are numbers');
+    //     return;
+    // }
+    //check for milliseconds
+    if(!$.isNumeric(trackMilliseconds)){
+        alert('Please input milliseconds as a number');
+        return;
+    }
+        //check for bytes
+    if(!$.isNumeric(trackBytes)){
+        alert('Please input the price as a number');
+        return;
+    }
     const token = $("#csrf_token").val().trim();
     $.ajax({
         url: url +"/tracks/" + trackId,
@@ -145,7 +164,7 @@ $("#changeTrack").on("click", function(e) {
         },
         success: function(data) {
                 
-            console.log('success');
+            alert('Track edited');
             $("#trackFrm").css("display", "none");
         },
         error: function(jqxhr, status, exception){

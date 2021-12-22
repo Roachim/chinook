@@ -120,7 +120,7 @@ $("#changeArtist").on("click", function(e) {
         },
         success: function(data) {
                 
-            console.log('success');
+            alert('Artist edited');
             $("#artistCreateFrm").css("display", "none");
         },
         error: function(jqxhr, status, exception){

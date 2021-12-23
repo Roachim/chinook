@@ -68,8 +68,6 @@
             } 
             
         }
-        
-        //$CustomerId ,$FirstName, $LastName, $Password, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email
     }
 
 ?>

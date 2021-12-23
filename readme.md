@@ -1,3 +1,5 @@
+## Work by: Joachim Frank
+
 ## Using the App
 -- To log in as admin, simply write "admin" in password field without an email
 -- To log in as a customer, fill in both fields with the relevant info

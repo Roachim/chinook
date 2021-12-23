@@ -23,19 +23,21 @@ define('ENTITY_ADMINS', 'admins');
 
 
 
-$url = strtok($_SERVER['REQUEST_URI'], "?");    // GET parameters are removed
+$url = strtok($_SERVER['REQUEST_URI'], "?");    // GET parameters are removed, as they are behind the '?'
 
 // If there is a trailing slash, it is removed, so that it is not taken into account by the explode function
+//as that would leave an empty string in the end.
 //smart
 if (substr($url, strlen($url) - 1) == '/') {
     $url = substr($url, 0, strlen($url) - 1);
 }
 // Everything up to the folder where this file exists is removed.
-// This allows the API to be deployed to any directory in the server
+// This allows the API to be deployed to any directory in the server.
+// of string, get substring from n'th position. n'th position comes from where the directory path meets this folder.
 //cool
 $url = substr($url, strpos($url, basename(__DIR__)));
 
-// get a better read of the url by dividing and deleting the "/"
+// get a better read of the url by dividing and deleting the "/". creating an array.
 $urlPieces = explode('/', urldecode($url));
 
 header('Content-Type: application/json');
@@ -51,22 +53,8 @@ $verb = $_SERVER['REQUEST_METHOD'];
 if($pieces > MAX_PIECES){
     die("Invalid URL.  Please check the readme.md");
 }
-//check csrf token if making a post request and validate
-// if($verb == 'POST'){
-//     if(empty($_SESSION['token'])){
-//         echo header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed. No session.');
-//         exit;
-//     } else if(empty($_POST['token'])){
-//         echo header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed. No token.');
-//         exit;
-//     } 
-//     else if($_SESSION['token'] !=$_POST['token'] ){
-//         $token = $_SESSION['token'];
-//         echo header($_SERVER['SERVER_PROTOCOL'] . '405 Method Not Allowed. Tokens do not match.');
-//         exit;
-//     }
-// }
 
+//check csrf token if making a post request and authenticate
 
 if($verb === 'POST'){
     //apply the tokens value to a variable while filtering. because why not
@@ -120,7 +108,6 @@ if ($pieces == 1) {
                         }else{
                             echo json_encode($album->GetAll());                             //get all albums
                         }
-                        
                         break;
                     case 'POST':                            //create new album
                         if ($pieces == MAX_PIECES) {

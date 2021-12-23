@@ -29,6 +29,10 @@ table div{
     display: inline-block;
     
 }
+.newCustomer input{
+    display: flex;
+    flex-direction: column;
+}
 table div tr{
     display: inline-block;
     padding: 10px;
@@ -123,7 +127,7 @@ footer{
 .logoutFrm{
     max-width: 60.48px;
 }
-.hideOnLoad{
+.profile{
     display: none;
 }
 .logoutFrm input{
@@ -142,6 +146,31 @@ footer{
     .buttons{
         display: flex;
         flex-direction: row;
+    }
+    .newCustomer label{
+        display: flex;
+        flex-direction: column;
+    }
+    .newCustomer label{
+        font-size: 19px;
+    }
+    .newCustomer input{
+        display: flex;
+        flex-direction: row;
+        width: 300px;
+        height: 40px;
+        text-size-adjust: 30px;
+    }
+    .buttons{
+        width: 200px;
+        height: 50px;
+    }
+    .profile input{
+        display: flex;
+        flex-direction: row;
+        width: 300px;
+        height: 40px;
+        text-size-adjust: 30px;
     }
 }
    
@@ -164,5 +193,27 @@ footer{
     table div tr{
         
         flex-direction: row;
+    }
+    .newCustomer label{
+        font-size: 25px;
+    }
+    .newCustomer input{
+        display: flex;
+        flex-direction: row;
+        width: 500px;
+        height: 50px;
+        text-size-adjust: 30px;
+    }
+    .profile input{
+        display: flex;
+        flex-direction: row;
+        width: 500px;
+        height: 50px;
+        text-size-adjust: 30px;
+    }
+    .buttons{
+       
+        width: 400px;
+        height: 75px;
     }
 }

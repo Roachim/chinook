@@ -68,8 +68,6 @@
             } 
             
         }
-        
-        //$CustomerId ,$FirstName, $LastName, $Password, $Company, $Address, $City, $State, $Country, $PostalCode, $Phone, $Fax, $Email
     }
 
 ?>
@@ -95,7 +93,6 @@
         <input type="submit" id="LoginBtn" value="Login">
     </form>
     <br>
-    <button id="Btn">click for info</button>
     <table id="name" class="name"></table>
 
     <footer>

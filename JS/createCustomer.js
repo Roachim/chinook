@@ -17,20 +17,8 @@ $("#profileBtn").on("click", function() {
     $.ajax({
         url: url +"/customers",
         type: "POST",
-        data: {
-            firstName: firstName,
-            lastName: lastName,
-            password: password,
-            email: email,
-            company: company,
-            address: address,
-            city: city,
-            state: state,
-            country: country,
-            postalCode: postalCode,
-            phone: phone,
-            fax: fax
-        },
+        data: form.serialize(),
+        contentType: 'application/json',
         success: function(data) {
             if (data) {
                 alert("Profile created");

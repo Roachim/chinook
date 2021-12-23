@@ -65,19 +65,22 @@
     <div id="modal" class="modal">
         <div id="cart" class="cart">
             <fieldset class="purchaseCart" id="purchaseCart">
-                <label for="billingAddress">Billing Address, you can change it :D</label>
-                <input type="text" id="billingAddress" value="<?= $address?>" >
-                <label for="billingCity">Billing City</label>
-                <input type="text" id="billingCity" value="<?= $city ?>" readonly>
-                <label for="billingState">Billing State</label>
-                <input type="text" id="billingState" value="<?= $state?>" readonly>
-                <label for="billingCountry">Billing Country</label>
-                <input type="text" id="billingCountry" value="<?= $country?>" readonly>
-                <label for="billingPostalCode">Billing Postal Code</label>
-                <input type="text" id="billingPostalCode" value="<?= $postalCode?>" readonly>
-                <label for="billingTotal">Total</label>
-                <input type="text" id="billingTotal" value="<?=$cartTotal ?>"readonly>
-                <button id="buyTracks">Buy tracks</button>
+                <form id="purchase">
+                    <label for="billingAddress">Billing Address, you can change it :D</label>
+                    <input type="text" id="billingAddress" value="<?= $address?>" >
+                    <label for="billingCity">Billing City</label>
+                    <input type="text" id="billingCity" value="<?= $city ?>" readonly>
+                    <label for="billingState">Billing State</label>
+                    <input type="text" id="billingState" value="<?= $state?>" readonly>
+                    <label for="billingCountry">Billing Country</label>
+                    <input type="text" id="billingCountry" value="<?= $country?>" readonly>
+                    <label for="billingPostalCode">Billing Postal Code</label>
+                    <input type="text" id="billingPostalCode" value="<?= $postalCode?>" readonly>
+                    <label for="billingTotal">Total</label>
+                    <input type="text" id="billingTotal" value="<?=$cartTotal ?>"readonly>
+                    <input type="submit" id="buyTracks">Buy tracks</input>
+                </form>
+                
             </fieldset>
         </div>
     </div>
@@ -103,36 +106,39 @@
                         <h3>Edit user profile</h3>
                         <h4>Email cannot be changed</h4>
                         <legend>customer profile</legend>
-                        <input type="hidden" id="txtCustId" value="<?= $customerId?>" required>
-                        <label for="txtFirstName">First name</label>
-                        <input type="text" id="txtFirstName" value="<?= $firstName?>" required>
-                        <label for="txtLastName">Last name</label>
-                        <input type="text" id="txtLastName" value="<?= $lastName?>" required>
-                        <label for="txtEmail">Email</label>
-                        <input type="text" id="txtEmail" value="<?= $email?>" readonly>
-                        <label for="txtCompany">Company</label>
-                        <input type="text" id="txtCompany" value="<?= $company?>" >
-                        <label for="txtAddress">Address</label>
-                        <input type="text" id="txtAddress" value="<?= $address?>" >
-                        <label for="txtCity">City</label>
-                        <input type="text" id="txtCity" value="<?= $city?>" >
-                        <label for="txtState">State</label>
-                        <input type="text" id="txtState" value="<?= $state?>" >
-                        <label for="txtCountry">Country</label>
-                        <input type="text" id="txtCountry" value="<?= $country?>" >
-                        <label for="txtPostalCode">Postal code</label>
-                        <input type="text" id="txtPostalCode" value="<?= $postalCode?>" >
-                        <label for="txtPhone">Phone number</label>
-                        <input type="text" id="txtPhone" value="<?= $phone?>" >
-                        <label for="txtFax">Fax</label>
-                        <input type="text" id="txtFax" value="<?= $fax?>" >
-                        <fieldset>
-                            <legend>Password change</legend>
-                            <label for="txtOldPassword">Old password</label>
-                            <input type="password" id="txtOldPassword">
-                            <label for="txtNewPassword">New password</label>
-                            <input type="password" id="txtNewPassword">
-                        </fieldset>                        
+                        <form id="changeCustomerData">
+                            <input type="hidden" id="txtCustId" value="<?= $customerId?>" required>
+                            <label for="txtFirstName">First name</label>
+                            <input type="text" id="txtFirstName" value="<?= $firstName?>" required>
+                            <label for="txtLastName">Last name</label>
+                            <input type="text" id="txtLastName" value="<?= $lastName?>" required>
+                            <label for="txtEmail">Email</label>
+                            <input type="text" id="txtEmail" value="<?= $email?>" readonly>
+                            <label for="txtCompany">Company</label>
+                            <input type="text" id="txtCompany" value="<?= $company?>" >
+                            <label for="txtAddress">Address</label>
+                            <input type="text" id="txtAddress" value="<?= $address?>" >
+                            <label for="txtCity">City</label>
+                            <input type="text" id="txtCity" value="<?= $city?>" >
+                            <label for="txtState">State</label>
+                            <input type="text" id="txtState" value="<?= $state?>" >
+                            <label for="txtCountry">Country</label>
+                            <input type="text" id="txtCountry" value="<?= $country?>" >
+                            <label for="txtPostalCode">Postal code</label>
+                            <input type="text" id="txtPostalCode" value="<?= $postalCode?>" >
+                            <label for="txtPhone">Phone number</label>
+                            <input type="text" id="txtPhone" value="<?= $phone?>" >
+                            <label for="txtFax">Fax</label>
+                            <input type="text" id="txtFax" value="<?= $fax?>" >
+                            <fieldset>
+                                <legend>Password change</legend>
+                                <label for="txtOldPassword">Old password</label>
+                                <input type="password" id="txtOldPassword">
+                                <label for="txtNewPassword">New password</label>
+                                <input type="password" id="txtNewPassword">
+                            </fieldset>   
+                        </form>
+                                             
                     </fieldset>
                 </form>
             </main>

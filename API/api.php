@@ -66,20 +66,26 @@ if($pieces > MAX_PIECES){
 //         exit;
 //     }
 // }
-
+$newAlbum = (array) json_decode(file_get_contents("php://input"), true);
 
 if($verb === 'POST'){
     //apply the tokens value to a variable while filtering. because why not
-    $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
+    $token = json_decode($newAlbum['token']) ;
+
     if($pieces == 2 && $urlPieces[POS_ENTITY] =="customers"){
         //someone is trying to make new user, let them.
 
-    }else if (!$token || $token !== $_SESSION['token']) {
-        //if session has not token, or no token was sent, well thats a big no no.
-        // return 405 http status code
-        header($_SERVER['SERVER_PROTOCOL'] . ' 400 No token or false token.');
+    }else if (!$token) {
+        //if session has not token.
+        // return 400 http status code
+        header($_SERVER['SERVER_PROTOCOL'] . ' 400 No Token');
         exit;
-    } else {
+    } else if($token !== $_SESSION['token']){
+        //if tokens dont match
+        header($_SERVER['SERVER_PROTOCOL'] . ' 400 False token');
+        exit;
+    }
+    else {
         // just continue
     }
 }

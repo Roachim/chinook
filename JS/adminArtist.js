@@ -81,6 +81,8 @@ $("#addArtist").on("click", function(e) {
         url: url +"/artists",
         type: "POST",
         dataType : 'json',
+        data: form.serialize(),
+        contentType: 'application/json',
         data: {
             artistName: artistName,
             token: token
@@ -112,6 +114,8 @@ $("#changeArtist").on("click", function(e) {
         url: url +"/artists/" + artistId,
         type: "POST",
         dataType : 'json',
+        data: form.serialize(),
+        contentType: 'application/json',
         data: {
             artistId: artistId,
             artistName: artistName,

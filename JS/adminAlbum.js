@@ -82,15 +82,18 @@ $("#addAlbum").on("click", function(e) {
         url: url +"/albums",
         type: "POST",
         dataType : 'json',
+        data: form.serialize(),
+        contentType: 'application/json',
         data: {
             title: title,
             artistId: artistId,
-
             token: token
         },
         success: function(data) {
                 
             console.log('success');
+            alert('Album Added');
+            location.reload();
         },
         error: function(jqxhr, status, exception){
             console.log('Exception:', exception);
@@ -101,8 +104,7 @@ $("#addAlbum").on("click", function(e) {
         }
 
     });
-    alert('Album Added');
-    location.reload();
+
 });
 $("#changeAlbum").on("click", function(e) {
     e.preventDefault();
@@ -111,11 +113,13 @@ $("#changeAlbum").on("click", function(e) {
     const artistId = $("#newAlbumArtist").val().trim();
 
     const token = $("#csrf_token").val().trim();
-    console.log("click");
+    console.log(token);
     $.ajax({
         url: url +"/albums/" + albumId,
         type: "POST",
         dataType : 'json',
+        data: form.serialize(),
+        contentType: 'application/json',
         data: {
             albumId: albumId,
             title: title,

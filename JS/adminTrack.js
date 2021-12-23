@@ -6,6 +6,7 @@ $("#trackBtn").on("click", function(e){
     $.ajax({
         url: url + "/tracks",
         type: 'GET',
+        dataType: 'JSON',
     success: function(data) {
         console.log(data);
         //table to append with results
@@ -88,6 +89,8 @@ $("#addTrack").on("click", function(e) {
         url: url +"/tracks",
         type: "POST",
         dataType : 'json',
+        data: form.serialize(),
+        contentType: 'application/json',
         data: {
             trackName: trackName,
             trackAlbumId: trackAlbumId,
@@ -150,6 +153,8 @@ $("#changeTrack").on("click", function(e) {
         url: url +"/tracks/" + trackId,
         type: "POST",
         dataType : 'json',
+        data: form.serialize(),
+        contentType: 'application/json',
         data: {
             trackName: trackName,
             trackAlbumId: trackAlbumId,

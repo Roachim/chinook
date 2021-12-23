@@ -156,24 +156,8 @@ $(document).ready(function() {
         $.ajax({
             url: url +"/customers/" + customerId,
             type: "POST",
-            data: {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                company: company,
-                address: address,
-                city: city,
-                state: state,
-                country: country,
-                postalCode: postalCode,
-                phone: phone,
-                fax: fax,
-
-                password: password,
-                newPassword: newPassword,
-
-                token: token
-            },
+            data: form.serialize(),
+            contentType: 'application/json',
             success: function(data) {
                 
                 if (data) {
@@ -183,6 +167,7 @@ $(document).ready(function() {
                     $.ajax({
                         url: url + "/session",
                         type: "POST",
+                        contentType: 'json',
                         data: {
                             token: token
                         },
@@ -197,7 +182,7 @@ $(document).ready(function() {
                             console.log(console.warn(jqxhr.responseText));
                         }//end of error
                     })
-                    window.location.replace('loginPage.php');
+                    window.location.replace('index.php');
 
                 } else if(!data) {
                     alert("Error");
@@ -244,6 +229,7 @@ $(document).ready(function() {
                 $.ajax({
                     url: url +"/invoices",
                     type: "POST",
+                    contentType: 'json',
                     data: {
                         customerId: customerId,
                         billingAddress: address,
@@ -309,6 +295,7 @@ $(document).ready(function() {
             $.ajax({
                 url: "cart.php",
                 type: "POST",
+                contentType: 'json',
                 data:{
                     trackId: trackId
                 }
@@ -326,6 +313,7 @@ $(document).ready(function() {
                         $.ajax({
                             url: "cartTotal.php",
                             type: "POST",
+                            contentType: 'json',
                             data:{
                                 price: price
                             },
